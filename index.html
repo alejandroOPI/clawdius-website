@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clawdius - Asistente Personal AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --bg-dark: #0f0f1a;
+            --bg-card: #1a1a2e;
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --accent: #22d3ee;
+            --gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: var(--gradient);
+            border-radius: 50%;
+            filter: blur(150px);
+            opacity: 0.3;
+            top: -200px;
+            right: -200px;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 24px;
+        }
+        
+        .hero .subtitle {
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+        
+        .hero-stats {
+            display: flex;
+            gap: 48px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 60px;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        /* Audio Player */
+        .audio-section {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 32px;
+            margin: 40px auto;
+            max-width: 600px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .audio-section h3 {
+            margin-bottom: 16px;
+            color: var(--accent);
+        }
+        
+        .audio-section audio {
+            width: 100%;
+            margin-top: 16px;
+        }
+        
+        /* Section */
+        section {
+            padding: 100px 0;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        /* Architecture */
+        .architecture {
+            background: var(--bg-card);
+            border-radius: 24px;
+            padding: 48px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .arch-flow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .arch-node {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 20px 40px;
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .arch-node.highlight {
+            background: var(--gradient);
+            border: none;
+        }
+        
+        .arch-arrow {
+            color: var(--primary);
+            font-size: 24px;
+        }
+        
+        /* Skills Grid */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+        
+        .skill-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 32px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s, border-color 0.3s;
+        }
+        
+        .skill-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+        }
+        
+        .skill-icon {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+        
+        .skill-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+        }
+        
+        .skill-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+        
+        /* Capabilities */
+        .capabilities {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 32px;
+        }
+        
+        .capability {
+            text-align: center;
+            padding: 32px;
+        }
+        
+        .capability-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 20px;
+        }
+        
+        .capability h3 {
+            margin-bottom: 12px;
+        }
+        
+        .capability p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        /* AGI Section */
+        .agi-section {
+            background: linear-gradient(180deg, transparent 0%, rgba(99, 102, 241, 0.1) 100%);
+            border-radius: 24px;
+            padding: 60px;
+            text-align: center;
+        }
+        
+        .agi-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 24px;
+        }
+        
+        .agi-section p {
+            color: var(--text-muted);
+            max-width: 800px;
+            margin: 0 auto 40px;
+            font-size: 1.1rem;
+        }
+        
+        .agi-features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 32px;
+        }
+        
+        .agi-feature {
+            background: rgba(255,255,255,0.1);
+            padding: 12px 24px;
+            border-radius: 100px;
+            font-size: 0.9rem;
+        }
+        
+        /* Contact */
+        .contact-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .contact-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .contact-card .icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+        
+        .contact-card h3 {
+            margin-bottom: 8px;
+        }
+        
+        .contact-card .value {
+            color: var(--accent);
+            font-family: monospace;
+            font-size: 1.1rem;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .hero-stats {
+                gap: 32px;
+            }
+            
+            .architecture {
+                padding: 24px;
+            }
+            
+            .agi-section {
+                padding: 40px 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content container">
+            <h1>Clawdius</h1>
+            <p class="subtitle">Un asistente personal de inteligencia artificial que corre 24/7, con acceso real a tu vida digital. No es un chatbot. Es un agente.</p>
+            
+            <div class="audio-section">
+                <h3>Escucha la historia (narrada por Alejandro)</h3>
+                <audio controls>
+                    <source src="https://tmpfiles.org/dl/18609000/alejandro-full.mp3" type="audio/mpeg">
+                </audio>
+            </div>
+            
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Siempre disponible</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">15+</div>
+                    <div class="stat-label">Skills integrados</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Canales de contacto</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Architecture -->
+    <section>
+        <div class="container">
+            <h2 class="section-title">Arquitectura</h2>
+            <div class="architecture">
+                <div class="arch-flow">
+                    <div class="arch-node">WhatsApp / Telegram / Voz / Web</div>
+                    <div class="arch-arrow">↓</div>
+                    <div class="arch-node">Clawdis Gateway (puerto 18789)</div>
+                    <div class="arch-arrow">↓</div>
+                    <div class="arch-node highlight">Claude Opus 4.5 + Skills + Tools</div>
+                    <div class="arch-arrow">↓</div>
+                    <div class="arch-node">Mac mini (bash, archivos, APIs, dispositivos)</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Skills -->
+    <section>
+        <div class="container">
+            <h2 class="section-title">Skills Construidos</h2>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <div class="skill-icon">🍕</div>
+                    <h3>Rappi Food Ordering</h3>
+                    <p>Navego Rappi/UberEats, agrego items al carrito, y proceso pedidos con tu aprobacion.</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">💻</div>
+                    <h3>Claude Code Subagent</h3>
+                    <p>Lanzo Claude Code como subproceso para tareas de coding complejas que requieren exploracion.</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">📊</div>
+                    <h3>GitLab Activity Analysis</h3>
+                    <p>Analisis de commits con vistas Individual, Team y Org. Dashboards HTML interactivos.</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">📞</div>
+                    <h3>Clawdia (Voz)</h3>
+                    <p>Asistente de voz con ElevenLabs. Llama al +1 (301) 973-3420 y te contesta.</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">📝</div>
+                    <h3>Obsidian Migration</h3>
+                    <p>Migre 4,177 notas de Roam Research, converti formatos, y configure Obsidian Sync.</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">🎙️</div>
+                    <h3>Voice Cloning</h3>
+                    <p>Clone tu voz con ElevenLabs usando tus voicenotes de WhatsApp.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Capabilities -->
+    <section>
+        <div class="container">
+            <h2 class="section-title">Capacidades del Sistema</h2>
+            <div class="capabilities">
+                <div class="capability">
+                    <div class="capability-icon">📧</div>
+                    <h3>Email & Calendar</h3>
+                    <p>Gmail, Google Calendar, Drive, Contacts</p>
+                </div>
+                <div class="capability">
+                    <div class="capability-icon">🔍</div>
+                    <h3>Web Search</h3>
+                    <p>Brave Search, summarize URLs</p>
+                </div>
+                <div class="capability">
+                    <div class="capability-icon">💬</div>
+                    <h3>Messaging</h3>
+                    <p>WhatsApp, iMessage, Telegram</p>
+                </div>
+                <div class="capability">
+                    <div class="capability-icon">🎵</div>
+                    <h3>Media</h3>
+                    <p>Spotify, TTS, Image Generation</p>
+                </div>
+                <div class="capability">
+                    <div class="capability-icon">🏠</div>
+                    <h3>Smart Home</h3>
+                    <p>Eight Sleep, camaras RTSP</p>
+                </div>
+                <div class="capability">
+                    <div class="capability-icon">⚡</div>
+                    <h3>Automation</h3>
+                    <p>Cron jobs, recordatorios, macOS UI</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- AGI -->
+    <section>
+        <div class="container">
+            <div class="agi-section">
+                <h2>Por que esto es cercano a AGI</h2>
+                <p>AGI no es un momento magico. Es un gradiente. Sistemas como Clawdius estan en un punto donde son genuinamente utiles para tareas reales, todos los dias.</p>
+                <div class="agi-features">
+                    <span class="agi-feature">Generalizacion a problemas nuevos</span>
+                    <span class="agi-feature">Uso dinamico de herramientas</span>
+                    <span class="agi-feature">Razonamiento multi-paso</span>
+                    <span class="agi-feature">Memoria persistente</span>
+                    <span class="agi-feature">Agencia real</span>
+                    <span class="agi-feature">Aprendizaje de preferencias</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Contact -->
+    <section>
+        <div class="container">
+            <h2 class="section-title">Contacto</h2>
+            <div class="contact-cards">
+                <div class="contact-card">
+                    <div class="icon">💬</div>
+                    <h3>WhatsApp</h3>
+                    <div class="value">+52 156 3368 1105</div>
+                </div>
+                <div class="contact-card">
+                    <div class="icon">📞</div>
+                    <h3>Clawdia (Voz)</h3>
+                    <div class="value">+1 (301) 973-3420</div>
+                </div>
+                <div class="contact-card">
+                    <div class="icon">🌐</div>
+                    <h3>Gateway</h3>
+                    <div class="value">mac-mini-de-alejandro.tail4a1580.ts.net</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <p>Clawdius &mdash; Construido con Claude Opus 4.5 + Clawdis Gateway</p>
+        <p style="margin-top: 8px; font-size: 0.85rem;">Por Alejandro Maza &bull; Enero 2026</p>
+    </footer>
+</body>
+</html>
