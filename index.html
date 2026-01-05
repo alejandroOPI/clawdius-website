@@ -3,106 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clawdius — Asistente Personal AI</title>
-    <meta name="description" content="Un agente de inteligencia artificial que corre 24/7 con acceso real a tu vida digital.">
+    <title>Clawdius — Un Agente Personal</title>
+    <meta name="description" content="No es un chatbot. Es un agente de inteligencia artificial con acceso real a tu vida digital.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
     <main>
-        <!-- Hero -->
         <section class="hero">
-            <div class="hero__content">
-                <h1 class="hero__title"><span class="gradient-text">Clawdius</span></h1>
-                <p class="hero__subtitle">Un asistente personal de inteligencia artificial que corre 24/7, con acceso real a tu vida digital. No es un chatbot. Es un agente.</p>
-                
-                <div class="audio-player">
-                    <div class="audio-player__label">Escucha la historia</div>
-                    <audio controls>
-                        <source src="https://tmpfiles.org/dl/18609000/alejandro-full.mp3" type="audio/mpeg">
-                    </audio>
+            <h1 class="hero__title">
+                <span>Clawdius</span>
+            </h1>
+            <p class="hero__subtitle">
+                No es un chatbot. Es un agente de inteligencia artificial 
+                que corre veinticuatro horas, con acceso real a tu vida digital.
+            </p>
+            
+            <div class="audio-card">
+                <div class="audio-card__label">escucha la historia</div>
+                <audio controls>
+                    <source src="https://tmpfiles.org/dl/18609000/alejandro-full.mp3" type="audio/mpeg">
+                </audio>
+            </div>
+            
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat__number">24/7</div>
+                    <div class="stat__label">disponible</div>
                 </div>
-                
-                <div class="stats">
-                    <div class="stat">
-                        <div class="stat__number">24/7</div>
-                        <div class="stat__label">Siempre disponible</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat__number">15+</div>
-                        <div class="stat__label">Skills integrados</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat__number">3</div>
-                        <div class="stat__label">Canales</div>
-                    </div>
+                <div class="stat">
+                    <div class="stat__number">15+</div>
+                    <div class="stat__label">skills</div>
+                </div>
+                <div class="stat">
+                    <div class="stat__number">3</div>
+                    <div class="stat__label">canales</div>
                 </div>
             </div>
         </section>
 
-        <!-- Architecture -->
+        <hr class="divider">
+
         <section>
-            <h2>Arquitectura</h2>
+            <div class="section__counter">parte uno.</div>
+            <h2 class="section__title">
+                <span>Arquitectura</span>
+            </h2>
             <div class="architecture">
-                <div class="arch-flow">
-                    <div class="arch-node">WhatsApp / Telegram / Voz / Web</div>
-                    <div class="arch-arrow">↓</div>
-                    <div class="arch-node">Clawdis Gateway</div>
-                    <div class="arch-arrow">↓</div>
-                    <div class="arch-node highlight">Claude Opus 4.5 + Skills</div>
-                    <div class="arch-arrow">↓</div>
-                    <div class="arch-node">Mac mini (bash, APIs, dispositivos)</div>
-                </div>
+                <div class="arch-node">WhatsApp · Telegram · Voz · Web</div>
+                <div class="arch-arrow">↓</div>
+                <div class="arch-node">Clawdis Gateway</div>
+                <div class="arch-arrow">↓</div>
+                <div class="arch-node highlight">Claude Opus 4.5 + Skills</div>
+                <div class="arch-arrow">↓</div>
+                <div class="arch-node">Mac mini · bash · APIs · dispositivos</div>
             </div>
         </section>
 
-        <!-- Skills -->
+        <hr class="divider">
+
         <section>
-            <h2>Skills Construidos</h2>
+            <div class="section__counter">parte dos.</div>
+            <h2 class="section__title">
+                <span>Skills</span>
+                <span><em>construidos</em></span>
+            </h2>
             <div class="skills-grid">
-                <div class="skill-card">
-                    <div class="skill-card__icon">🍕</div>
+                <div class="skill">
+                    <div class="skill__icon">🍕</div>
                     <h3>Food Ordering</h3>
-                    <p>Navego Rappi/UberEats, agrego items al carrito, y proceso pedidos con tu aprobacion.</p>
+                    <p>Navego Rappi, agrego al carrito, proceso pedidos con aprobacion.</p>
                 </div>
-                <div class="skill-card">
-                    <div class="skill-card__icon">💻</div>
+                <div class="skill">
+                    <div class="skill__icon">💻</div>
                     <h3>Claude Code</h3>
-                    <p>Subagente para tareas de coding complejas que requieren exploracion y multiples archivos.</p>
+                    <p>Subagente para tareas de coding que requieren exploracion profunda.</p>
                 </div>
-                <div class="skill-card">
-                    <div class="skill-card__icon">📊</div>
+                <div class="skill">
+                    <div class="skill__icon">📊</div>
                     <h3>GitLab Analysis</h3>
-                    <p>Analisis de commits con vistas Individual, Team y Org. Dashboards interactivos.</p>
+                    <p>Analisis de commits. Vistas Individual, Team, Org. Dashboards.</p>
                 </div>
-                <div class="skill-card">
-                    <div class="skill-card__icon">📞</div>
-                    <h3>Clawdia (Voz)</h3>
-                    <p>Asistente de voz. Llama al +1 (301) 973-3420 y te contesta con acceso a todos los skills.</p>
+                <div class="skill">
+                    <div class="skill__icon">📞</div>
+                    <h3>Clawdia</h3>
+                    <p>Asistente de voz. Llama y te contesta con acceso a todos los skills.</p>
                 </div>
-                <div class="skill-card">
-                    <div class="skill-card__icon">📝</div>
+                <div class="skill">
+                    <div class="skill__icon">📝</div>
                     <h3>Obsidian</h3>
-                    <p>Migre 4,177 notas de Roam, converti formatos, limpie tags, y configure Sync.</p>
+                    <p>Migre 4,177 notas de Roam. Converti formatos. Configure Sync.</p>
                 </div>
-                <div class="skill-card">
-                    <div class="skill-card__icon">🎙️</div>
+                <div class="skill">
+                    <div class="skill__icon">🎙️</div>
                     <h3>Voice Clone</h3>
-                    <p>Clone tu voz con ElevenLabs usando voicenotes de WhatsApp. Esta narracion es un ejemplo.</p>
+                    <p>Clone tu voz con ElevenLabs. Esta narracion es un ejemplo.</p>
                 </div>
             </div>
         </section>
 
-        <!-- Capabilities -->
+        <hr class="divider">
+
         <section>
-            <h2>Capacidades</h2>
+            <div class="section__counter">parte tres.</div>
+            <h2 class="section__title">
+                <span>Capacidades</span>
+            </h2>
             <div class="capabilities">
                 <div class="capability">
                     <div class="capability__icon">📧</div>
                     <h4>Email</h4>
-                    <p>Gmail, Calendar, Drive</p>
+                    <p>Gmail, Calendar</p>
                 </div>
                 <div class="capability">
                     <div class="capability__icon">🔍</div>
@@ -112,7 +125,7 @@
                 <div class="capability">
                     <div class="capability__icon">💬</div>
                     <h4>Messaging</h4>
-                    <p>WhatsApp, iMessage</p>
+                    <p>WhatsApp, iMsg</p>
                 </div>
                 <div class="capability">
                     <div class="capability__icon">🎵</div>
@@ -126,45 +139,59 @@
                 </div>
                 <div class="capability">
                     <div class="capability__icon">🏠</div>
-                    <h4>Smart Home</h4>
-                    <p>Eight Sleep, cameras</p>
+                    <h4>Home</h4>
+                    <p>Eight Sleep</p>
                 </div>
             </div>
         </section>
 
-        <!-- AGI -->
+        <hr class="divider">
+
         <section>
-            <div class="agi-section">
-                <h2>Cercano a AGI</h2>
-                <p>AGI no es un momento magico. Es un gradiente. Sistemas como este estan en un punto donde son genuinamente utiles para tareas reales, todos los dias.</p>
-                <div class="agi-features">
-                    <span class="agi-feature">Generalizacion</span>
-                    <span class="agi-feature">Uso de herramientas</span>
-                    <span class="agi-feature">Razonamiento multi-paso</span>
-                    <span class="agi-feature">Memoria persistente</span>
-                    <span class="agi-feature">Agencia real</span>
+            <div class="section__counter">parte cuatro.</div>
+            <h2 class="section__title">
+                <span>Cercano a</span>
+                <span><em>AGI</em></span>
+            </h2>
+            <div class="agi">
+                <p class="agi__quote">
+                    "AGI no es un momento magico. Es un gradiente. 
+                    Sistemas como este estan en un punto donde son 
+                    genuinamente utiles para tareas reales, todos los dias."
+                </p>
+                <div class="agi__features">
+                    <span class="agi__feature">Generalizacion</span>
+                    <span class="agi__feature">Herramientas</span>
+                    <span class="agi__feature">Multi-paso</span>
+                    <span class="agi__feature">Memoria</span>
+                    <span class="agi__feature">Agencia</span>
                 </div>
             </div>
         </section>
 
-        <!-- Contact -->
+        <hr class="divider">
+
         <section>
-            <h2>Contacto</h2>
+            <div class="section__counter">contacto.</div>
+            <h2 class="section__title">
+                <span>Habla con</span>
+                <span><em>Clawdius</em></span>
+            </h2>
             <div class="contact-grid">
-                <div class="contact-card">
-                    <div class="contact-card__icon">💬</div>
+                <div class="contact">
+                    <div class="contact__icon">💬</div>
                     <h4>WhatsApp</h4>
-                    <div class="contact-card__value">+52 156 3368 1105</div>
+                    <div class="contact__value">+52 156 3368 1105</div>
                 </div>
-                <div class="contact-card">
-                    <div class="contact-card__icon">📞</div>
+                <div class="contact">
+                    <div class="contact__icon">📞</div>
                     <h4>Clawdia</h4>
-                    <div class="contact-card__value">+1 (301) 973-3420</div>
+                    <div class="contact__value">+1 301 973 3420</div>
                 </div>
-                <div class="contact-card">
-                    <div class="contact-card__icon">🌐</div>
+                <div class="contact">
+                    <div class="contact__icon">🌐</div>
                     <h4>Gateway</h4>
-                    <div class="contact-card__value">Tailscale</div>
+                    <div class="contact__value">Tailscale</div>
                 </div>
             </div>
         </section>
