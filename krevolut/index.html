@@ -1,0 +1,1834 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Revolut Replica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<style>
+/* ===== RUI DESIGN TOKENS (extracted from app.revolut.com DOM) ===== */
+:root {
+  /* Colors */
+  --rui-color-accent: #6fa0ff;
+  --rui-color-on-accent: #fff;
+  --rui-color-accent-neutral: #fff;
+  --rui-color-accent-control-neutral: #cdcdcd;
+  --rui-color-action-background: rgba(99,147,243,.2);
+  --rui-color-action-background-neutral: rgba(255,255,255,.2);
+  --rui-color-action-label: rgba(99,147,243,.3);
+  --rui-color-positive: #1ac097;
+  --rui-color-danger: #ff5363;
+  --rui-color-warning: #ff9f0a;
+  --rui-color-blue: #6fa0ff;
+  --rui-color-red: #ff453a;
+  --rui-color-green: #30d158;
+  --rui-color-teal: #13d1a3;
+  --rui-color-yellow: #ffd60a;
+  --rui-color-purple: #bf5af2;
+  --rui-color-indigo: #5e5ce6;
+  --rui-color-deep-pink: #ff5777;
+  --rui-color-brown: #ac816e;
+  --rui-color-foreground: #fff;
+  --rui-color-inactive: rgba(255,255,255,.6);
+  --rui-color-grey-50: #717173;
+  --rui-color-grey-tone-8: rgba(255,255,255,.14);
+  --rui-color-grey-tone-20: rgba(255,255,255,.38);
+  --rui-color-grouped-background: #000d19;
+  --rui-color-widget-background: rgba(255,255,255,.1);
+  --rui-color-nested-background: rgba(0,0,0,.15);
+  --rui-color-popover-background: #28333d;
+  --rui-color-segmented-background: rgba(255,255,255,.1);
+  --rui-color-segmented-active: rgba(255,255,255,.2);
+  --rui-color-search-background: rgba(255,255,255,.14);
+  --rui-color-disabled-background: #1f1f1f;
+  --rui-color-red-action-background: #330e0c;
+  --rui-color-input-error-focus: #421210;
+
+  /* Typography */
+  --rui-font-brand: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --rui-font-size-display1: 3.5rem;
+  --rui-font-size-heading1: 1.5rem;
+  --rui-font-size-sm-h6: 1.375rem;
+  --rui-font-size-sm-subtitle-2: 1rem;
+  --rui-font-size-emphasis1: .9375rem;
+  --rui-font-size-body1: .9375rem;
+  --rui-font-size-body2: .875rem;
+  --rui-font-size-body3: .75rem;
+  --rui-font-size-emphasis3: .75rem;
+  --rui-font-weight-heading1: 700;
+  --rui-font-weight-emphasis3: 600;
+  --rui-font-weight-subheader: 500;
+  --rui-font-weight-body1: 400;
+  --rui-line-height-heading1: 1.33333;
+  --rui-line-height-body2: 1.42857;
+  --rui-line-height-body3: 1.5;
+
+  /* Spacing */
+  --rui-space-sp50: .125rem;
+  --rui-space-sp100: .1875rem;
+  --rui-space-sp300: .5rem;
+  --rui-space-sp400: .75rem;
+  --rui-space-sp600: 1.25rem;
+  --rui-space-sp1000: 2rem;
+
+  /* Radii */
+  --rui-radius-widget: .75rem;
+  --rui-radius-nested-widget: .5rem;
+  --rui-radius-cell: .5rem;
+  --rui-radius-r6: .375rem;
+  --rui-radius-r8: .5rem;
+  --rui-radius-r12: .75rem;
+  --rui-radius-round: 9999px;
+
+  /* Sizes */
+  --rui-size-button-md: 2.75rem;
+  --rui-size-button-sm: 2rem;
+  --rui-size-s16: 1rem;
+  --rui-size-s24: 1.5rem;
+  --rui-size-s40: 2.5rem;
+  --rui-size-s48: 3rem;
+
+  /* Shadows */
+  --rui-shadow-level1: 0 .125rem .1875rem rgba(0,0,0,.05);
+  --rui-shadow-level2: 0 .1875rem .5rem rgba(0,0,0,.1);
+  --rui-shadow-popover: 0 .25rem .25rem .25rem rgba(0,0,0,.12), 0 1rem 3rem rgba(0,0,0,.16);
+
+  /* Timing */
+  --rui-duration-sm: .2s;
+  --rui-duration-xl: .9s;
+  --rui-duration-skeleton: 1.5s;
+  --rui-easing-toast: cubic-bezier(.175,.885,.21,1.65);
+  --rui-timing-lg: .45s cubic-bezier(.15,.5,.5,1);
+}
+
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--rui-font-brand);
+  background: #111;
+  color: var(--rui-color-foreground);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 20px 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== DEVICE FRAME ===== */
+.device-frame {
+  width: 393px;
+  height: 852px;
+  background: var(--rui-color-grouped-background);
+  border-radius: 40px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 0 0 2px #333, 0 20px 60px rgba(0,0,0,.5);
+}
+
+/* Status bar */
+.status-bar {
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 28px 0;
+  font-size: 15px;
+  font-weight: 600;
+  position: relative;
+  z-index: 100;
+}
+.status-bar .time { font-weight: 700; font-size: 16px; }
+.status-bar .icons { display: flex; gap: 5px; align-items: center; }
+.status-bar .icons svg { width: 16px; height: 16px; }
+
+/* ===== APP CONTAINER ===== */
+.app {
+  height: calc(852px - 54px);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ===== SCREENS ===== */
+.screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 64px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: transform 300ms ease-out, opacity 200ms ease;
+  will-change: transform;
+  -webkit-overflow-scrolling: touch;
+}
+.screen::-webkit-scrollbar { display: none; }
+.screen.hidden-left { transform: translateX(-30%); opacity: 0.3; pointer-events: none; }
+.screen.hidden-right { transform: translateX(100%); opacity: 1; pointer-events: none; }
+.screen.active { transform: translateX(0); opacity: 1; }
+.screen.tab-hidden { display: none; }
+
+/* ===== HEADER BAR ===== */
+.header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px 12px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--rui-color-grouped-background);
+}
+.header-bar .avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--rui-radius-round);
+  background: linear-gradient(135deg, #6fa0ff, #5e5ce6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+}
+.header-bar .actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+.header-bar .actions .icon-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--rui-radius-round);
+  background: transparent;
+  border: none;
+  color: var(--rui-color-foreground);
+  cursor: pointer;
+  transition: background var(--rui-duration-sm) ease;
+}
+.header-bar .actions .icon-btn:hover {
+  background: var(--rui-color-widget-background);
+}
+.header-bar .actions .icon-btn svg { width: 22px; height: 22px; }
+
+/* ===== BALANCE CARD ===== */
+.balance-section { padding: 4px 16px 16px; }
+.balance-label {
+  font-size: var(--rui-font-size-body2);
+  color: var(--rui-color-inactive);
+  font-weight: var(--rui-font-weight-subheader);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.balance-label .chevron { width: 16px; height: 16px; color: var(--rui-color-inactive); }
+.balance-amount {
+  font-size: 32px;
+  font-weight: var(--rui-font-weight-heading1);
+  letter-spacing: -0.5px;
+  margin-bottom: 2px;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+.balance-amount .currency {
+  font-size: var(--rui-font-size-body1);
+  color: var(--rui-color-inactive);
+  font-weight: var(--rui-font-weight-subheader);
+}
+.balance-hide {
+  font-size: var(--rui-font-size-body3);
+  color: var(--rui-color-inactive);
+  cursor: pointer;
+}
+
+/* ===== QUICK ACTIONS ===== */
+.quick-actions {
+  display: flex;
+  justify-content: space-around;
+  padding: 16px 16px 20px;
+}
+.quick-action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: var(--rui-color-foreground);
+}
+.quick-action:active .quick-action-icon { transform: scale(0.92); }
+.quick-action-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--rui-radius-round);
+  background: var(--rui-color-action-background);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 200ms cubic-bezier(.175,.885,.21,1.65);
+}
+.quick-action-icon svg { width: 22px; height: 22px; color: var(--rui-color-accent); }
+.quick-action-label {
+  font-size: var(--rui-font-size-body3);
+  color: var(--rui-color-inactive);
+  font-weight: var(--rui-font-weight-body1);
+}
+
+/* ===== TRANSACTION FEED ===== */
+.feed-section { padding: 0 16px; }
+.feed-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.feed-header h3 {
+  font-size: var(--rui-font-size-emphasis1);
+  font-weight: var(--rui-font-weight-emphasis3);
+}
+.feed-header .see-all {
+  font-size: var(--rui-font-size-body3);
+  color: var(--rui-color-accent);
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-weight: var(--rui-font-weight-subheader);
+}
+
+.date-group { margin-bottom: 20px; }
+.date-label {
+  font-size: var(--rui-font-size-body3);
+  color: var(--rui-color-inactive);
+  font-weight: var(--rui-font-weight-subheader);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.transaction-card {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  cursor: pointer;
+  border-radius: var(--rui-radius-cell);
+  transition: background var(--rui-duration-sm) ease;
+  position: relative;
+}
+.transaction-card:active { background: var(--rui-color-widget-background); }
+
+.tx-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--rui-radius-round);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-right: 12px;
+}
+.tx-icon svg { width: 20px; height: 20px; }
+.tx-icon.transport { background: rgba(111,160,255,.15); color: var(--rui-color-blue); }
+.tx-icon.entertainment { background: rgba(191,90,242,.15); color: var(--rui-color-purple); }
+.tx-icon.shopping { background: rgba(255,87,119,.15); color: var(--rui-color-deep-pink); }
+.tx-icon.income { background: rgba(26,192,151,.15); color: var(--rui-color-positive); }
+.tx-icon.food { background: rgba(255,159,10,.15); color: var(--rui-color-warning); }
+.tx-icon.tech { background: rgba(94,92,230,.15); color: var(--rui-color-indigo); }
+.tx-icon.services { background: rgba(19,209,163,.15); color: var(--rui-color-teal); }
+
+.tx-info { flex: 1; min-width: 0; }
+.tx-merchant {
+  font-size: var(--rui-font-size-emphasis1);
+  font-weight: var(--rui-font-weight-emphasis3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tx-category {
+  font-size: var(--rui-font-size-body3);
+  color: var(--rui-color-inactive);
+  margin-top: 2px;
+}
+
+.tx-amount {
+  text-align: right;
+  flex-shrink: 0;
+  margin-left: 12px;
+}
+.tx-amount .amount {
+  font-size: var(--rui-font-size-emphasis1);
+  font-weight: var(--rui-font-weight-emphasis3);
+}
+.tx-amount .amount.positive { color: var(--rui-color-positive); }
+.tx-amount .original {
+  font-size: var(--rui-font-size-body3);
+  color: var(--rui-color-inactive);
+  margin-top: 2px;
+  text-align: right;
+}
+
+/* Pending animation */
+.transaction-card.pending { animation: pulse-pending 2s ease-in-out infinite; }
+@keyframes pulse-pending {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ===== TRANSACTION DETAIL ===== */
+.detail-screen { background: var(--rui-color-grouped-background); }
+.detail-header {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  background: var(--rui-color-grouped-background);
+  z-index: 10;
+}
+.detail-header .back-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  color: var(--rui-color-foreground);
+  cursor: pointer;
+  border-radius: var(--rui-radius-round);
+  transition: background var(--rui-duration-sm);
+}
+.detail-header .back-btn:hover { background: var(--rui-color-widget-background); }
+.detail-header h2 {
+  font-size: var(--rui-font-size-sm-subtitle-2);
+  font-weight: var(--rui-font-weight-emphasis3);
+}
+
+.detail-amount-section {
+  text-align: center;
+  padding: 24px 16px 32px;
+}
+.detail-merchant-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--rui-radius-round);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+.detail-merchant-icon svg { width: 28px; height: 28px; }
+.detail-amount {
+  font-size: 36px;
+  font-weight: var(--rui-font-weight-heading1);
+  letter-spacing: -0.5px;
+  margin-bottom: 4px;
+}
+.detail-merchant-name {
+  font-size: var(--rui-font-size-body1);
+  color: var(--rui-color-inactive);
+  margin-bottom: 8px;
+}
+.detail-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: var(--rui-radius-round);
+  font-size: var(--rui-font-size-body3);
+  font-weight: var(--rui-font-weight-subheader);
+}
+.detail-status.completed {
+  background: rgba(26,192,151,.12);
+  color: var(--rui-color-positive);
+}
+.detail-status.pending {
+  background: rgba(255,159,10,.12);
+  color: var(--rui-color-warning);
+}
+.detail-status svg { width: 14px; height: 14px; }
+
+.detail-info {
+  margin: 0 16px;
+  background: var(--rui-color-widget-background);
+  border-radius: var(--rui-radius-widget);
+  overflow: hidden;
+}
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.detail-row:last-child { border-bottom: none; }
+.detail-row-label {
+  font-size: var(--rui-font-size-body2);
+  color: var(--rui-color-inactive);
+}
+.detail-row-value {
+  font-size: var(--rui-font-size-body2);
+  font-weight: var(--rui-font-weight-subheader);
+  text-align: right;
+}
+
+.detail-actions {
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.detail-btn {
+  height: var(--rui-size-button-md);
+  border-radius: var(--rui-radius-r6);
+  font-size: var(--rui-font-size-body1);
+  font-weight: var(--rui-font-weight-emphasis3);
+  font-family: var(--rui-font-brand);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform 150ms cubic-bezier(.175,.885,.21,1.65);
+}
+.detail-btn:active { transform: scale(0.95); }
+.detail-btn.primary {
+  background: var(--rui-color-action-background);
+  color: var(--rui-color-accent);
+}
+.detail-btn.ghost {
+  background: transparent;
+  color: var(--rui-color-accent);
+}
+.detail-btn svg { width: 18px; height: 18px; }
+
+.detail-note {
+  margin: 0 16px 20px;
+  padding: 14px 16px;
+  background: var(--rui-color-widget-background);
+  border-radius: var(--rui-radius-widget);
+  font-size: var(--rui-font-size-body2);
+  color: var(--rui-color-inactive);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.detail-note svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+/* ===== CARDS SCREEN ===== */
+.cards-screen { padding: 0; }
+.cards-header {
+  padding: 12px 16px 16px;
+  font-size: var(--rui-font-size-heading1);
+  font-weight: var(--rui-font-weight-heading1);
+}
+
+.card-visual {
+  margin: 0 16px 24px;
+  aspect-ratio: 1.586;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #2a2a3e, #1a1a2e);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 200ms ease;
+}
+.card-visual:active { transform: scale(0.98); }
+.card-visual.platinum {
+  background: linear-gradient(145deg, #3d3d4f 0%, #1e1e2e 50%, #2a2a3e 100%);
+}
+.card-visual::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse, rgba(255,255,255,.03) 0%, transparent 60%);
+  pointer-events: none;
+}
+.card-logo {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.card-logo .revolut-text {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.card-logo .plan-badge {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 3px 8px;
+  border-radius: var(--rui-radius-round);
+  background: rgba(255,255,255,.1);
+}
+.card-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.card-number {
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  font-variant-numeric: tabular-nums;
+}
+.card-expiry {
+  font-size: var(--rui-font-size-body3);
+  color: var(--rui-color-inactive);
+  margin-top: 4px;
+}
+.card-network {
+  width: 48px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mastercard-logo {
+  display: flex;
+  gap: -4px;
+}
+.mastercard-logo .circle {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+}
+.mastercard-logo .circle.red { background: #eb001b; }
+.mastercard-logo .circle.yellow { background: #f79e1b; margin-left: -8px; opacity: 0.85; }
+
+/* Card frozen overlay */
+.card-visual.frozen { filter: brightness(0.4) saturate(0.3); }
+.card-visual.frozen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(100,180,255,.08);
+  z-index: 2;
+  backdrop-filter: blur(2px);
+}
+
+.card-actions {
+  display: flex;
+  gap: 12px;
+  padding: 0 16px 24px;
+}
+.card-action-btn {
+  flex: 1;
+  height: var(--rui-size-button-md);
+  border-radius: var(--rui-radius-r6);
+  background: var(--rui-color-widget-background);
+  border: none;
+  color: var(--rui-color-foreground);
+  font-family: var(--rui-font-brand);
+  font-size: var(--rui-font-size-body2);
+  font-weight: var(--rui-font-weight-emphasis3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform 150ms cubic-bezier(.175,.885,.21,1.65);
+}
+.card-action-btn:active { transform: scale(0.95); }
+.card-action-btn.freeze-active {
+  background: var(--rui-color-action-background);
+  color: var(--rui-color-accent);
+}
+.card-action-btn svg { width: 18px; height: 18px; }
+
+/* Card config section */
+.card-config {
+  margin: 0 16px 16px;
+  background: var(--rui-color-widget-background);
+  border-radius: var(--rui-radius-widget);
+  overflow: hidden;
+}
+.config-section-title {
+  padding: 16px 16px 8px;
+  font-size: var(--rui-font-size-body3);
+  color: var(--rui-color-inactive);
+  font-weight: var(--rui-font-weight-subheader);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.config-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.config-toggle:last-child { border-bottom: none; }
+.config-toggle-info { flex: 1; padding-right: 12px; }
+.config-toggle-label {
+  font-size: var(--rui-font-size-body2);
+  font-weight: var(--rui-font-weight-subheader);
+}
+.config-toggle-desc {
+  font-size: var(--rui-font-size-body3);
+  color: var(--rui-color-inactive);
+  margin-top: 2px;
+}
+
+/* Toggle switch */
+.toggle {
+  width: 51px;
+  height: 31px;
+  border-radius: 16px;
+  background: var(--rui-color-grey-50);
+  position: relative;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 200ms ease;
+}
+.toggle.on { background: var(--rui-color-accent); }
+.toggle .thumb {
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  background: #fff;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: transform 200ms cubic-bezier(.175,.885,.21,1.65);
+  box-shadow: 0 1px 3px rgba(0,0,0,.2);
+}
+.toggle.on .thumb { transform: translateX(20px); }
+
+/* Other cards list */
+.other-cards {
+  margin: 0 16px 24px;
+}
+.other-cards-title {
+  font-size: var(--rui-font-size-body3);
+  color: var(--rui-color-inactive);
+  font-weight: var(--rui-font-weight-subheader);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+.other-card-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--rui-color-widget-background);
+  border-radius: var(--rui-radius-widget);
+  cursor: pointer;
+  gap: 12px;
+}
+.other-card-mini {
+  width: 48px;
+  height: 30px;
+  border-radius: 4px;
+  background: linear-gradient(135deg, #333, #222);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.other-card-info { flex: 1; }
+.other-card-name { font-size: var(--rui-font-size-body2); font-weight: var(--rui-font-weight-subheader); }
+.other-card-number { font-size: var(--rui-font-size-body3); color: var(--rui-color-inactive); }
+
+/* ===== SEND MONEY FLOW ===== */
+.send-screen { background: var(--rui-color-grouped-background); }
+
+.send-header {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  background: var(--rui-color-grouped-background);
+  z-index: 10;
+}
+.send-header .close-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  color: var(--rui-color-foreground);
+  cursor: pointer;
+  border-radius: var(--rui-radius-round);
+}
+.send-header h2 {
+  font-size: var(--rui-font-size-sm-subtitle-2);
+  font-weight: var(--rui-font-weight-emphasis3);
+}
+
+/* Send step 1: recipient */
+.send-step { display: none; }
+.send-step.active { display: block; }
+
+.search-bar {
+  margin: 0 16px 16px;
+  height: var(--rui-size-button-md);
+  background: var(--rui-color-search-background);
+  border-radius: var(--rui-radius-r8);
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  gap: 10px;
+}
+.search-bar svg { width: 20px; height: 20px; color: var(--rui-color-inactive); flex-shrink: 0; }
+.search-bar input {
+  flex: 1;
+  background: none;
+  border: none;
+  color: var(--rui-color-foreground);
+  font-family: var(--rui-font-brand);
+  font-size: var(--rui-font-size-body1);
+  outline: none;
+}
+.search-bar input::placeholder { color: var(--rui-color-inactive); }
+
+.recent-contacts {
+  padding: 0 16px 20px;
+}
+.recent-contacts-title {
+  font-size: var(--rui-font-size-body3);
+  color: var(--rui-color-inactive);
+  font-weight: var(--rui-font-weight-subheader);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+.contacts-grid {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+.contacts-grid::-webkit-scrollbar { display: none; }
+.contact-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  min-width: 60px;
+}
+.contact-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--rui-radius-round);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 16px;
+  transition: transform 150ms ease;
+}
+.contact-item:active .contact-avatar { transform: scale(0.9); }
+.contact-name {
+  font-size: var(--rui-font-size-body3);
+  color: var(--rui-color-inactive);
+  text-align: center;
+  max-width: 60px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.contact-list { padding: 0 16px; }
+.contact-list-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  gap: 12px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255,255,255,.04);
+}
+.contact-list-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--rui-radius-round);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.contact-list-info { flex: 1; }
+.contact-list-name { font-size: var(--rui-font-size-body1); font-weight: var(--rui-font-weight-subheader); }
+.contact-list-handle { font-size: var(--rui-font-size-body3); color: var(--rui-color-inactive); }
+
+/* Send step 2: amount */
+.amount-entry {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 16px 24px;
+}
+.amount-recipient {
+  font-size: var(--rui-font-size-body2);
+  color: var(--rui-color-inactive);
+  margin-bottom: 32px;
+}
+.amount-display {
+  font-size: 48px;
+  font-weight: var(--rui-font-weight-heading1);
+  letter-spacing: -1px;
+  margin-bottom: 8px;
+  transition: transform 100ms cubic-bezier(.175,.885,.21,1.65);
+  display: flex;
+  align-items: baseline;
+}
+.amount-display .currency-symbol {
+  font-size: 28px;
+  color: var(--rui-color-inactive);
+  margin-right: 4px;
+}
+.amount-balance-info {
+  font-size: var(--rui-font-size-body3);
+  color: var(--rui-color-inactive);
+  margin-bottom: 32px;
+}
+
+.numpad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+}
+.numpad-key {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: var(--rui-font-weight-subheader);
+  font-family: var(--rui-font-brand);
+  border: none;
+  background: none;
+  color: var(--rui-color-foreground);
+  cursor: pointer;
+  border-radius: var(--rui-radius-r8);
+  transition: background var(--rui-duration-sm) ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.numpad-key:active { background: var(--rui-color-widget-background); }
+.numpad-key svg { width: 24px; height: 24px; }
+
+.send-continue-btn {
+  margin: 16px 16px 0;
+  width: calc(100% - 32px);
+  height: var(--rui-size-button-md);
+  border-radius: var(--rui-radius-r6);
+  background: var(--rui-color-accent);
+  color: var(--rui-color-on-accent);
+  border: none;
+  font-family: var(--rui-font-brand);
+  font-size: var(--rui-font-size-body1);
+  font-weight: var(--rui-font-weight-emphasis3);
+  cursor: pointer;
+  transition: transform 150ms cubic-bezier(.175,.885,.21,1.65), opacity 150ms;
+}
+.send-continue-btn:active { transform: scale(0.95); }
+.send-continue-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.send-continue-btn:disabled:active { transform: none; }
+
+/* Send step 3: review */
+.review-section { padding: 24px 16px; }
+.review-amount-display {
+  text-align: center;
+  margin-bottom: 32px;
+}
+.review-amount-display .amount {
+  font-size: 40px;
+  font-weight: var(--rui-font-weight-heading1);
+}
+.review-amount-display .to-label {
+  font-size: var(--rui-font-size-body2);
+  color: var(--rui-color-inactive);
+  margin-top: 4px;
+}
+.review-details {
+  background: var(--rui-color-widget-background);
+  border-radius: var(--rui-radius-widget);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+/* Send step 4: success */
+.success-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 16px 24px;
+  text-align: center;
+}
+.success-check {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--rui-radius-round);
+  background: rgba(26,192,151,.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  animation: success-pop 600ms cubic-bezier(.175,.885,.21,1.65);
+}
+.success-check svg { width: 40px; height: 40px; color: var(--rui-color-positive); }
+@keyframes success-pop {
+  0% { transform: scale(0); opacity: 0; }
+  60% { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.success-title {
+  font-size: var(--rui-font-size-heading1);
+  font-weight: var(--rui-font-weight-heading1);
+  margin-bottom: 8px;
+}
+.success-subtitle {
+  font-size: var(--rui-font-size-body2);
+  color: var(--rui-color-inactive);
+}
+
+/* Confetti */
+.confetti-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 50;
+}
+.confetti-piece {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  animation: confetti-fall 2.5s ease-in forwards;
+}
+@keyframes confetti-fall {
+  0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(852px) rotate(720deg); opacity: 0; }
+}
+
+/* ===== SKELETON LOADING ===== */
+.skeleton {
+  background: linear-gradient(90deg, rgba(255,255,255,.06) 25%, rgba(255,255,255,.12) 50%, rgba(255,255,255,.06) 75%);
+  background-size: 200% 100%;
+  animation: shimmer var(--rui-duration-skeleton) infinite;
+  border-radius: var(--rui-radius-r6);
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ===== BOTTOM TAB BAR ===== */
+.tab-bar {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: var(--rui-color-grouped-background);
+  border-top: 1px solid rgba(255,255,255,.08);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  padding-bottom: 8px;
+}
+.tab-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 44px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: var(--rui-color-grey-50);
+  transition: color var(--rui-duration-sm) ease;
+  position: relative;
+}
+.tab-item.active { color: var(--rui-color-accent); }
+.tab-item svg {
+  width: 24px;
+  height: 24px;
+  transition: transform 200ms cubic-bezier(.175,.885,.21,1.65);
+}
+.tab-item.active svg { transform: scale(1.1); }
+
+/* ===== PLACEHOLDER SCREENS ===== */
+.placeholder-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--rui-color-inactive);
+  gap: 12px;
+}
+.placeholder-screen svg { width: 48px; height: 48px; opacity: 0.3; }
+.placeholder-screen span { font-size: var(--rui-font-size-body1); }
+
+/* ===== UTILITIES ===== */
+.fade-in { animation: fadeIn 300ms ease forwards; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+</style>
+</head>
+<body>
+
+<div class="device-frame">
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span class="time">9:41</span>
+    <div class="icons">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 6l5-3 5 3 5-3 5 3v14l-5-3-5 3-5-3-5 3V6z"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>
+      <svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="7" width="18" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="4" y="9" width="12" height="8" rx="1" fill="currentColor" opacity=".9"/><path d="M22 11v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </div>
+  </div>
+
+  <!-- App -->
+  <div class="app">
+
+    <!-- HOME SCREEN -->
+    <div class="screen active" id="screen-home">
+      <div class="header-bar">
+        <div class="avatar">CG</div>
+        <div class="actions">
+          <button class="icon-btn"><i data-lucide="search"></i></button>
+          <button class="icon-btn"><i data-lucide="bell"></i></button>
+          <button class="icon-btn"><i data-lucide="scan-line"></i></button>
+        </div>
+      </div>
+
+      <div class="balance-section">
+        <div class="balance-label">
+          Cuentas <i data-lucide="chevron-down" class="chevron" style="width:16px;height:16px"></i>
+        </div>
+        <div class="balance-amount">
+          <span>1.954,23</span>
+          <span class="currency">EUR</span>
+        </div>
+      </div>
+
+      <div class="quick-actions">
+        <button class="quick-action" onclick="openSendFlow()">
+          <div class="quick-action-icon"><i data-lucide="plus"></i></div>
+          <span class="quick-action-label">Anadir</span>
+        </button>
+        <button class="quick-action" onclick="openSendFlow()">
+          <div class="quick-action-icon"><i data-lucide="arrow-up-right"></i></div>
+          <span class="quick-action-label">Enviar</span>
+        </button>
+        <button class="quick-action">
+          <div class="quick-action-icon"><i data-lucide="arrow-down-left"></i></div>
+          <span class="quick-action-label">Solicitar</span>
+        </button>
+        <button class="quick-action">
+          <div class="quick-action-icon"><i data-lucide="ellipsis"></i></div>
+          <span class="quick-action-label">Mas</span>
+        </button>
+      </div>
+
+      <div class="feed-section">
+        <div class="feed-header">
+          <h3>Transacciones</h3>
+          <button class="see-all">Ver todo</button>
+        </div>
+
+        <!-- Today -->
+        <div class="date-group">
+          <div class="date-label">Hoy</div>
+          <div class="transaction-card" onclick="openTransaction(0)">
+            <div class="tx-icon tech"><i data-lucide="wifi"></i></div>
+            <div class="tx-info">
+              <div class="tx-merchant">Viasat</div>
+              <div class="tx-category">Servicios</div>
+            </div>
+            <div class="tx-amount">
+              <div class="amount">-10,25 EUR</div>
+              <div class="original">12,00 USD</div>
+            </div>
+          </div>
+          <div class="transaction-card pending" onclick="openTransaction(1)">
+            <div class="tx-icon transport"><i data-lucide="car"></i></div>
+            <div class="tx-info">
+              <div class="tx-merchant">Uber</div>
+              <div class="tx-category">Transporte · Pendiente</div>
+            </div>
+            <div class="tx-amount">
+              <div class="amount">-4,52 EUR</div>
+              <div class="original">85,00 MXN</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Yesterday -->
+        <div class="date-group">
+          <div class="date-label">Ayer</div>
+          <div class="transaction-card" onclick="openTransaction(2)">
+            <div class="tx-icon entertainment"><i data-lucide="music"></i></div>
+            <div class="tx-info">
+              <div class="tx-merchant">Spotify</div>
+              <div class="tx-category">Entretenimiento</div>
+            </div>
+            <div class="tx-amount">
+              <div class="amount">-9,99 EUR</div>
+            </div>
+          </div>
+          <div class="transaction-card" onclick="openTransaction(3)">
+            <div class="tx-icon income"><i data-lucide="arrow-down-left"></i></div>
+            <div class="tx-info">
+              <div class="tx-merchant">Maria Garcia</div>
+              <div class="tx-category">Transferencia recibida</div>
+            </div>
+            <div class="tx-amount">
+              <div class="amount positive">+500,00 EUR</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2 days ago -->
+        <div class="date-group">
+          <div class="date-label">1 Mar</div>
+          <div class="transaction-card" onclick="openTransaction(4)">
+            <div class="tx-icon shopping"><i data-lucide="shopping-bag"></i></div>
+            <div class="tx-info">
+              <div class="tx-merchant">Apple Store</div>
+              <div class="tx-category">Compras</div>
+            </div>
+            <div class="tx-amount">
+              <div class="amount">-149,99 EUR</div>
+            </div>
+          </div>
+          <div class="transaction-card" onclick="openTransaction(5)">
+            <div class="tx-icon food"><i data-lucide="utensils"></i></div>
+            <div class="tx-info">
+              <div class="tx-merchant">Restaurante La Buena Vida</div>
+              <div class="tx-category">Restaurantes</div>
+            </div>
+            <div class="tx-amount">
+              <div class="amount">-42,50 EUR</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Spacer for scroll -->
+        <div style="height: 80px"></div>
+      </div>
+    </div>
+
+    <!-- TRANSACTION DETAIL SCREEN -->
+    <div class="screen hidden-right detail-screen" id="screen-detail">
+      <div class="detail-header">
+        <button class="back-btn" onclick="closeDetail()"><i data-lucide="chevron-left"></i></button>
+        <h2 id="detail-title">Detalle</h2>
+      </div>
+
+      <div class="detail-amount-section">
+        <div class="detail-merchant-icon tx-icon tech" id="detail-icon">
+          <i data-lucide="wifi"></i>
+        </div>
+        <div class="detail-amount" id="detail-amount">-10,25 EUR</div>
+        <div class="detail-merchant-name" id="detail-merchant">Viasat</div>
+        <div class="detail-status completed" id="detail-status">
+          <i data-lucide="check-circle-2"></i>
+          <span>Completado</span>
+        </div>
+      </div>
+
+      <div class="detail-info" id="detail-info">
+        <div class="detail-row">
+          <span class="detail-row-label">Cargo del comercio</span>
+          <span class="detail-row-value" id="detail-original">12,00 USD</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-row-label">Tipo de cambio</span>
+          <span class="detail-row-value" id="detail-rate">1 EUR = 1,170542 USD</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-row-label">Comision</span>
+          <span class="detail-row-value">Sin comision</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-row-label">Tarjeta</span>
+          <span class="detail-row-value" id="detail-card">Platinum ····2403</span>
+        </div>
+      </div>
+
+      <div class="detail-note" id="detail-note">
+        <i data-lucide="pencil"></i>
+        <span>Anadir una nota</span>
+      </div>
+
+      <div class="detail-actions">
+        <button class="detail-btn primary">
+          <i data-lucide="download"></i>
+          Descargar recibo
+        </button>
+        <button class="detail-btn ghost">
+          <i data-lucide="help-circle"></i>
+          Obtener ayuda
+        </button>
+      </div>
+    </div>
+
+    <!-- CARDS SCREEN -->
+    <div class="screen tab-hidden" id="screen-cards">
+      <div class="cards-header">Tarjetas</div>
+
+      <div class="card-visual platinum" id="main-card">
+        <div class="card-logo">
+          <span class="revolut-text">Revolut</span>
+          <span class="plan-badge">Platinum</span>
+        </div>
+        <div class="card-bottom">
+          <div>
+            <div class="card-number">····  ····  ····  2403</div>
+            <div class="card-expiry">05/30</div>
+          </div>
+          <div class="card-network">
+            <div class="mastercard-logo">
+              <div class="circle red"></div>
+              <div class="circle yellow"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-actions">
+        <button class="card-action-btn" id="freeze-btn" onclick="toggleFreeze()">
+          <i data-lucide="lock"></i>
+          Bloquear
+        </button>
+        <button class="card-action-btn">
+          <i data-lucide="settings"></i>
+          Configuracion
+        </button>
+      </div>
+
+      <div class="card-config">
+        <div class="config-section-title">Seguridad</div>
+        <div class="config-toggle">
+          <div class="config-toggle-info">
+            <div class="config-toggle-label">Transacciones online</div>
+            <div class="config-toggle-desc">Permitir pagos por internet</div>
+          </div>
+          <div class="toggle on" onclick="this.classList.toggle('on')"><div class="thumb"></div></div>
+        </div>
+        <div class="config-toggle">
+          <div class="config-toggle-info">
+            <div class="config-toggle-label">Seguridad por ubicacion</div>
+            <div class="config-toggle-desc">Verificar ubicacion del dispositivo</div>
+          </div>
+          <div class="toggle" onclick="this.classList.toggle('on')"><div class="thumb"></div></div>
+        </div>
+        <div class="config-toggle">
+          <div class="config-toggle-info">
+            <div class="config-toggle-label">Banda magnetica</div>
+            <div class="config-toggle-desc">Pagos con banda magnetica</div>
+          </div>
+          <div class="toggle on" onclick="this.classList.toggle('on')"><div class="thumb"></div></div>
+        </div>
+        <div class="config-toggle">
+          <div class="config-toggle-info">
+            <div class="config-toggle-label">Retiradas de cajero</div>
+            <div class="config-toggle-desc">Permitir retiradas en cajeros automaticos</div>
+          </div>
+          <div class="toggle on" onclick="this.classList.toggle('on')"><div class="thumb"></div></div>
+        </div>
+      </div>
+
+      <div class="other-cards">
+        <div class="other-cards-title">Otras tarjetas</div>
+        <div class="other-card-item">
+          <div class="other-card-mini">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+          </div>
+          <div class="other-card-info">
+            <div class="other-card-name">Virtual</div>
+            <div class="other-card-number">····7568 · 05/30</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="height: 80px"></div>
+    </div>
+
+    <!-- SEND MONEY SCREEN -->
+    <div class="screen hidden-right send-screen" id="screen-send">
+      <div class="send-header">
+        <button class="close-btn" onclick="closeSendFlow()"><i data-lucide="x"></i></button>
+        <h2 id="send-title">Enviar dinero</h2>
+      </div>
+
+      <!-- Step 1: Select recipient -->
+      <div class="send-step active" id="send-step-1">
+        <div class="search-bar">
+          <i data-lucide="search"></i>
+          <input type="text" placeholder="Buscar contacto...">
+        </div>
+
+        <div class="recent-contacts">
+          <div class="recent-contacts-title">Recientes</div>
+          <div class="contacts-grid">
+            <div class="contact-item" onclick="selectRecipient('Maria G.', 'MG', '#1ac097')">
+              <div class="contact-avatar" style="background: rgba(26,192,151,.2); color: #1ac097">MG</div>
+              <div class="contact-name">Maria G.</div>
+            </div>
+            <div class="contact-item" onclick="selectRecipient('Pablo R.', 'PR', '#6fa0ff')">
+              <div class="contact-avatar" style="background: rgba(111,160,255,.2); color: #6fa0ff">PR</div>
+              <div class="contact-name">Pablo R.</div>
+            </div>
+            <div class="contact-item" onclick="selectRecipient('Ana L.', 'AL', '#bf5af2')">
+              <div class="contact-avatar" style="background: rgba(191,90,242,.2); color: #bf5af2">AL</div>
+              <div class="contact-name">Ana L.</div>
+            </div>
+            <div class="contact-item" onclick="selectRecipient('Carlos O.', 'CO', '#ff9f0a')">
+              <div class="contact-avatar" style="background: rgba(255,159,10,.2); color: #ff9f0a">CO</div>
+              <div class="contact-name">Carlos O.</div>
+            </div>
+            <div class="contact-item" onclick="selectRecipient('Lucia M.', 'LM', '#ff5777')">
+              <div class="contact-avatar" style="background: rgba(255,87,119,.2); color: #ff5777">LM</div>
+              <div class="contact-name">Lucia M.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-list">
+          <div class="contact-list-item" onclick="selectRecipient('Ana Lopez', 'AL', '#bf5af2')">
+            <div class="contact-list-avatar" style="background: rgba(191,90,242,.2); color: #bf5af2">AL</div>
+            <div class="contact-list-info">
+              <div class="contact-list-name">Ana Lopez</div>
+              <div class="contact-list-handle">@analopez</div>
+            </div>
+          </div>
+          <div class="contact-list-item" onclick="selectRecipient('Carlos Ottati', 'CO', '#ff9f0a')">
+            <div class="contact-list-avatar" style="background: rgba(255,159,10,.2); color: #ff9f0a">CO</div>
+            <div class="contact-list-info">
+              <div class="contact-list-name">Carlos Ottati</div>
+              <div class="contact-list-handle">@cgarciaottati</div>
+            </div>
+          </div>
+          <div class="contact-list-item" onclick="selectRecipient('Lucia Martinez', 'LM', '#ff5777')">
+            <div class="contact-list-avatar" style="background: rgba(255,87,119,.2); color: #ff5777">LM</div>
+            <div class="contact-list-info">
+              <div class="contact-list-name">Lucia Martinez</div>
+              <div class="contact-list-handle">@luciam</div>
+            </div>
+          </div>
+          <div class="contact-list-item" onclick="selectRecipient('Maria Garcia', 'MG', '#1ac097')">
+            <div class="contact-list-avatar" style="background: rgba(26,192,151,.2); color: #1ac097">MG</div>
+            <div class="contact-list-info">
+              <div class="contact-list-name">Maria Garcia</div>
+              <div class="contact-list-handle">@mariagarcia</div>
+            </div>
+          </div>
+          <div class="contact-list-item" onclick="selectRecipient('Pablo Rodriguez', 'PR', '#6fa0ff')">
+            <div class="contact-list-avatar" style="background: rgba(111,160,255,.2); color: #6fa0ff">PR</div>
+            <div class="contact-list-info">
+              <div class="contact-list-name">Pablo Rodriguez</div>
+              <div class="contact-list-handle">@pablor</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Amount -->
+      <div class="send-step" id="send-step-2">
+        <div class="amount-entry">
+          <div class="amount-recipient" id="send-to-name">Para Maria G.</div>
+          <div class="amount-display" id="amount-display">
+            <span class="currency-symbol">EUR</span>
+            <span id="amount-value">0</span>
+          </div>
+          <div class="amount-balance-info">Disponible: 1.954,23 EUR</div>
+        </div>
+
+        <div class="numpad">
+          <button class="numpad-key" onclick="numpadInput('1')">1</button>
+          <button class="numpad-key" onclick="numpadInput('2')">2</button>
+          <button class="numpad-key" onclick="numpadInput('3')">3</button>
+          <button class="numpad-key" onclick="numpadInput('4')">4</button>
+          <button class="numpad-key" onclick="numpadInput('5')">5</button>
+          <button class="numpad-key" onclick="numpadInput('6')">6</button>
+          <button class="numpad-key" onclick="numpadInput('7')">7</button>
+          <button class="numpad-key" onclick="numpadInput('8')">8</button>
+          <button class="numpad-key" onclick="numpadInput('9')">9</button>
+          <button class="numpad-key" onclick="numpadInput('.')">.</button>
+          <button class="numpad-key" onclick="numpadInput('0')">0</button>
+          <button class="numpad-key" onclick="numpadInput('del')"><i data-lucide="delete"></i></button>
+        </div>
+
+        <button class="send-continue-btn" id="send-continue" disabled onclick="goToReview()">Continuar</button>
+      </div>
+
+      <!-- Step 3: Review -->
+      <div class="send-step" id="send-step-3">
+        <div class="review-section">
+          <div class="review-amount-display">
+            <div class="amount" id="review-amount">EUR 50,00</div>
+            <div class="to-label" id="review-to">Para Maria G.</div>
+          </div>
+
+          <div class="review-details">
+            <div class="detail-row">
+              <span class="detail-row-label">De</span>
+              <span class="detail-row-value">Cuenta EUR · 1.954,23</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-row-label">Comision</span>
+              <span class="detail-row-value" style="color: var(--rui-color-positive)">Sin comision</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-row-label">Llegada</span>
+              <span class="detail-row-value">Instantaneo</span>
+            </div>
+          </div>
+
+          <button class="send-continue-btn" style="width:100%; margin:0" onclick="sendSuccess()">
+            Enviar <span id="review-send-amount">EUR 50,00</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 4: Success -->
+      <div class="send-step" id="send-step-4">
+        <div class="success-section">
+          <div class="success-check"><i data-lucide="check"></i></div>
+          <div class="success-title">Enviado</div>
+          <div class="success-subtitle" id="success-msg">EUR 50,00 enviado a Maria G.</div>
+        </div>
+        <button class="send-continue-btn" style="background: var(--rui-color-widget-background); color: var(--rui-color-foreground);" onclick="closeSendFlow()">Hecho</button>
+      </div>
+    </div>
+
+    <!-- CRYPTO SCREEN (placeholder) -->
+    <div class="screen tab-hidden" id="screen-crypto">
+      <div class="placeholder-screen">
+        <i data-lucide="trending-up"></i>
+        <span>Crypto</span>
+      </div>
+    </div>
+
+    <!-- LIFESTYLE SCREEN (placeholder) -->
+    <div class="screen tab-hidden" id="screen-lifestyle">
+      <div class="placeholder-screen">
+        <i data-lucide="compass"></i>
+        <span>Estilo de vida</span>
+      </div>
+    </div>
+
+    <!-- HUB SCREEN (placeholder) -->
+    <div class="screen tab-hidden" id="screen-hub">
+      <div class="placeholder-screen">
+        <i data-lucide="layout-grid"></i>
+        <span>Hub</span>
+      </div>
+    </div>
+
+    <!-- BOTTOM TAB BAR -->
+    <div class="tab-bar" id="tab-bar">
+      <button class="tab-item active" data-tab="home" onclick="switchTab('home')">
+        <i data-lucide="home"></i>
+      </button>
+      <button class="tab-item" data-tab="cards" onclick="switchTab('cards')">
+        <i data-lucide="credit-card"></i>
+      </button>
+      <button class="tab-item" data-tab="crypto" onclick="switchTab('crypto')">
+        <i data-lucide="trending-up"></i>
+      </button>
+      <button class="tab-item" data-tab="lifestyle" onclick="switchTab('lifestyle')">
+        <i data-lucide="compass"></i>
+      </button>
+      <button class="tab-item" data-tab="hub" onclick="switchTab('hub')">
+        <i data-lucide="layout-grid"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Init Lucide icons
+lucide.createIcons();
+
+// Transaction data
+const transactions = [
+  { merchant: 'Viasat', category: 'Servicios', amount: '-10,25 EUR', original: '12,00 USD', rate: '1 EUR = 1,170542 USD', card: 'Platinum ····2403', status: 'completed', iconClass: 'tech', icon: 'wifi' },
+  { merchant: 'Uber', category: 'Transporte', amount: '-4,52 EUR', original: '85,00 MXN', rate: '1 EUR = 18,80531 MXN', card: 'Platinum ····2403', status: 'pending', iconClass: 'transport', icon: 'car' },
+  { merchant: 'Spotify', category: 'Entretenimiento', amount: '-9,99 EUR', original: null, rate: null, card: 'Virtual ····7568', status: 'completed', iconClass: 'entertainment', icon: 'music' },
+  { merchant: 'Maria Garcia', category: 'Transferencia recibida', amount: '+500,00 EUR', original: null, rate: null, card: null, status: 'completed', iconClass: 'income', icon: 'arrow-down-left', positive: true },
+  { merchant: 'Apple Store', category: 'Compras', amount: '-149,99 EUR', original: null, rate: null, card: 'Platinum ····2403', status: 'completed', iconClass: 'shopping', icon: 'shopping-bag' },
+  { merchant: 'Restaurante La Buena Vida', category: 'Restaurantes', amount: '-42,50 EUR', original: null, rate: null, card: 'Platinum ····2403', status: 'completed', iconClass: 'food', icon: 'utensils' },
+];
+
+// Tab switching
+let currentTab = 'home';
+function switchTab(tab) {
+  if (tab === currentTab) return;
+  // Hide send flow if open
+  const sendScreen = document.getElementById('screen-send');
+  if (!sendScreen.classList.contains('hidden-right')) {
+    closeSendFlow();
+  }
+  // Close detail if open
+  closeDetail();
+
+  document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+  document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+
+  // Hide all tab screens
+  const tabScreens = ['home', 'cards', 'crypto', 'lifestyle', 'hub'];
+  tabScreens.forEach(s => {
+    const el = document.getElementById(`screen-${s}`);
+    if (s === tab) {
+      el.classList.remove('tab-hidden');
+      el.classList.add('active');
+      el.classList.remove('hidden-left', 'hidden-right');
+    } else {
+      el.classList.add('tab-hidden');
+      el.classList.remove('active');
+    }
+  });
+
+  currentTab = tab;
+  lucide.createIcons();
+}
+
+// Transaction detail
+function openTransaction(idx) {
+  const tx = transactions[idx];
+  document.getElementById('detail-title').textContent = tx.merchant;
+  document.getElementById('detail-amount').textContent = tx.amount;
+  document.getElementById('detail-amount').style.color = tx.positive ? 'var(--rui-color-positive)' : '';
+  document.getElementById('detail-merchant').textContent = tx.category;
+
+  // Update icon
+  const iconEl = document.getElementById('detail-icon');
+  iconEl.className = `detail-merchant-icon tx-icon ${tx.iconClass}`;
+  iconEl.innerHTML = `<i data-lucide="${tx.icon}"></i>`;
+
+  // Status
+  const statusEl = document.getElementById('detail-status');
+  if (tx.status === 'pending') {
+    statusEl.className = 'detail-status pending';
+    statusEl.innerHTML = '<i data-lucide="clock"></i><span>Pendiente</span>';
+  } else {
+    statusEl.className = 'detail-status completed';
+    statusEl.innerHTML = '<i data-lucide="check-circle-2"></i><span>Completado</span>';
+  }
+
+  // Info rows
+  let infoHtml = '';
+  if (tx.original) {
+    infoHtml += `<div class="detail-row"><span class="detail-row-label">Cargo del comercio</span><span class="detail-row-value">${tx.original}</span></div>`;
+  }
+  if (tx.rate) {
+    infoHtml += `<div class="detail-row"><span class="detail-row-label">Tipo de cambio</span><span class="detail-row-value">${tx.rate}</span></div>`;
+  }
+  infoHtml += `<div class="detail-row"><span class="detail-row-label">Comision</span><span class="detail-row-value">Sin comision</span></div>`;
+  if (tx.card) {
+    infoHtml += `<div class="detail-row"><span class="detail-row-label">Tarjeta</span><span class="detail-row-value">${tx.card}</span></div>`;
+  }
+  document.getElementById('detail-info').innerHTML = infoHtml;
+
+  // Show detail screen
+  const homeScreen = document.getElementById(`screen-${currentTab}`);
+  homeScreen.classList.add('hidden-left');
+  homeScreen.classList.remove('active');
+
+  const detailScreen = document.getElementById('screen-detail');
+  detailScreen.classList.remove('hidden-right', 'tab-hidden');
+  detailScreen.classList.add('active');
+
+  document.getElementById('tab-bar').style.display = 'none';
+  lucide.createIcons();
+}
+
+function closeDetail() {
+  const detailScreen = document.getElementById('screen-detail');
+  if (detailScreen.classList.contains('active')) {
+    detailScreen.classList.remove('active');
+    detailScreen.classList.add('hidden-right');
+
+    const currentScreen = document.getElementById(`screen-${currentTab}`);
+    currentScreen.classList.remove('hidden-left');
+    currentScreen.classList.add('active');
+
+    document.getElementById('tab-bar').style.display = '';
+  }
+}
+
+// Card freeze
+let isFrozen = false;
+function toggleFreeze() {
+  isFrozen = !isFrozen;
+  const card = document.getElementById('main-card');
+  const btn = document.getElementById('freeze-btn');
+  if (isFrozen) {
+    card.classList.add('frozen');
+    btn.classList.add('freeze-active');
+    btn.innerHTML = '<i data-lucide="unlock"></i> Desbloquear';
+  } else {
+    card.classList.remove('frozen');
+    btn.classList.remove('freeze-active');
+    btn.innerHTML = '<i data-lucide="lock"></i> Bloquear';
+  }
+  lucide.createIcons();
+}
+
+// Send money flow
+let selectedRecipient = '';
+let sendAmount = '';
+let sendStep = 1;
+
+function openSendFlow() {
+  sendStep = 1;
+  sendAmount = '';
+  selectedRecipient = '';
+  showSendStep(1);
+
+  const sendScreen = document.getElementById('screen-send');
+  sendScreen.classList.remove('hidden-right', 'tab-hidden');
+  sendScreen.classList.add('active');
+
+  const currentScreen = document.getElementById(`screen-${currentTab}`);
+  currentScreen.classList.add('hidden-left');
+  currentScreen.classList.remove('active');
+
+  document.getElementById('tab-bar').style.display = 'none';
+  document.getElementById('send-title').textContent = 'Enviar dinero';
+  lucide.createIcons();
+}
+
+function closeSendFlow() {
+  const sendScreen = document.getElementById('screen-send');
+  sendScreen.classList.remove('active');
+  sendScreen.classList.add('hidden-right');
+
+  const currentScreen = document.getElementById(`screen-${currentTab}`);
+  currentScreen.classList.remove('hidden-left');
+  currentScreen.classList.add('active');
+
+  document.getElementById('tab-bar').style.display = '';
+  // Reset
+  sendAmount = '';
+  sendStep = 1;
+  document.getElementById('amount-value').textContent = '0';
+  document.getElementById('send-continue').disabled = true;
+}
+
+function showSendStep(step) {
+  document.querySelectorAll('.send-step').forEach((el, i) => {
+    el.classList.toggle('active', i === step - 1);
+  });
+  sendStep = step;
+}
+
+function selectRecipient(name, initials, color) {
+  selectedRecipient = name;
+  document.getElementById('send-to-name').textContent = `Para ${name}`;
+  document.getElementById('send-title').textContent = name;
+  showSendStep(2);
+}
+
+function numpadInput(key) {
+  if (key === 'del') {
+    sendAmount = sendAmount.slice(0, -1);
+  } else if (key === '.') {
+    if (!sendAmount.includes('.')) sendAmount += sendAmount ? '.' : '0.';
+  } else {
+    if (sendAmount.length < 8) sendAmount += key;
+  }
+
+  const display = document.getElementById('amount-value');
+  display.textContent = sendAmount || '0';
+
+  // Bounce animation
+  const displayContainer = document.getElementById('amount-display');
+  displayContainer.style.transform = 'scale(1.03)';
+  setTimeout(() => { displayContainer.style.transform = 'scale(1)'; }, 100);
+
+  // Enable/disable continue
+  const btn = document.getElementById('send-continue');
+  const val = parseFloat(sendAmount);
+  btn.disabled = !(val > 0 && val <= 1954.23);
+}
+
+function goToReview() {
+  const formatted = `EUR ${parseFloat(sendAmount).toFixed(2).replace('.', ',')}`;
+  document.getElementById('review-amount').textContent = formatted;
+  document.getElementById('review-to').textContent = `Para ${selectedRecipient}`;
+  document.getElementById('review-send-amount').textContent = formatted;
+  document.getElementById('send-title').textContent = 'Revisar';
+  showSendStep(3);
+}
+
+function sendSuccess() {
+  const formatted = `EUR ${parseFloat(sendAmount).toFixed(2).replace('.', ',')}`;
+  document.getElementById('success-msg').textContent = `${formatted} enviado a ${selectedRecipient}`;
+  document.getElementById('send-title').textContent = '';
+  showSendStep(4);
+  spawnConfetti();
+  lucide.createIcons();
+}
+
+// Confetti
+function spawnConfetti() {
+  const container = document.createElement('div');
+  container.className = 'confetti-container';
+  document.querySelector('.app').appendChild(container);
+
+  const colors = ['#6fa0ff', '#1ac097', '#ff5363', '#ffd60a', '#bf5af2', '#ff9f0a', '#5e5ce6'];
+  for (let i = 0; i < 50; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random() * 100 + '%';
+    piece.style.top = -10 + 'px';
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.animationDelay = Math.random() * 0.5 + 's';
+    piece.style.animationDuration = 1.5 + Math.random() * 1.5 + 's';
+    piece.style.width = 4 + Math.random() * 6 + 'px';
+    piece.style.height = 4 + Math.random() * 6 + 'px';
+    piece.style.transform = `rotate(${Math.random() * 360}deg)`;
+    container.appendChild(piece);
+  }
+  setTimeout(() => container.remove(), 3000);
+}
+</script>
+</body>
+</html>
