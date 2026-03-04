@@ -2,1524 +2,1379 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#000d19">
-<title>Krevolut</title>
-
-<!-- Inter font via Google Fonts -->
+<title>Revolut</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-<!-- Lucide icons via unpkg CDN -->
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-
 <style>
-/* ============================================================
-   DESIGN TOKENS — All 138 RUI CSS Variables
-   Source: ~/krevolut/teardown/design-system/css-variables-raw.json
-   ============================================================ */
+/* ===== RUI DESIGN TOKENS (extracted from app.revolut.com production DOM) ===== */
 :root {
-  /* Colors — Core */
-  --rui-color-grey-2: #f7f7f7;
-  --rui-color-grey-tone-20: rgba(255,255,255,.38);
-  --rui-color-action-label: rgba(99,147,243,.3);
-  --rui-color-channel-action-background-neutral: 255 255 255;
-  --rui-color-action-background: rgba(99,147,243,.2);
-  --rui-color-accent-control-neutral: #cdcdcd;
-  --rui-color-widget-background: rgba(255,255,255,.1);
-  --rui-color-channel-teal: 19 209 163;
-  --rui-color-channel-shimmer-photo-header: 0 0 0;
+  --rui-color-accent: #6fa0ff;
   --rui-color-on-accent: #fff;
-  --rui-color-premium-dark: #5d7d67;
-  --rui-color-channel-brown: 172 129 110;
-  --rui-color-channel-metal-dark: 164 131 93;
-  --rui-color-channel-cold-blue: 10 132 255;
-  --rui-color-channel-popover-background: 40 51 61;
-  --rui-color-channel-premium-light: 227 219 211;
-  --rui-color-channel-grouped-background: 0 13 25;
-  --rui-color-yellow: #ffd60a;
-  --rui-color-channel-ultra-mid: 154 129 162;
-  --rui-color-grouped-background: #000d19;
-  --rui-color-channel-red: 255 69 58;
-  --rui-color-foreground: #fff;
-  --rui-color-segmented-background: rgba(255,255,255,.1);
+  --rui-color-action-background: rgba(99,147,243,.2);
   --rui-color-action-background-neutral: rgba(255,255,255,.2);
-  --rui-color-premium-mid: #8eb199;
-  --rui-color-channel-action-background: 99 147 243;
-  --rui-color-channel-orange: 255 159 10;
-  --rui-color-danger: #ff5363;
-  --rui-color-blue: #6fa0ff;
-  --rui-color-metal-light: #b1aaa1;
-  --rui-color-metal-dark: #a4835d;
-  --rui-color-search-background: rgba(255,255,255,.14);
-  --rui-color-channel-blue: 111 160 255;
-  --rui-color-action-photo-header-background: #6fa0ff;
-  --rui-color-channel-success: 26 192 151;
-  --rui-color-deep-pink: #ff5777;
-  --rui-color-accent-neutral: #fff;
-  --rui-color-brown: #ac816e;
-  --rui-color-channel-purple: 191 90 242;
-  --rui-color-channel-light-green: 90 208 36;
-  --rui-color-channel-negative: 255 83 99;
-  --rui-color-input-error-focus: #421210;
-  --rui-color-teal: #13d1a3;
-  --rui-color-grey-8: #ebebf0;
-  --rui-color-ultra-mid: #9a81a2;
-  --rui-color-segmented-active: rgba(255,255,255,.2);
-  --rui-color-popover-background: #28333d;
-  --rui-color-disabled-background: #1f1f1f;
-  --rui-color-premium-light: #e3dbd3;
-  --rui-color-red-action-background: #330e0c;
-  --rui-color-channel-green: 48 209 88;
-  --rui-color-light-green: #5ad024;
-  --rui-color-warning: #ff9f0a;
-  --rui-color-nested-background: rgba(0,0,0,.15);
-  --rui-color-light-blue: #2bb2ff;
   --rui-color-positive: #1ac097;
+  --rui-color-danger: #ff5363;
+  --rui-color-warning: #ff9f0a;
+  --rui-color-blue: #6fa0ff;
+  --rui-color-teal: #13d1a3;
+  --rui-color-purple: #bf5af2;
+  --rui-color-indigo: #5e5ce6;
+  --rui-color-deep-pink: #ff5777;
+  --rui-color-brown: #ac816e;
+  --rui-color-foreground: #fff;
   --rui-color-inactive: rgba(255,255,255,.6);
   --rui-color-grey-50: #717173;
-  --rui-color-indigo: #5e5ce6;
-  --rui-color-channel-pink: 255 80 164;
-  --rui-color-channel-lime: 203 220 15;
-
-  /* Typography */
-  --rui-font-default: -apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Helvetica Neue",Helvetica,Arial,Arimo,sans-serif;
-  --rui-font-brand: "Inter",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Helvetica Neue",Helvetica,Arial,Arimo,sans-serif;
-  --rui-font-weight-heading1: 700;
-  --rui-font-weight-heading2: 700;
-  --rui-font-weight-heading3: 700;
-  --rui-font-weight-body1: 400;
-  --rui-font-weight-body3: 400;
-  --rui-font-weight-emphasis3: 600;
-  --rui-font-weight-emphasis4: 600;
-  --rui-font-weight-subheader: 500;
-  --rui-font-weight-marketing-display1: 500;
-  --rui-font-weight-marketing-display2: 500;
-  --rui-font-weight-sm-subtitle-2: 500;
+  --rui-color-grouped-background: #000d19;
+  --rui-color-widget-background: rgba(255,255,255,.1);
+  --rui-color-nested-background: rgba(0,0,0,.15);
+  --rui-color-popover-background: #28333d;
+  --rui-color-search-background: rgba(255,255,255,.14);
+  --rui-color-disabled-background: #1f1f1f;
+  --rui-font-brand: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
   --rui-font-size-heading1: 1.5rem;
+  --rui-font-size-emphasis1: .9375rem;
   --rui-font-size-body1: .9375rem;
   --rui-font-size-body2: .875rem;
   --rui-font-size-body3: .75rem;
-  --rui-font-size-emphasis1: .9375rem;
-  --rui-font-size-emphasis3: .75rem;
-  --rui-font-size-display1: 3.5rem;
-  --rui-font-size-marketing-display1: 3.5rem;
-  --rui-font-size-marketing-display3: 2rem;
-  --rui-font-size-sm-subtitle-2: 1rem;
-  --rui-font-size-sm-h6: 1.375rem;
-  --rui-line-height-heading1: 1.33333;
-  --rui-line-height-heading3: 1.33333;
-  --rui-line-height-body2: 1.42857;
-  --rui-line-height-body3: 1.5;
-  --rui-line-height-subheader: 1.375;
-  --rui-line-height-display1: 1.18182;
-  --rui-line-height-marketing-display3: 1.125;
-  --rui-line-height-sm-subtitle-2: 1.375;
-  --rui-line-height-sm-h6: 1.18182;
-  --rui-letter-spacing-heading1: 0;
-  --rui-letter-spacing-heading2: 0;
-  --rui-letter-spacing-heading3: 0;
-  --rui-letter-spacing-emphasis3: 0;
-  --rui-letter-spacing-display2: 0;
-
-  /* Spacing */
-  --rui-space-none: 0;
-  --rui-space-sp50: .125rem;
-  --rui-space-sp100: .1875rem;
-  --rui-space-sp300: .5rem;
-  --rui-space-sp400: .75rem;
-  --rui-space-sp600: 1.25rem;
-  --rui-space-sp1000: 2rem;
-  --rui-space-s8: .375rem;
-  --rui-space-s12: .5rem;
-
-  /* Sizing */
-  --rui-size-s4: .25rem;
-  --rui-size-s16: 1rem;
-  --rui-size-s20: 1.25rem;
-  --rui-size-s24: 1.5rem;
-  --rui-size-s40: 2.5rem;
-  --rui-size-s48: 3rem;
-  --rui-size-s56: 3.5rem;
-  --rui-size-s72: 4.5rem;
-  --rui-size-button-sm: 2rem;
-  --rui-size-button-md: 2.75rem;
-  --rui-size-control-sm: 2rem;
-
-  /* Radii */
-  --rui-radius-r2: .125rem;
+  --rui-radius-widget: .75rem;
+  --rui-radius-cell: .5rem;
   --rui-radius-r6: .375rem;
   --rui-radius-r8: .5rem;
-  --rui-radius-r12: .75rem;
-  --rui-radius-rd200: .375rem;
   --rui-radius-round: 9999px;
-  --rui-radius-widget: .75rem;
-  --rui-radius-nested-widget: .5rem;
-  --rui-radius-cell: .5rem;
-
-  /* Shadows */
-  --rui-shadow-level1: 0 .125rem .1875rem rgba(0,0,0,.05);
-  --rui-shadow-level2: 0 .1875rem .5rem rgba(0,0,0,.1);
-  --rui-shadow-level3: 0 .1875rem 1.875rem rgba(0,0,0,.08);
-  --rui-shadow-popover: 0 .25rem .25rem .25rem rgba(0,0,0,.12),0 1rem 3rem rgba(0,0,0,.16);
-
-  /* Animation / Timing */
-  --rui-timing-shadow: .2s cubic-bezier(.4,.3,.8,.6);
-  --rui-timing-lg: .45s cubic-bezier(.15,.5,.5,1);
-  --rui-easing-toast: cubic-bezier(.175,.885,.21,1.65);
+  --rui-size-button-md: 2.75rem;
   --rui-duration-sm: .2s;
-  --rui-duration-xl: .9s;
   --rui-duration-skeleton: 1.5s;
-
-  /* ============================================================
-     APP-LEVEL TOKENS
-     ============================================================ */
-  --app-accent: #6fa0ff;
-  --app-bg: #000d19;
-  --app-tab-inactive: #717173;
-  --app-tab-active: #6fa0ff;
-  --app-tab-bar-bg: rgba(0, 13, 25, 0.92);
-  --app-status-bar-height: 54px;
-  --app-tab-bar-height: 56px;
-  --app-device-width: 393px;
-  --app-device-height: 852px;
-  --app-device-radius: 44px;
-  --safe-area-top: env(safe-area-inset-top, 0px);
-  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --rui-easing-toast: cubic-bezier(.175,.885,.21,1.65);
 }
 
-/* ============================================================
-   RESET & BASE
-   ============================================================ */
-*, *::before, *::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-html, body {
-  height: 100%;
-  overflow: hidden;
-  background: #0a0a0a;
-  font-family: var(--rui-font-brand);
-  color: var(--rui-color-foreground);
-}
+html { height: 100%; }
 
 body {
+  font-family: var(--rui-font-brand);
+  background: var(--rui-color-grouped-background);
+  color: var(--rui-color-foreground);
+  height: 100%;
   display: flex;
-  align-items: center;
   justify-content: center;
-}
-
-/* ============================================================
-   DEVICE FRAME — Desktop (>=500px)
-   ============================================================ */
-.device-frame {
-  position: relative;
-  width: var(--app-device-width);
-  height: var(--app-device-height);
-  border-radius: var(--app-device-radius);
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
   overflow: hidden;
-  background: var(--app-bg);
-  box-shadow:
-    0 0 0 2px #1a1a1a,
-    0 0 0 4px #2a2a2a,
-    0 0 0 6px rgba(0,0,0,.3),
-    0 20px 60px rgba(0,0,0,.6),
-    0 40px 100px rgba(0,0,0,.4);
+}
+@media (min-width: 500px) {
+  body { background: #0a0a0a; padding: 24px 0; align-items: flex-start; }
 }
 
-/* Mobile: full viewport, no frame */
-@media (max-width: 499px) {
-  body {
-    background: var(--app-bg);
-  }
+/* ===== DEVICE FRAME ===== */
+.device-frame {
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  background: var(--rui-color-grouped-background);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+@media (min-width: 500px) {
   .device-frame {
-    width: 100%;
-    height: 100dvh;
-    border-radius: 0;
-    box-shadow: none;
+    width: 393px;
+    height: 852px;
+    border-radius: 44px;
+    box-shadow: 0 0 0 11px #1a1a1a, 0 0 0 13px #333, 0 30px 80px rgba(0,0,0,.6);
+    flex-shrink: 0;
   }
 }
 
-/* ============================================================
-   STATUS BAR — Desktop only
-   ============================================================ */
+/* Status bar - only on desktop */
 .status-bar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: var(--app-status-bar-height);
+  height: 54px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 24px 0;
-  z-index: 100;
-  pointer-events: none;
-  background: transparent;
-}
-
-.status-bar__time {
+  padding: 16px 28px 0;
   font-size: 15px;
   font-weight: 600;
-  letter-spacing: 0.02em;
+  flex-shrink: 0;
 }
-
-.status-bar__icons {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.status-bar__icons svg {
-  opacity: 0.9;
-}
-
-/* Hide status bar on mobile (real device shows its own) */
 @media (max-width: 499px) {
-  .status-bar {
-    display: none;
-  }
+  .status-bar { height: env(safe-area-inset-top, 0px); padding: 0; min-height: 0; }
+  .status-bar * { display: none; }
 }
+.status-bar .time { font-weight: 700; font-size: 16px; letter-spacing: 0.5px; }
+.status-bar .icons { display: flex; gap: 6px; align-items: center; }
+.status-bar .icons svg { width: 16px; height: 16px; }
 
-/* ============================================================
-   APP CONTAINER
-   ============================================================ */
+/* ===== APP ===== */
 .app {
-  position: absolute;
-  inset: 0;
+  flex: 1;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-}
-
-/* ============================================================
-   SCREENS CONTAINER
-   ============================================================ */
-.screens {
   position: relative;
-  flex: 1;
   overflow: hidden;
 }
 
-/* Mobile: respect safe areas */
-@media (max-width: 499px) {
-  .screens {
-    padding-top: var(--safe-area-top);
-  }
-}
-
-/* Desktop: respect fake status bar */
-@media (min-width: 500px) {
-  .screens {
-    padding-top: var(--app-status-bar-height);
-  }
-}
-
-/* ============================================================
-   INDIVIDUAL SCREENS
-   ============================================================ */
+/* ===== SCREENS ===== */
 .screen {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--app-bg);
+  top: 0; left: 0;
+  width: 100%;
+  height: calc(100% - 68px);
   overflow-y: auto;
   overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-  opacity: 0;
-  visibility: hidden;
-  transition: none;
-  will-change: transform, opacity;
-}
-
-/* Scrollbar styling */
-.screen::-webkit-scrollbar { width: 0; }
-
-/* Active screen */
-.screen.active {
-  opacity: 1;
-  visibility: visible;
-  z-index: 1;
-}
-
-/* Push screen (detail views) - slide from right */
-.screen.push-enter {
-  animation: pushEnter 300ms ease-out forwards;
-  z-index: 10;
-}
-
-.screen.push-exit {
-  animation: pushExit 300ms ease-out forwards;
-  z-index: 10;
-}
-
-.screen.push-behind {
-  animation: pushBehind 300ms ease-out forwards;
-  z-index: 0;
-}
-
-.screen.push-behind-reverse {
-  animation: pushBehindReverse 300ms ease-out forwards;
-  z-index: 0;
-}
-
-@keyframes spin {
-  from { transform: translateX(-50%) translateY(20px) rotate(0deg); }
-  to { transform: translateX(-50%) translateY(20px) rotate(360deg); }
-}
-
-@keyframes pushEnter {
-  from {
-    transform: translateX(100%);
-    opacity: 1;
-    visibility: visible;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-    visibility: visible;
-  }
-}
-
-@keyframes pushExit {
-  from {
-    transform: translateX(0);
-    opacity: 1;
-    visibility: visible;
-  }
-  to {
-    transform: translateX(100%);
-    opacity: 1;
-    visibility: hidden;
-  }
-}
-
-@keyframes pushBehind {
-  from {
-    transform: translateX(0) scale(1);
-    opacity: 1;
-  }
-  to {
-    transform: translateX(-30%) scale(0.95);
-    opacity: 0.5;
-  }
-}
-
-@keyframes pushBehindReverse {
-  from {
-    transform: translateX(-30%) scale(0.95);
-    opacity: 0.5;
-  }
-  to {
-    transform: translateX(0) scale(1);
-    opacity: 1;
-  }
-}
-
-/* ============================================================
-   SCREEN PLACEHOLDER CONTENT
-   ============================================================ */
-.screen__placeholder {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  gap: 12px;
-  color: var(--rui-color-inactive);
-  padding: 20px;
-}
-
-.screen__placeholder-icon {
-  width: 48px;
-  height: 48px;
-  opacity: 0.4;
-}
-
-.screen__placeholder-title {
-  font-size: var(--rui-font-size-heading1);
-  font-weight: var(--rui-font-weight-heading1);
-  color: var(--rui-color-foreground);
-}
-
-.screen__placeholder-sub {
-  font-size: var(--rui-font-size-body2);
-  color: var(--rui-color-grey-50);
-}
-
-/* Back button for pushed screens */
-.screen__back {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  width: 36px;
-  height: 36px;
-  border-radius: var(--rui-radius-round);
-  background: var(--rui-color-action-background-neutral);
-  border: none;
-  color: var(--rui-color-foreground);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 20;
-  transition: transform 120ms ease;
-}
-
-.screen__back:active {
-  transform: scale(0.9);
-}
-
-/* Mobile: offset back button for safe area */
-@media (max-width: 499px) {
-  .screen__back {
-    top: calc(var(--safe-area-top) + 12px);
-  }
-}
-
-/* Desktop: offset back button for status bar */
-@media (min-width: 500px) {
-  .screen__back {
-    top: calc(var(--app-status-bar-height) + 12px);
-  }
-}
-
-/* ============================================================
-   BOTTOM TAB BAR
-   ============================================================ */
-.tab-bar {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  height: var(--app-tab-bar-height);
-  background: var(--app-tab-bar-bg);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-top: 0.5px solid rgba(255,255,255,.08);
-  z-index: 50;
-  flex-shrink: 0;
-  transition: transform 300ms ease-out, opacity 200ms ease;
-}
-
-/* Mobile: respect safe area bottom */
-@media (max-width: 499px) {
-  .tab-bar {
-    padding-bottom: var(--safe-area-bottom);
-    height: calc(var(--app-tab-bar-height) + var(--safe-area-bottom));
-  }
-}
-
-/* Hide tab bar when pushed screen is active */
-.tab-bar.hidden {
-  transform: translateY(100%);
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* ============================================================
-   TAB ITEMS
-   ============================================================ */
-.tab-item {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  border: none;
-  background: none;
-  cursor: pointer;
-  padding: 0;
-  position: relative;
-  -webkit-tap-highlight-color: transparent;
-  transition: transform 120ms ease;
-}
-
-.tab-item svg {
-  width: 24px;
-  height: 24px;
-  stroke-width: 1.8;
-  color: var(--app-tab-inactive);
-  transition: color 150ms ease, transform 200ms cubic-bezier(.175,.885,.32,1.275);
-}
-
-.tab-item.active svg {
-  color: var(--app-tab-active);
-  transform: scale(1.08);
-}
-
-/* Press feedback */
-.tab-item:active {
-  transform: scale(0.9);
-}
-
-/* ============================================================
-   BUTTON PRESS FEEDBACK (Global)
-   ============================================================ */
-.pressable {
-  transition: transform 120ms cubic-bezier(.175,.885,.32,1.275);
-  cursor: pointer;
-}
-
-.pressable:active,
-.pressable.pressing {
-  transform: scale(0.95);
-}
-
-/* ============================================================
-   UTILITY ANIMATIONS
-   ============================================================ */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-@keyframes slideUp {
-  from { transform: translateY(20px); opacity: 0; }
-  to   { transform: translateY(0); opacity: 1; }
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50%      { opacity: 0.4; }
-}
-
-.animate-pulse {
-  animation: pulse 2s ease-in-out infinite;
-}
-
-/* Shimmer for skeleton loading */
-@keyframes shimmer {
-  0%   { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-
-.skeleton {
-  background: linear-gradient(
-    90deg,
-    rgba(255,255,255,.06) 25%,
-    rgba(255,255,255,.12) 50%,
-    rgba(255,255,255,.06) 75%
-  );
-  background-size: 200% 100%;
-  animation: shimmer var(--rui-duration-skeleton) linear infinite;
-  border-radius: var(--rui-radius-r6);
-}
-
-/* ============================================================
-   BOTTOM SHEET OVERLAY (reusable)
-   ============================================================ */
-.sheet-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,.5);
-  z-index: 90;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 250ms ease;
-}
-
-.sheet-overlay.visible {
-  opacity: 1;
-  visibility: visible;
-}
-
-.bottom-sheet {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: var(--rui-color-popover-background);
-  border-radius: 24px 24px 0 0;
-  z-index: 91;
-  transform: translateY(100%);
-  transition: transform 250ms cubic-bezier(.175,.885,.32,1.275);
-  box-shadow: var(--rui-shadow-popover);
-  max-height: 80%;
-  overflow-y: auto;
-}
-
-.bottom-sheet.visible {
-  transform: translateY(0);
-}
-
-.bottom-sheet__handle {
-  width: 36px;
-  height: 4px;
-  background: rgba(255,255,255,.2);
-  border-radius: var(--rui-radius-round);
-  margin: 10px auto 16px;
-}
-
-/* ============================================================
-   TOAST
-   ============================================================ */
-.toast {
-  position: absolute;
-  top: 60px;
-  left: 50%;
-  transform: translateX(-50%) translateY(-120px);
-  background: var(--rui-color-popover-background);
-  color: var(--rui-color-foreground);
-  padding: 12px 20px;
-  border-radius: var(--rui-radius-r12);
-  font-size: var(--rui-font-size-body2);
-  font-weight: var(--rui-font-weight-subheader);
-  z-index: 200;
-  box-shadow: var(--rui-shadow-popover);
-  transition: transform 400ms var(--rui-easing-toast);
-  white-space: nowrap;
-}
-
-.toast.visible {
-  transform: translateX(-50%) translateY(0);
-}
-
-/* ============================================================
-   SWIPE GESTURES
-   ============================================================ */
-
-/* Edge-back: shadow on the swiped screen's left edge */
-.screen.swiping-back {
-  box-shadow: -8px 0 30px rgba(0,0,0,.35);
+  transition: transform 300ms cubic-bezier(.25,.1,.25,1), opacity 200ms ease;
   will-change: transform;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+}
+.screen::-webkit-scrollbar { display: none; }
+.screen.hidden-left { transform: translateX(-30%); opacity: 0.4; pointer-events: none; }
+.screen.hidden-right { transform: translateX(100%); pointer-events: none; }
+.screen.active { transform: translateX(0); opacity: 1; }
+.screen.tab-hidden { display: none; }
+
+/* ===== HOME HEADER ===== */
+.home-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 20px 4px;
+  flex-shrink: 0;
+}
+.revolut-logo {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #0066ff 0%, #0044cc 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 16px;
+  color: white;
+  letter-spacing: -1px;
+}
+.home-header .right-icons { display: flex; gap: 8px; align-items: center; }
+.icon-btn {
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: var(--rui-radius-round);
+  background: transparent; border: none;
+  color: var(--rui-color-foreground);
+  cursor: pointer;
+  transition: background var(--rui-duration-sm) ease;
+}
+.icon-btn:active { background: var(--rui-color-widget-background); }
+.icon-btn svg { width: 22px; height: 22px; }
+
+.avatar-btn {
+  width: 32px; height: 32px;
+  border-radius: var(--rui-radius-round);
+  background: #3a4555;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 600; font-size: 12px; color: #ccc;
+  cursor: pointer;
 }
 
-/* Pull-to-refresh indicator */
-.ptr-indicator {
+.page-title {
+  padding: 4px 20px 12px;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+/* ===== MAIN CARD WIDGET (balance + transactions) ===== */
+.main-widget {
+  margin: 0 16px 16px;
+  background: rgba(255,255,255,.07);
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+}
+/* Subtle blue glow at top-left like the real app */
+.main-widget::before {
+  content: '';
   position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%) translateY(-40px);
-  width: 28px;
-  height: 28px;
-  border: 2.5px solid rgba(255,255,255,.15);
-  border-top-color: var(--app-accent);
-  border-radius: 50%;
-  z-index: 5;
-  opacity: 0;
-  transition: opacity 150ms ease;
+  top: -40px; left: -40px;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(111,160,255,.08) 0%, transparent 70%);
   pointer-events: none;
 }
 
-.ptr-indicator.visible {
-  opacity: 1;
+.widget-balance {
+  padding: 20px 20px 16px;
+}
+.balance-label {
+  font-size: var(--rui-font-size-body2);
+  color: var(--rui-color-inactive);
+  font-weight: 500;
+  display: flex; align-items: center; gap: 6px;
+  margin-bottom: 6px;
+}
+.balance-label svg { width: 14px; height: 14px; }
+.balance-amount {
+  font-size: 34px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  display: flex; align-items: baseline; gap: 6px;
+}
+.balance-amount .currency {
+  font-size: 16px;
+  color: var(--rui-color-inactive);
+  font-weight: 500;
 }
 
-.ptr-indicator.spinning {
-  animation: ptrSpin 600ms linear infinite;
-}
-
-@keyframes ptrSpin {
-  to { transform: translateX(-50%) translateY(-40px) rotate(360deg); }
-}
-
-/* Skeleton shimmer overlay for pull-to-refresh */
-.ptr-shimmer-overlay {
-  position: absolute;
-  inset: 0;
-  background: var(--app-bg);
-  z-index: 4;
+/* Quick actions row inside card */
+.quick-actions {
   display: flex;
-  flex-direction: column;
-  padding: 70px 16px 16px;
-  gap: 16px;
-}
-
-.ptr-shimmer-overlay .skel-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.ptr-shimmer-overlay .skel-circle {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.ptr-shimmer-overlay .skel-lines {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+  padding: 4px 12px 16px;
   gap: 8px;
 }
+.quick-action {
+  flex: 1;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  cursor: pointer; border: none; background: none; color: var(--rui-color-foreground);
+  -webkit-tap-highlight-color: transparent;
+}
+.quick-action:active .qa-icon { transform: scale(0.9); }
+.qa-icon {
+  width: 44px; height: 44px;
+  border-radius: var(--rui-radius-round);
+  background: var(--rui-color-action-background);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 200ms cubic-bezier(.175,.885,.21,1.65);
+}
+.qa-icon svg { width: 20px; height: 20px; color: var(--rui-color-accent); }
+.qa-label { font-size: 11px; color: var(--rui-color-inactive); font-weight: 400; }
 
-.ptr-shimmer-overlay .skel-line {
-  height: 12px;
-  border-radius: 6px;
+/* Divider */
+.widget-divider {
+  height: 1px;
+  background: rgba(255,255,255,.06);
+  margin: 0 20px;
 }
 
-.ptr-shimmer-overlay .skel-line.w60 { width: 60%; }
-.ptr-shimmer-overlay .skel-line.w80 { width: 80%; }
-.ptr-shimmer-overlay .skel-line.w40 { width: 40%; }
-
-.ptr-shimmer-overlay .skel-block {
-  height: 100px;
-  border-radius: var(--rui-radius-r12);
+/* Transaction feed inside widget */
+.widget-feed { padding: 0; }
+.feed-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 20px 8px;
 }
+.feed-header h3 { font-size: 14px; font-weight: 600; }
+.feed-header .see-all {
+  font-size: 12px; color: var(--rui-color-accent);
+  cursor: pointer; border: none; background: none; font-weight: 500;
+}
+
+.date-label {
+  font-size: 11px;
+  color: var(--rui-color-inactive);
+  font-weight: 500;
+  padding: 8px 20px 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.tx-card {
+  display: flex; align-items: center;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background var(--rui-duration-sm) ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.tx-card:active { background: rgba(255,255,255,.05); }
+
+.tx-icon {
+  width: 40px; height: 40px;
+  border-radius: var(--rui-radius-round);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-right: 12px;
+}
+.tx-icon svg { width: 18px; height: 18px; }
+.tx-icon.transport { background: rgba(111,160,255,.12); color: var(--rui-color-blue); }
+.tx-icon.entertainment { background: rgba(191,90,242,.12); color: var(--rui-color-purple); }
+.tx-icon.shopping { background: rgba(255,87,119,.12); color: var(--rui-color-deep-pink); }
+.tx-icon.income { background: rgba(26,192,151,.12); color: var(--rui-color-positive); }
+.tx-icon.food { background: rgba(255,159,10,.12); color: var(--rui-color-warning); }
+.tx-icon.tech { background: rgba(19,209,163,.12); color: var(--rui-color-teal); }
+
+.tx-info { flex: 1; min-width: 0; }
+.tx-merchant { font-size: 14px; font-weight: 500; line-height: 1.3; }
+.tx-category { font-size: 12px; color: var(--rui-color-inactive); margin-top: 1px; }
+
+.tx-amount-col { text-align: right; flex-shrink: 0; margin-left: 12px; }
+.tx-amt { font-size: 14px; font-weight: 500; }
+.tx-amt.positive { color: var(--rui-color-positive); }
+.tx-orig { font-size: 11px; color: var(--rui-color-inactive); margin-top: 1px; }
+
+.tx-card.pending { animation: pulse-pending 2s ease-in-out infinite; }
+@keyframes pulse-pending { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+.widget-bottom-pad { height: 8px; }
+
+/* ===== Promo card below main widget ===== */
+.promo-card {
+  margin: 0 16px 16px;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, rgba(111,160,255,.12) 0%, rgba(94,92,230,.08) 100%);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+}
+.promo-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  background: var(--rui-color-action-background);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.promo-icon svg { width: 20px; height: 20px; color: var(--rui-color-accent); }
+.promo-text { flex: 1; }
+.promo-title { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+.promo-desc { font-size: 12px; color: var(--rui-color-inactive); line-height: 1.4; }
+
+/* ===== TRANSACTION DETAIL ===== */
+.detail-screen { background: var(--rui-color-grouped-background); }
+.detail-header {
+  display: flex; align-items: center; padding: 12px 16px; gap: 12px;
+  position: sticky; top: 0; background: var(--rui-color-grouped-background); z-index: 10;
+}
+.back-btn {
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  border: none; background: none; color: var(--rui-color-foreground);
+  cursor: pointer; border-radius: var(--rui-radius-round);
+}
+.back-btn:active { background: var(--rui-color-widget-background); }
+.detail-header h2 { font-size: 16px; font-weight: 600; }
+
+.detail-amount-section { text-align: center; padding: 24px 16px 28px; }
+.detail-icon-large {
+  width: 56px; height: 56px; border-radius: var(--rui-radius-round);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+}
+.detail-icon-large svg { width: 26px; height: 26px; }
+.detail-big-amount { font-size: 36px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 6px; }
+.detail-merchant-name { font-size: 15px; color: var(--rui-color-inactive); margin-bottom: 10px; }
+.detail-status {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 14px; border-radius: var(--rui-radius-round);
+  font-size: 12px; font-weight: 500;
+}
+.detail-status.completed { background: rgba(26,192,151,.1); color: var(--rui-color-positive); }
+.detail-status.pending { background: rgba(255,159,10,.1); color: var(--rui-color-warning); }
+.detail-status svg { width: 14px; height: 14px; }
+
+.detail-info {
+  margin: 0 16px; background: var(--rui-color-widget-background);
+  border-radius: var(--rui-radius-widget); overflow: hidden;
+}
+.detail-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,.05);
+}
+.detail-row:last-child { border-bottom: none; }
+.detail-row-label { font-size: 14px; color: var(--rui-color-inactive); }
+.detail-row-value { font-size: 14px; font-weight: 500; text-align: right; }
+
+.detail-note {
+  margin: 16px; padding: 14px 16px;
+  background: var(--rui-color-widget-background); border-radius: var(--rui-radius-widget);
+  font-size: 14px; color: var(--rui-color-inactive);
+  cursor: pointer; display: flex; align-items: center; gap: 10px;
+}
+.detail-note svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+.detail-actions { padding: 8px 16px 20px; display: flex; flex-direction: column; gap: 12px; }
+.detail-btn {
+  height: var(--rui-size-button-md); border-radius: var(--rui-radius-r6);
+  font-size: 15px; font-weight: 600; font-family: var(--rui-font-brand);
+  border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: transform 150ms cubic-bezier(.175,.885,.21,1.65);
+}
+.detail-btn:active { transform: scale(0.95); }
+.detail-btn.primary { background: var(--rui-color-action-background); color: var(--rui-color-accent); }
+.detail-btn.ghost { background: transparent; color: var(--rui-color-accent); }
+.detail-btn svg { width: 18px; height: 18px; }
+
+/* ===== CARDS SCREEN ===== */
+.cards-title { padding: 8px 20px 16px; font-size: 26px; font-weight: 700; letter-spacing: -0.3px; }
+
+.card-visual {
+  margin: 0 16px 20px;
+  aspect-ratio: 1.586;
+  border-radius: 14px;
+  padding: 22px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  position: relative; overflow: hidden;
+  cursor: pointer; transition: transform 200ms ease;
+}
+.card-visual:active { transform: scale(0.98); }
+.card-visual.platinum {
+  background: linear-gradient(155deg, #4a4a5e 0%, #2a2a3e 30%, #1e1e2e 60%, #2d2d40 100%);
+}
+/* Brushed metal texture */
+.card-visual::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0px,
+    rgba(255,255,255,.015) 1px,
+    transparent 2px,
+    transparent 4px
+  );
+  pointer-events: none;
+}
+/* Shine effect */
+.card-visual::after {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%; width: 200%; height: 200%;
+  background: radial-gradient(ellipse at 30% 20%, rgba(255,255,255,.06) 0%, transparent 50%);
+  pointer-events: none;
+}
+.card-logo { display: flex; justify-content: space-between; align-items: flex-start; position: relative; z-index: 1; }
+.card-logo .revolut-text { font-size: 17px; font-weight: 700; letter-spacing: 0.5px; }
+.card-logo .plan-badge {
+  font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px;
+  padding: 3px 8px; border-radius: var(--rui-radius-round);
+  background: rgba(255,255,255,.12);
+}
+.card-bottom { display: flex; justify-content: space-between; align-items: flex-end; position: relative; z-index: 1; }
+.card-number { font-size: 15px; font-weight: 500; letter-spacing: 2.5px; font-variant-numeric: tabular-nums; }
+.card-expiry { font-size: 12px; color: rgba(255,255,255,.5); margin-top: 4px; }
+.mastercard-logo { display: flex; }
+.mastercard-logo .circle { width: 24px; height: 24px; border-radius: 50%; }
+.mastercard-logo .circle.red { background: #eb001b; }
+.mastercard-logo .circle.yellow { background: #f79e1b; margin-left: -9px; opacity: 0.85; }
+
+.card-visual.frozen { filter: brightness(0.35) saturate(0.2); }
+.card-visual.frozen::after { background: rgba(100,180,255,.06); backdrop-filter: blur(2px); }
+
+.card-actions { display: flex; gap: 10px; padding: 0 16px 20px; }
+.card-action-btn {
+  flex: 1; height: var(--rui-size-button-md); border-radius: var(--rui-radius-r8);
+  background: var(--rui-color-widget-background); border: none;
+  color: var(--rui-color-foreground); font-family: var(--rui-font-brand);
+  font-size: 14px; font-weight: 600; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: transform 150ms cubic-bezier(.175,.885,.21,1.65);
+}
+.card-action-btn:active { transform: scale(0.95); }
+.card-action-btn.freeze-active { background: var(--rui-color-action-background); color: var(--rui-color-accent); }
+.card-action-btn svg { width: 18px; height: 18px; }
+
+.card-config {
+  margin: 0 16px 16px; background: var(--rui-color-widget-background);
+  border-radius: var(--rui-radius-widget); overflow: hidden;
+}
+.config-section-title {
+  padding: 14px 16px 6px; font-size: 11px; color: var(--rui-color-inactive);
+  font-weight: 500; text-transform: uppercase; letter-spacing: 0.8px;
+}
+.config-toggle {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,.05);
+}
+.config-toggle:last-child { border-bottom: none; }
+.config-toggle-info { flex: 1; padding-right: 12px; }
+.config-toggle-label { font-size: 14px; font-weight: 500; }
+.config-toggle-desc { font-size: 12px; color: var(--rui-color-inactive); margin-top: 2px; }
+
+.toggle {
+  width: 51px; height: 31px; border-radius: 16px;
+  background: #39393d; position: relative; cursor: pointer; flex-shrink: 0;
+  transition: background 200ms ease;
+}
+.toggle.on { background: var(--rui-color-accent); }
+.toggle .thumb {
+  width: 27px; height: 27px; border-radius: 50%; background: #fff;
+  position: absolute; top: 2px; left: 2px;
+  transition: transform 200ms cubic-bezier(.175,.885,.21,1.65);
+  box-shadow: 0 2px 4px rgba(0,0,0,.3);
+}
+.toggle.on .thumb { transform: translateX(20px); }
+
+.other-cards { margin: 0 16px 20px; }
+.other-cards-title {
+  font-size: 11px; color: var(--rui-color-inactive); font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px;
+}
+.other-card-item {
+  display: flex; align-items: center; padding: 14px 16px;
+  background: var(--rui-color-widget-background); border-radius: var(--rui-radius-widget);
+  cursor: pointer; gap: 12px;
+}
+.other-card-mini {
+  width: 44px; height: 28px; border-radius: 4px;
+  background: linear-gradient(135deg, #2a2a3e, #1e1e2e);
+  display: flex; align-items: center; justify-content: center;
+}
+.other-card-name { font-size: 14px; font-weight: 500; }
+.other-card-number { font-size: 12px; color: var(--rui-color-inactive); }
+
+/* ===== SEND MONEY FLOW ===== */
+.send-screen { background: var(--rui-color-grouped-background); }
+.send-header {
+  display: flex; align-items: center; padding: 12px 16px; gap: 12px;
+  position: sticky; top: 0; background: var(--rui-color-grouped-background); z-index: 10;
+}
+.send-header h2 { font-size: 16px; font-weight: 600; }
+
+.send-step { display: none; }
+.send-step.active { display: block; }
+
+.search-bar {
+  margin: 0 16px 16px; height: var(--rui-size-button-md);
+  background: var(--rui-color-search-background); border-radius: var(--rui-radius-r8);
+  display: flex; align-items: center; padding: 0 14px; gap: 10px;
+}
+.search-bar svg { width: 20px; height: 20px; color: var(--rui-color-inactive); flex-shrink: 0; }
+.search-bar input {
+  flex: 1; background: none; border: none; color: var(--rui-color-foreground);
+  font-family: var(--rui-font-brand); font-size: 15px; outline: none;
+}
+.search-bar input::placeholder { color: var(--rui-color-inactive); }
+
+.section-label {
+  font-size: 11px; color: var(--rui-color-inactive); font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.8px;
+  padding: 0 20px; margin-bottom: 12px;
+}
+
+.contacts-row {
+  display: flex; gap: 16px; padding: 0 20px 20px; overflow-x: auto;
+}
+.contacts-row::-webkit-scrollbar { display: none; }
+.contact-item {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  cursor: pointer; min-width: 56px;
+  -webkit-tap-highlight-color: transparent;
+}
+.contact-item:active .contact-avatar { transform: scale(0.9); }
+.contact-avatar {
+  width: 48px; height: 48px; border-radius: var(--rui-radius-round);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 600; font-size: 15px; transition: transform 150ms ease;
+}
+.contact-name { font-size: 11px; color: var(--rui-color-inactive); text-align: center; max-width: 56px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.contact-list { padding: 0 16px; }
+.contact-list-item {
+  display: flex; align-items: center; padding: 12px 4px; gap: 12px;
+  cursor: pointer; border-bottom: 1px solid rgba(255,255,255,.04);
+  -webkit-tap-highlight-color: transparent;
+}
+.contact-list-avatar {
+  width: 40px; height: 40px; border-radius: var(--rui-radius-round);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 600; font-size: 14px; flex-shrink: 0;
+}
+.contact-list-name { font-size: 15px; font-weight: 500; }
+.contact-list-handle { font-size: 12px; color: var(--rui-color-inactive); }
+
+/* Amount entry */
+.amount-entry { display: flex; flex-direction: column; align-items: center; padding: 32px 16px 20px; }
+.amount-recipient { font-size: 14px; color: var(--rui-color-inactive); margin-bottom: 28px; }
+.amount-display {
+  font-size: 48px; font-weight: 700; letter-spacing: -1px; margin-bottom: 8px;
+  transition: transform 100ms cubic-bezier(.175,.885,.21,1.65);
+  display: flex; align-items: baseline;
+}
+.amount-display .cur-sym { font-size: 28px; color: var(--rui-color-inactive); margin-right: 4px; font-weight: 500; }
+.amount-balance-info { font-size: 12px; color: var(--rui-color-inactive); margin-bottom: 28px; }
+
+.numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; width: 100%; max-width: 300px; margin: 0 auto; }
+.numpad-key {
+  height: 54px; display: flex; align-items: center; justify-content: center;
+  font-size: 24px; font-weight: 500; font-family: var(--rui-font-brand);
+  border: none; background: none; color: var(--rui-color-foreground);
+  cursor: pointer; border-radius: var(--rui-radius-r8);
+  -webkit-tap-highlight-color: transparent; user-select: none;
+}
+.numpad-key:active { background: rgba(255,255,255,.08); }
+.numpad-key svg { width: 24px; height: 24px; }
+
+.cta-btn {
+  margin: 16px 16px 0; width: calc(100% - 32px);
+  height: var(--rui-size-button-md); border-radius: var(--rui-radius-r8);
+  background: var(--rui-color-accent); color: var(--rui-color-on-accent);
+  border: none; font-family: var(--rui-font-brand);
+  font-size: 15px; font-weight: 600; cursor: pointer;
+  transition: transform 150ms cubic-bezier(.175,.885,.21,1.65), opacity 150ms;
+}
+.cta-btn:active { transform: scale(0.97); }
+.cta-btn:disabled { opacity: 0.35; cursor: default; }
+.cta-btn:disabled:active { transform: none; }
+
+/* Review */
+.review-section { padding: 24px 16px; }
+.review-amount-display { text-align: center; margin-bottom: 28px; }
+.review-amount-display .amt { font-size: 40px; font-weight: 700; letter-spacing: -0.5px; }
+.review-amount-display .to-label { font-size: 14px; color: var(--rui-color-inactive); margin-top: 6px; }
+.review-details { background: var(--rui-color-widget-background); border-radius: var(--rui-radius-widget); overflow: hidden; margin-bottom: 24px; }
+
+/* Success */
+.success-section {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 100px 16px 24px; text-align: center;
+}
+.success-check {
+  width: 80px; height: 80px; border-radius: var(--rui-radius-round);
+  background: rgba(26,192,151,.12);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 24px; animation: success-pop 600ms cubic-bezier(.175,.885,.21,1.65);
+}
+.success-check svg { width: 40px; height: 40px; color: var(--rui-color-positive); }
+@keyframes success-pop { 0% { transform: scale(0); opacity: 0; } 60% { transform: scale(1.15); } 100% { transform: scale(1); opacity: 1; } }
+.success-title { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+.success-subtitle { font-size: 14px; color: var(--rui-color-inactive); }
+
+/* Confetti */
+.confetti-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 50; }
+.confetti-piece { position: absolute; width: 8px; height: 8px; border-radius: 2px; animation: confetti-fall 2.5s ease-in forwards; }
+@keyframes confetti-fall { 0% { transform: translateY(-20px) rotate(0deg); opacity: 1; } 100% { transform: translateY(900px) rotate(720deg); opacity: 0; } }
+@keyframes ptr-spin { from { transform: translateX(-50%) translateY(20px) rotate(0deg); } to { transform: translateX(-50%) translateY(20px) rotate(360deg); } }
+
+/* ===== TAB BAR ===== */
+.tab-bar {
+  height: 68px;
+  display: flex; align-items: flex-start; justify-content: space-around;
+  background: var(--rui-color-grouped-background);
+  border-top: 1px solid rgba(255,255,255,.06);
+  position: absolute; bottom: 0; left: 0; right: 0; z-index: 50;
+  padding-top: 10px;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (max-width: 499px) {
+  .tab-bar {
+    height: calc(68px + env(safe-area-inset-bottom, 0px));
+  }
+}
+.tab-item {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  width: 48px; cursor: pointer; border: none; background: none;
+  color: var(--rui-color-grey-50);
+  -webkit-tap-highlight-color: transparent;
+}
+.tab-item.active { color: var(--rui-color-accent); }
+.tab-item svg { width: 24px; height: 24px; transition: transform 200ms cubic-bezier(.175,.885,.21,1.65); }
+.tab-item.active svg { transform: scale(1.08); }
+
+/* Placeholder screens */
+.placeholder-screen {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  height: 100%; color: var(--rui-color-inactive); gap: 12px;
+}
+.placeholder-screen svg { width: 48px; height: 48px; opacity: 0.2; }
+.placeholder-screen span { font-size: 15px; font-weight: 500; }
 </style>
-
 </head>
 <body>
 
-<!-- ================================================================
-     DEVICE FRAME
-     ================================================================ -->
-<div class="device-frame" id="deviceFrame">
-
-  <!-- Status Bar (desktop only, handled via CSS) -->
+<div class="device-frame">
   <div class="status-bar">
-    <span class="status-bar__time">9:41</span>
-    <div class="status-bar__icons">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M5 12.55a11 11 0 0 1 14.08 0"/>
-        <path d="M1.42 9a16 16 0 0 1 21.16 0"/>
-        <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
-        <circle cx="12" cy="20" r="1"/>
-      </svg>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M2 7h1v10H2z" opacity=".4"/>
-        <path d="M6 5h1v12H6z" opacity=".6"/>
-        <path d="M10 3h1v14h-1z" opacity=".8"/>
-        <path d="M14 1h1v16h-1z"/>
-      </svg>
-      <svg width="24" height="14" viewBox="0 0 27 14" fill="currentColor">
-        <rect x="0" y="1" width="22" height="12" rx="2.5" ry="2.5" stroke="currentColor" stroke-width="1" fill="none" opacity=".35"/>
-        <rect x="1.5" y="2.5" width="19" height="9" rx="1.5" ry="1.5" fill="currentColor"/>
-        <path d="M23.5 5v4a2.5 2.5 0 0 0 0-4z" fill="currentColor" opacity=".4"/>
-      </svg>
+    <span class="time">9:41</span>
+    <div class="icons">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 6l5-3 5 3 5-3 5 3v14l-5-3-5 3-5-3-5 3V6z"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>
+      <svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="7" width="18" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="4" y="9" width="12" height="8" rx="1" fill="currentColor" opacity=".9"/><path d="M22 11v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
     </div>
   </div>
 
-  <!-- App Container -->
-  <div class="app" id="app">
+  <div class="app">
+    <!-- HOME -->
+    <div class="screen active" id="screen-home">
+      <div class="home-header">
+        <div class="revolut-logo">R</div>
+        <div class="right-icons">
+          <button class="icon-btn"><i data-lucide="grid-2x2"></i></button>
+          <div class="avatar-btn">CJ</div>
+        </div>
+      </div>
+      <div class="page-title">Inicio</div>
 
-    <!-- Screens Container -->
-    <div class="screens" id="screensContainer">
+      <div class="main-widget">
+        <div class="widget-balance">
+          <div class="balance-label">Cuentas <i data-lucide="chevron-down" style="width:14px;height:14px"></i></div>
+          <div class="balance-amount"><span>1.954,23</span> <span class="currency">EUR</span></div>
+        </div>
 
-      <!-- TAB SCREENS (main level) -->
+        <div class="quick-actions">
+          <button class="quick-action" onclick="openSendFlow()">
+            <div class="qa-icon"><i data-lucide="plus"></i></div>
+            <span class="qa-label">Anadir</span>
+          </button>
+          <button class="quick-action" onclick="openSendFlow()">
+            <div class="qa-icon"><i data-lucide="arrow-up-right"></i></div>
+            <span class="qa-label">Enviar</span>
+          </button>
+          <button class="quick-action">
+            <div class="qa-icon"><i data-lucide="arrow-down-left"></i></div>
+            <span class="qa-label">Solicitar</span>
+          </button>
+          <button class="quick-action">
+            <div class="qa-icon"><i data-lucide="repeat"></i></div>
+            <span class="qa-label">Cambiar</span>
+          </button>
+          <button class="quick-action">
+            <div class="qa-icon"><i data-lucide="ellipsis"></i></div>
+            <span class="qa-label">Mas</span>
+          </button>
+        </div>
 
-      <!-- Home Screen -->
-      <div class="screen active" id="screen-home" data-tab="home">
-        <div class="screen__placeholder">
-          <i data-lucide="home" class="screen__placeholder-icon"></i>
-          <div class="screen__placeholder-title">Inicio</div>
-          <div class="screen__placeholder-sub">Dashboard principal</div>
+        <div class="widget-divider"></div>
+
+        <div class="widget-feed">
+          <div class="feed-header">
+            <h3>Transacciones</h3>
+            <button class="see-all">Ver todo</button>
+          </div>
+
+          <div class="date-label">Hoy</div>
+          <div class="tx-card" onclick="openTransaction(0)">
+            <div class="tx-icon tech"><i data-lucide="wifi"></i></div>
+            <div class="tx-info"><div class="tx-merchant">Viasat</div><div class="tx-category">Servicios</div></div>
+            <div class="tx-amount-col"><div class="tx-amt">-10,25 EUR</div><div class="tx-orig">12,00 USD</div></div>
+          </div>
+          <div class="tx-card pending" onclick="openTransaction(1)">
+            <div class="tx-icon transport"><i data-lucide="car"></i></div>
+            <div class="tx-info"><div class="tx-merchant">Uber</div><div class="tx-category">Transporte</div></div>
+            <div class="tx-amount-col"><div class="tx-amt">-4,52 EUR</div><div class="tx-orig">85,00 MXN</div></div>
+          </div>
+
+          <div class="date-label">Ayer</div>
+          <div class="tx-card" onclick="openTransaction(2)">
+            <div class="tx-icon entertainment"><i data-lucide="music"></i></div>
+            <div class="tx-info"><div class="tx-merchant">Spotify</div><div class="tx-category">Entretenimiento</div></div>
+            <div class="tx-amount-col"><div class="tx-amt">-9,99 EUR</div></div>
+          </div>
+          <div class="tx-card" onclick="openTransaction(3)">
+            <div class="tx-icon income"><i data-lucide="arrow-down-left"></i></div>
+            <div class="tx-info"><div class="tx-merchant">Maria Garcia</div><div class="tx-category">Transferencia recibida</div></div>
+            <div class="tx-amount-col"><div class="tx-amt positive">+500,00 EUR</div></div>
+          </div>
+
+          <div class="date-label">1 Mar</div>
+          <div class="tx-card" onclick="openTransaction(4)">
+            <div class="tx-icon shopping"><i data-lucide="shopping-bag"></i></div>
+            <div class="tx-info"><div class="tx-merchant">Apple Store</div><div class="tx-category">Compras</div></div>
+            <div class="tx-amount-col"><div class="tx-amt">-149,99 EUR</div></div>
+          </div>
+          <div class="tx-card" onclick="openTransaction(5)">
+            <div class="tx-icon food"><i data-lucide="utensils"></i></div>
+            <div class="tx-info"><div class="tx-merchant">La Buena Vida</div><div class="tx-category">Restaurantes</div></div>
+            <div class="tx-amount-col"><div class="tx-amt">-42,50 EUR</div></div>
+          </div>
+          <div class="widget-bottom-pad"></div>
         </div>
       </div>
 
-      <!-- Cards Screen -->
-      <div class="screen" id="screen-cards" data-tab="cards">
-        <div class="screen__placeholder">
-          <i data-lucide="credit-card" class="screen__placeholder-icon"></i>
-          <div class="screen__placeholder-title">Tarjetas</div>
-          <div class="screen__placeholder-sub">Gestiona tus tarjetas</div>
+      <div class="promo-card">
+        <div class="promo-icon"><i data-lucide="gift"></i></div>
+        <div class="promo-text">
+          <div class="promo-title">Invita a tus amigos</div>
+          <div class="promo-desc">Gana hasta 100 EUR por cada amigo que invite</div>
         </div>
       </div>
 
-      <!-- Invest Screen -->
-      <div class="screen" id="screen-invest" data-tab="invest">
-        <div class="screen__placeholder">
-          <i data-lucide="trending-up" class="screen__placeholder-icon"></i>
-          <div class="screen__placeholder-title">Crypto</div>
-          <div class="screen__placeholder-sub">Inversiones y trading</div>
+      <div style="height: 80px"></div>
+    </div>
+
+    <!-- TRANSACTION DETAIL -->
+    <div class="screen hidden-right detail-screen" id="screen-detail">
+      <div class="detail-header">
+        <button class="back-btn" onclick="closeDetail()"><i data-lucide="chevron-left"></i></button>
+        <h2 id="detail-title">Detalle</h2>
+      </div>
+      <div class="detail-amount-section">
+        <div class="detail-icon-large tx-icon tech" id="detail-icon"><i data-lucide="wifi"></i></div>
+        <div class="detail-big-amount" id="detail-amount">-10,25 EUR</div>
+        <div class="detail-merchant-name" id="detail-merchant">Viasat</div>
+        <div class="detail-status completed" id="detail-status"><i data-lucide="check-circle-2"></i><span>Completado</span></div>
+      </div>
+      <div class="detail-info" id="detail-info">
+        <div class="detail-row"><span class="detail-row-label">Cargo del comercio</span><span class="detail-row-value">12,00 USD</span></div>
+        <div class="detail-row"><span class="detail-row-label">Tipo de cambio</span><span class="detail-row-value">1 EUR = 1,170542 USD</span></div>
+        <div class="detail-row"><span class="detail-row-label">Comision</span><span class="detail-row-value">Sin comision</span></div>
+        <div class="detail-row"><span class="detail-row-label">Tarjeta</span><span class="detail-row-value">Platinum ....2403</span></div>
+      </div>
+      <div class="detail-note"><i data-lucide="pencil"></i><span>Anadir una nota</span></div>
+      <div class="detail-actions">
+        <button class="detail-btn primary"><i data-lucide="download"></i>Descargar recibo</button>
+        <button class="detail-btn ghost"><i data-lucide="help-circle"></i>Obtener ayuda</button>
+      </div>
+    </div>
+
+    <!-- CARDS -->
+    <div class="screen tab-hidden" id="screen-cards">
+      <div class="cards-title">Tarjetas</div>
+      <div class="card-visual platinum" id="main-card">
+        <div class="card-logo">
+          <span class="revolut-text">Revolut</span>
+          <span class="plan-badge">Platinum</span>
+        </div>
+        <div class="card-bottom">
+          <div>
+            <div class="card-number">....  ....  ....  2403</div>
+            <div class="card-expiry">05/30</div>
+          </div>
+          <div class="mastercard-logo"><div class="circle red"></div><div class="circle yellow"></div></div>
         </div>
       </div>
-
-      <!-- Lifestyle Screen (Estilo de vida) -->
-      <div class="screen" id="screen-lifestyle" data-tab="lifestyle">
-        <div class="screen__placeholder">
-          <i data-lucide="compass" class="screen__placeholder-icon"></i>
-          <div class="screen__placeholder-title">Estilo de vida</div>
-          <div class="screen__placeholder-sub">Beneficios y estilo</div>
+      <div class="card-actions">
+        <button class="card-action-btn" id="freeze-btn" onclick="toggleFreeze()"><i data-lucide="lock"></i>Bloquear</button>
+        <button class="card-action-btn"><i data-lucide="settings"></i>Configuracion</button>
+      </div>
+      <div class="card-config">
+        <div class="config-section-title">Seguridad</div>
+        <div class="config-toggle">
+          <div class="config-toggle-info"><div class="config-toggle-label">Transacciones online</div><div class="config-toggle-desc">Permitir pagos por internet</div></div>
+          <div class="toggle on" onclick="this.classList.toggle('on')"><div class="thumb"></div></div>
+        </div>
+        <div class="config-toggle">
+          <div class="config-toggle-info"><div class="config-toggle-label">Seguridad por ubicacion</div><div class="config-toggle-desc">Verificar ubicacion del dispositivo</div></div>
+          <div class="toggle" onclick="this.classList.toggle('on')"><div class="thumb"></div></div>
+        </div>
+        <div class="config-toggle">
+          <div class="config-toggle-info"><div class="config-toggle-label">Banda magnetica</div><div class="config-toggle-desc">Pagos con banda magnetica</div></div>
+          <div class="toggle on" onclick="this.classList.toggle('on')"><div class="thumb"></div></div>
+        </div>
+        <div class="config-toggle">
+          <div class="config-toggle-info"><div class="config-toggle-label">Retiradas de cajero</div><div class="config-toggle-desc">Permitir retiradas en cajeros</div></div>
+          <div class="toggle on" onclick="this.classList.toggle('on')"><div class="thumb"></div></div>
         </div>
       </div>
-
-      <!-- Hub Screen -->
-      <div class="screen" id="screen-hub" data-tab="hub">
-        <div class="screen__placeholder">
-          <i data-lucide="layout-grid" class="screen__placeholder-icon"></i>
-          <div class="screen__placeholder-title">Hub</div>
-          <div class="screen__placeholder-sub">Servicios y ajustes</div>
+      <div class="other-cards">
+        <div class="other-cards-title">Otras tarjetas</div>
+        <div class="other-card-item">
+          <div class="other-card-mini"><svg width="16" height="12" viewBox="0 0 24 18" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="1.5"><rect x="1" y="1" width="22" height="16" rx="2"/><path d="M1 7h22"/></svg></div>
+          <div><div class="other-card-name">Virtual</div><div class="other-card-number">....7568 . 05/30</div></div>
         </div>
       </div>
+      <div style="height: 80px"></div>
+    </div>
 
-      <!-- PUSH SCREENS (slide from right) -->
-
-      <!-- Transaction Detail -->
-      <div class="screen" id="screen-detail" data-push="true">
-        <button class="screen__back" onclick="popScreen()" aria-label="Volver">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M15 18l-6-6 6-6"/>
-          </svg>
-        </button>
-        <div class="screen__placeholder">
-          <i data-lucide="receipt" class="screen__placeholder-icon"></i>
-          <div class="screen__placeholder-title">Detalle</div>
-          <div class="screen__placeholder-sub">Detalle de transacción</div>
+    <!-- SEND MONEY -->
+    <div class="screen hidden-right send-screen" id="screen-send">
+      <div class="send-header">
+        <button class="back-btn" onclick="closeSendFlow()"><i data-lucide="x"></i></button>
+        <h2 id="send-title">Enviar dinero</h2>
+      </div>
+      <!-- Step 1 -->
+      <div class="send-step active" id="send-step-1">
+        <div class="search-bar"><i data-lucide="search"></i><input type="text" placeholder="Buscar contacto..."></div>
+        <div class="section-label">Recientes</div>
+        <div class="contacts-row">
+          <div class="contact-item" onclick="selectRecipient('Maria G.')"><div class="contact-avatar" style="background:rgba(26,192,151,.15);color:#1ac097">MG</div><div class="contact-name">Maria G.</div></div>
+          <div class="contact-item" onclick="selectRecipient('Pablo R.')"><div class="contact-avatar" style="background:rgba(111,160,255,.15);color:#6fa0ff">PR</div><div class="contact-name">Pablo R.</div></div>
+          <div class="contact-item" onclick="selectRecipient('Ana L.')"><div class="contact-avatar" style="background:rgba(191,90,242,.15);color:#bf5af2">AL</div><div class="contact-name">Ana L.</div></div>
+          <div class="contact-item" onclick="selectRecipient('Carlos O.')"><div class="contact-avatar" style="background:rgba(255,159,10,.15);color:#ff9f0a">CO</div><div class="contact-name">Carlos O.</div></div>
+          <div class="contact-item" onclick="selectRecipient('Lucia M.')"><div class="contact-avatar" style="background:rgba(255,87,119,.15);color:#ff5777">LM</div><div class="contact-name">Lucia M.</div></div>
+        </div>
+        <div class="contact-list">
+          <div class="contact-list-item" onclick="selectRecipient('Ana Lopez')"><div class="contact-list-avatar" style="background:rgba(191,90,242,.15);color:#bf5af2">AL</div><div><div class="contact-list-name">Ana Lopez</div><div class="contact-list-handle">@analopez</div></div></div>
+          <div class="contact-list-item" onclick="selectRecipient('Carlos Ottati')"><div class="contact-list-avatar" style="background:rgba(255,159,10,.15);color:#ff9f0a">CO</div><div><div class="contact-list-name">Carlos Ottati</div><div class="contact-list-handle">@cgarciaottati</div></div></div>
+          <div class="contact-list-item" onclick="selectRecipient('Maria Garcia')"><div class="contact-list-avatar" style="background:rgba(26,192,151,.15);color:#1ac097">MG</div><div><div class="contact-list-name">Maria Garcia</div><div class="contact-list-handle">@mariagarcia</div></div></div>
+          <div class="contact-list-item" onclick="selectRecipient('Pablo Rodriguez')"><div class="contact-list-avatar" style="background:rgba(111,160,255,.15);color:#6fa0ff">PR</div><div><div class="contact-list-name">Pablo Rodriguez</div><div class="contact-list-handle">@pablor</div></div></div>
         </div>
       </div>
-
-      <!-- Card Config -->
-      <div class="screen" id="screen-card-config" data-push="true">
-        <button class="screen__back" onclick="popScreen()" aria-label="Volver">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M15 18l-6-6 6-6"/>
-          </svg>
-        </button>
-        <div class="screen__placeholder">
-          <i data-lucide="settings" class="screen__placeholder-icon"></i>
-          <div class="screen__placeholder-title">Configuración</div>
-          <div class="screen__placeholder-sub">Configuración de tarjeta</div>
+      <!-- Step 2 -->
+      <div class="send-step" id="send-step-2">
+        <div class="amount-entry">
+          <div class="amount-recipient" id="send-to-name">Para Maria G.</div>
+          <div class="amount-display" id="amount-display"><span class="cur-sym">EUR</span><span id="amount-value">0</span></div>
+          <div class="amount-balance-info">Disponible: 1.954,23 EUR</div>
+        </div>
+        <div class="numpad">
+          <button class="numpad-key" onclick="numpadInput('1')">1</button>
+          <button class="numpad-key" onclick="numpadInput('2')">2</button>
+          <button class="numpad-key" onclick="numpadInput('3')">3</button>
+          <button class="numpad-key" onclick="numpadInput('4')">4</button>
+          <button class="numpad-key" onclick="numpadInput('5')">5</button>
+          <button class="numpad-key" onclick="numpadInput('6')">6</button>
+          <button class="numpad-key" onclick="numpadInput('7')">7</button>
+          <button class="numpad-key" onclick="numpadInput('8')">8</button>
+          <button class="numpad-key" onclick="numpadInput('9')">9</button>
+          <button class="numpad-key" onclick="numpadInput('.')">.</button>
+          <button class="numpad-key" onclick="numpadInput('0')">0</button>
+          <button class="numpad-key" onclick="numpadInput('del')"><i data-lucide="delete"></i></button>
+        </div>
+        <button class="cta-btn" id="send-continue" disabled onclick="goToReview()">Continuar</button>
+      </div>
+      <!-- Step 3 -->
+      <div class="send-step" id="send-step-3">
+        <div class="review-section">
+          <div class="review-amount-display">
+            <div class="amt" id="review-amount">EUR 50,00</div>
+            <div class="to-label" id="review-to">Para Maria G.</div>
+          </div>
+          <div class="review-details">
+            <div class="detail-row"><span class="detail-row-label">De</span><span class="detail-row-value">Cuenta EUR . 1.954,23</span></div>
+            <div class="detail-row"><span class="detail-row-label">Comision</span><span class="detail-row-value" style="color:var(--rui-color-positive)">Sin comision</span></div>
+            <div class="detail-row"><span class="detail-row-label">Llegada</span><span class="detail-row-value">Instantaneo</span></div>
+          </div>
+          <button class="cta-btn" style="width:100%;margin:0" onclick="sendSuccess()">Enviar <span id="review-send-amount">EUR 50,00</span></button>
         </div>
       </div>
-
-      <!-- Crypto Screen -->
-      <div class="screen" id="screen-crypto" data-push="true">
-        <button class="screen__back" onclick="popScreen()" aria-label="Volver">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M15 18l-6-6 6-6"/>
-          </svg>
-        </button>
-        <div class="screen__placeholder">
-          <i data-lucide="bitcoin" class="screen__placeholder-icon"></i>
-          <div class="screen__placeholder-title">Crypto</div>
-          <div class="screen__placeholder-sub">Revolut X Trading</div>
+      <!-- Step 4 -->
+      <div class="send-step" id="send-step-4">
+        <div class="success-section">
+          <div class="success-check"><i data-lucide="check"></i></div>
+          <div class="success-title">Enviado</div>
+          <div class="success-subtitle" id="success-msg">EUR 50,00 enviado a Maria G.</div>
         </div>
+        <button class="cta-btn" style="background:var(--rui-color-widget-background);color:var(--rui-color-foreground)" onclick="closeSendFlow()">Hecho</button>
       </div>
+    </div>
 
-      <!-- Send Money -->
-      <div class="screen" id="screen-send" data-push="true">
-        <button class="screen__back" onclick="popScreen()" aria-label="Volver">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M15 18l-6-6 6-6"/>
-          </svg>
-        </button>
-        <div class="screen__placeholder">
-          <i data-lucide="send" class="screen__placeholder-icon"></i>
-          <div class="screen__placeholder-title">Enviar</div>
-          <div class="screen__placeholder-sub">Enviar dinero</div>
-        </div>
-      </div>
+    <!-- Placeholder tabs -->
+    <div class="screen tab-hidden" id="screen-crypto"><div class="placeholder-screen"><i data-lucide="trending-up"></i><span>Crypto</span></div></div>
+    <div class="screen tab-hidden" id="screen-lifestyle"><div class="placeholder-screen"><i data-lucide="compass"></i><span>Estilo de vida</span></div></div>
+    <div class="screen tab-hidden" id="screen-hub"><div class="placeholder-screen"><i data-lucide="layout-grid"></i><span>Hub</span></div></div>
 
-      <!-- Account Selector -->
-      <div class="screen" id="screen-account-selector" data-push="true">
-        <button class="screen__back" onclick="popScreen()" aria-label="Volver">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M15 18l-6-6 6-6"/>
-          </svg>
-        </button>
-        <div class="screen__placeholder">
-          <i data-lucide="wallet" class="screen__placeholder-icon"></i>
-          <div class="screen__placeholder-title">Cuentas</div>
-          <div class="screen__placeholder-sub">Selector de cuentas</div>
-        </div>
-      </div>
+    <!-- TAB BAR -->
+    <div class="tab-bar" id="tab-bar">
+      <button class="tab-item active" data-tab="home" onclick="switchTab('home')"><i data-lucide="home"></i></button>
+      <button class="tab-item" data-tab="cards" onclick="switchTab('cards')"><i data-lucide="credit-card"></i></button>
+      <button class="tab-item" data-tab="crypto" onclick="switchTab('crypto')"><i data-lucide="trending-up"></i></button>
+      <button class="tab-item" data-tab="lifestyle" onclick="switchTab('lifestyle')"><i data-lucide="compass"></i></button>
+      <button class="tab-item" data-tab="hub" onclick="switchTab('hub')"><i data-lucide="layout-grid"></i></button>
+    </div>
+  </div>
+</div>
 
-      <!-- Profile -->
-      <div class="screen" id="screen-profile" data-push="true">
-        <button class="screen__back" onclick="popScreen()" aria-label="Volver">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M15 18l-6-6 6-6"/>
-          </svg>
-        </button>
-        <div class="screen__placeholder">
-          <i data-lucide="user" class="screen__placeholder-icon"></i>
-          <div class="screen__placeholder-title">Perfil</div>
-          <div class="screen__placeholder-sub">Tu perfil y ajustes</div>
-        </div>
-      </div>
-
-      <!-- Security -->
-      <div class="screen" id="screen-security" data-push="true">
-        <button class="screen__back" onclick="popScreen()" aria-label="Volver">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M15 18l-6-6 6-6"/>
-          </svg>
-        </button>
-        <div class="screen__placeholder">
-          <i data-lucide="shield" class="screen__placeholder-icon"></i>
-          <div class="screen__placeholder-title">Seguridad</div>
-          <div class="screen__placeholder-sub">Centro de seguridad</div>
-        </div>
-      </div>
-
-    </div><!-- /screens -->
-
-    <!-- Bottom Tab Bar -->
-    <nav class="tab-bar" id="tabBar">
-      <button class="tab-item active" data-tab="home" onclick="switchTab('home')" aria-label="Inicio">
-        <i data-lucide="home"></i>
-      </button>
-      <button class="tab-item" data-tab="cards" onclick="switchTab('cards')" aria-label="Tarjetas">
-        <i data-lucide="credit-card"></i>
-      </button>
-      <button class="tab-item" data-tab="invest" onclick="switchTab('invest')" aria-label="Crypto">
-        <i data-lucide="trending-up"></i>
-      </button>
-      <button class="tab-item" data-tab="lifestyle" onclick="switchTab('lifestyle')" aria-label="Estilo de vida">
-        <i data-lucide="compass"></i>
-      </button>
-      <button class="tab-item" data-tab="hub" onclick="switchTab('hub')" aria-label="Hub">
-        <i data-lucide="layout-grid"></i>
-      </button>
-    </nav>
-
-  </div><!-- /app -->
-
-</div><!-- /device-frame -->
-
-<!-- ================================================================
-     JAVASCRIPT — Router, State, Interactions
-     ================================================================ -->
 <script>
-(function() {
-  'use strict';
+lucide.createIcons();
 
-  // ── State ───────────────────────────────────────────────────
-  const state = {
-    currentTab: 'home',
-    screenStack: [],       // stack of pushed screen IDs
-    tabScreenMap: {        // which tab-level screen each tab uses
-      home: 'screen-home',
-      cards: 'screen-cards',
-      invest: 'screen-invest',
-      lifestyle: 'screen-lifestyle',
-      hub: 'screen-hub'
+const transactions = [
+  { merchant:'Viasat', category:'Servicios', amount:'-10,25 EUR', original:'12,00 USD', rate:'1 EUR = 1,170542 USD', card:'Platinum ....2403', status:'completed', iconClass:'tech', icon:'wifi' },
+  { merchant:'Uber', category:'Transporte', amount:'-4,52 EUR', original:'85,00 MXN', rate:'1 EUR = 18,80531 MXN', card:'Platinum ....2403', status:'pending', iconClass:'transport', icon:'car' },
+  { merchant:'Spotify', category:'Entretenimiento', amount:'-9,99 EUR', original:null, rate:null, card:'Virtual ....7568', status:'completed', iconClass:'entertainment', icon:'music' },
+  { merchant:'Maria Garcia', category:'Transferencia recibida', amount:'+500,00 EUR', original:null, rate:null, card:null, status:'completed', iconClass:'income', icon:'arrow-down-left', positive:true },
+  { merchant:'Apple Store', category:'Compras', amount:'-149,99 EUR', original:null, rate:null, card:'Platinum ....2403', status:'completed', iconClass:'shopping', icon:'shopping-bag' },
+  { merchant:'La Buena Vida', category:'Restaurantes', amount:'-42,50 EUR', original:null, rate:null, card:'Platinum ....2403', status:'completed', iconClass:'food', icon:'utensils' },
+];
+
+let currentTab = 'home';
+function switchTab(tab) {
+  if (tab === currentTab) return;
+  closeSendFlowSilent();
+  closeDetailSilent();
+  document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+  document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+  ['home','cards','crypto','lifestyle','hub'].forEach(s => {
+    const el = document.getElementById(`screen-${s}`);
+    if (s === tab) { el.classList.remove('tab-hidden'); el.classList.add('active'); el.classList.remove('hidden-left','hidden-right'); }
+    else { el.classList.add('tab-hidden'); el.classList.remove('active'); }
+  });
+  currentTab = tab;
+  lucide.createIcons();
+}
+
+function openTransaction(idx) {
+  const tx = transactions[idx];
+  document.getElementById('detail-title').textContent = tx.merchant;
+  document.getElementById('detail-amount').textContent = tx.amount;
+  document.getElementById('detail-amount').style.color = tx.positive ? 'var(--rui-color-positive)' : '';
+  document.getElementById('detail-merchant').textContent = tx.category;
+  const iconEl = document.getElementById('detail-icon');
+  iconEl.className = `detail-icon-large tx-icon ${tx.iconClass}`;
+  iconEl.innerHTML = `<i data-lucide="${tx.icon}"></i>`;
+  const statusEl = document.getElementById('detail-status');
+  statusEl.className = tx.status === 'pending' ? 'detail-status pending' : 'detail-status completed';
+  statusEl.innerHTML = tx.status === 'pending' ? '<i data-lucide="clock"></i><span>Pendiente</span>' : '<i data-lucide="check-circle-2"></i><span>Completado</span>';
+  let info = '';
+  if (tx.original) info += `<div class="detail-row"><span class="detail-row-label">Cargo del comercio</span><span class="detail-row-value">${tx.original}</span></div>`;
+  if (tx.rate) info += `<div class="detail-row"><span class="detail-row-label">Tipo de cambio</span><span class="detail-row-value">${tx.rate}</span></div>`;
+  info += `<div class="detail-row"><span class="detail-row-label">Comision</span><span class="detail-row-value">Sin comision</span></div>`;
+  if (tx.card) info += `<div class="detail-row"><span class="detail-row-label">Tarjeta</span><span class="detail-row-value">${tx.card}</span></div>`;
+  document.getElementById('detail-info').innerHTML = info;
+  document.getElementById(`screen-${currentTab}`).classList.add('hidden-left');
+  document.getElementById(`screen-${currentTab}`).classList.remove('active');
+  const d = document.getElementById('screen-detail');
+  d.classList.remove('hidden-right','tab-hidden');
+  d.classList.add('active');
+  document.getElementById('tab-bar').style.display = 'none';
+  lucide.createIcons();
+}
+function closeDetail() {
+  const d = document.getElementById('screen-detail');
+  if (!d.classList.contains('active')) return;
+  d.classList.remove('active'); d.classList.add('hidden-right');
+  const c = document.getElementById(`screen-${currentTab}`);
+  c.classList.remove('hidden-left'); c.classList.add('active');
+  document.getElementById('tab-bar').style.display = '';
+}
+function closeDetailSilent() { const d = document.getElementById('screen-detail'); d.classList.remove('active'); d.classList.add('hidden-right'); document.getElementById('tab-bar').style.display = ''; }
+
+let isFrozen = false;
+function toggleFreeze() {
+  isFrozen = !isFrozen;
+  const card = document.getElementById('main-card');
+  const btn = document.getElementById('freeze-btn');
+  card.classList.toggle('frozen', isFrozen);
+  btn.classList.toggle('freeze-active', isFrozen);
+  btn.innerHTML = isFrozen ? '<i data-lucide="unlock"></i>Desbloquear' : '<i data-lucide="lock"></i>Bloquear';
+  lucide.createIcons();
+}
+
+let selectedRecipient = '', sendAmount = '';
+function openSendFlow() {
+  sendAmount = ''; selectedRecipient = '';
+  showSendStep(1);
+  const s = document.getElementById('screen-send');
+  s.classList.remove('hidden-right','tab-hidden'); s.classList.add('active');
+  document.getElementById(`screen-${currentTab}`).classList.add('hidden-left');
+  document.getElementById(`screen-${currentTab}`).classList.remove('active');
+  document.getElementById('tab-bar').style.display = 'none';
+  document.getElementById('send-title').textContent = 'Enviar dinero';
+  lucide.createIcons();
+}
+function closeSendFlow() {
+  const s = document.getElementById('screen-send');
+  s.classList.remove('active'); s.classList.add('hidden-right');
+  const c = document.getElementById(`screen-${currentTab}`);
+  c.classList.remove('hidden-left'); c.classList.add('active');
+  document.getElementById('tab-bar').style.display = '';
+  sendAmount = '';
+  document.getElementById('amount-value').textContent = '0';
+  document.getElementById('send-continue').disabled = true;
+}
+function closeSendFlowSilent() { const s = document.getElementById('screen-send'); s.classList.remove('active'); s.classList.add('hidden-right'); document.getElementById('tab-bar').style.display = ''; }
+
+function showSendStep(step) { document.querySelectorAll('.send-step').forEach((el, i) => { el.classList.toggle('active', i === step - 1); }); }
+function selectRecipient(name) {
+  selectedRecipient = name;
+  document.getElementById('send-to-name').textContent = `Para ${name}`;
+  document.getElementById('send-title').textContent = name;
+  showSendStep(2);
+}
+function numpadInput(key) {
+  if (key === 'del') sendAmount = sendAmount.slice(0, -1);
+  else if (key === '.') { if (!sendAmount.includes('.')) sendAmount += sendAmount ? '.' : '0.'; }
+  else if (sendAmount.length < 8) sendAmount += key;
+  document.getElementById('amount-value').textContent = sendAmount || '0';
+  const d = document.getElementById('amount-display');
+  d.style.transform = 'scale(1.03)';
+  setTimeout(() => d.style.transform = '', 100);
+  const v = parseFloat(sendAmount);
+  document.getElementById('send-continue').disabled = !(v > 0 && v <= 1954.23);
+}
+function goToReview() {
+  const f = `EUR ${parseFloat(sendAmount).toFixed(2).replace('.',',')}`;
+  document.getElementById('review-amount').textContent = f;
+  document.getElementById('review-to').textContent = `Para ${selectedRecipient}`;
+  document.getElementById('review-send-amount').textContent = f;
+  document.getElementById('send-title').textContent = 'Revisar';
+  showSendStep(3);
+}
+function sendSuccess() {
+  const f = `EUR ${parseFloat(sendAmount).toFixed(2).replace('.',',')}`;
+  document.getElementById('success-msg').textContent = `${f} enviado a ${selectedRecipient}`;
+  document.getElementById('send-title').textContent = '';
+  showSendStep(4);
+  spawnConfetti();
+  lucide.createIcons();
+}
+function spawnConfetti() {
+  const c = document.createElement('div'); c.className = 'confetti-container';
+  document.querySelector('.app').appendChild(c);
+  const colors = ['#6fa0ff','#1ac097','#ff5363','#ffd60a','#bf5af2','#ff9f0a','#5e5ce6'];
+  for (let i = 0; i < 50; i++) {
+    const p = document.createElement('div'); p.className = 'confetti-piece';
+    p.style.cssText = `left:${Math.random()*100}%;top:-10px;background:${colors[Math.floor(Math.random()*colors.length)]};animation-delay:${Math.random()*.5}s;animation-duration:${1.5+Math.random()*1.5}s;width:${4+Math.random()*6}px;height:${4+Math.random()*6}px;`;
+    c.appendChild(p);
+  }
+  setTimeout(() => c.remove(), 3000);
+}
+
+// ══════════════════════════════════════════════════════════════
+// SWIPE GESTURES
+// ══════════════════════════════════════════════════════════════
+
+// Helper: detect which pushed screen is currently visible
+function getActiveOverlay() {
+  const detail = document.getElementById('screen-detail');
+  const send = document.getElementById('screen-send');
+  if (detail && detail.classList.contains('active')) return { el: detail, type: 'detail' };
+  if (send && send.classList.contains('active')) return { el: send, type: 'send' };
+  return null;
+}
+
+// 1. Swipe-from-left-edge to go back (iOS-style)
+(function initEdgeSwipeBack() {
+  const EDGE_ZONE = 30;
+  const COMPLETE_THRESHOLD = 0.35;
+  const VELOCITY_THRESHOLD = 0.4;
+  const app = document.querySelector('.app');
+
+  let tracking = false;
+  let startX = 0, startY = 0, startTime = 0;
+  let currentDragX = 0;
+  let overlay = null;
+  let behindScreen = null;
+  let screenWidth = 0;
+  let directionLocked = false;
+  let isHorizontal = false;
+
+  app.addEventListener('touchstart', function(e) {
+    overlay = getActiveOverlay();
+    if (!overlay) return;
+    const touch = e.touches[0];
+    if (touch.clientX > EDGE_ZONE) return;
+
+    tracking = true;
+    directionLocked = false;
+    isHorizontal = false;
+    startX = touch.clientX;
+    startY = touch.clientY;
+    startTime = Date.now();
+    currentDragX = 0;
+    screenWidth = app.offsetWidth || window.innerWidth;
+
+    // The behind screen is the current tab
+    behindScreen = document.getElementById(`screen-${currentTab}`);
+
+    // Prepare for gesture
+    if (overlay.el) {
+      overlay.el.style.willChange = 'transform';
+      overlay.el.style.transition = 'none';
     }
-  };
+    if (behindScreen) {
+      behindScreen.style.willChange = 'transform, opacity';
+      behindScreen.style.transition = 'none';
+      behindScreen.classList.remove('tab-hidden');
+      behindScreen.classList.add('active');
+      behindScreen.classList.remove('hidden-left');
+      behindScreen.style.transform = 'translateX(-30%) scale(0.95)';
+      behindScreen.style.opacity = '0.5';
+    }
+  }, { passive: true });
 
-  // ── DOM refs ────────────────────────────────────────────────
-  const tabBar = document.getElementById('tabBar');
-  const screensContainer = document.getElementById('screensContainer');
+  app.addEventListener('touchmove', function(e) {
+    if (!tracking) return;
+    const touch = e.touches[0];
+    const dx = touch.clientX - startX;
+    const dy = touch.clientY - startY;
 
-  // ── Helpers ─────────────────────────────────────────────────
-  function getAllScreens() {
-    return screensContainer.querySelectorAll('.screen');
-  }
-
-  function getScreen(id) {
-    return document.getElementById(id);
-  }
-
-  function hideAllTabScreens() {
-    getAllScreens().forEach(s => {
-      if (!s.dataset.push) {
-        s.classList.remove('active');
-        s.style.transform = '';
-        s.style.opacity = '';
+    if (!directionLocked && (Math.abs(dx) > 8 || Math.abs(dy) > 8)) {
+      directionLocked = true;
+      isHorizontal = Math.abs(dx) > Math.abs(dy);
+      if (!isHorizontal) {
+        tracking = false;
+        cleanupSwipe();
+        return;
       }
-    });
-  }
-
-  function clearPushAnimations(screen) {
-    screen.classList.remove('push-enter', 'push-exit', 'push-behind', 'push-behind-reverse');
-  }
-
-  // ── switchTab ───────────────────────────────────────────────
-  // Instant switch between main tabs (no animation per Revolut spec)
-  window.switchTab = function(tabName) {
-    if (state.screenStack.length > 0) {
-      // If a pushed screen is active, pop everything first
-      popAllScreens();
     }
+    if (!directionLocked || !isHorizontal) return;
 
-    if (tabName === state.currentTab) return;
+    e.preventDefault();
+    currentDragX = Math.max(0, dx);
+    const progress = Math.min(currentDragX / screenWidth, 1);
 
-    state.currentTab = tabName;
-
-    // Update tab bar active state
-    tabBar.querySelectorAll('.tab-item').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.tab === tabName);
-    });
-
-    // Show correct screen instantly
-    hideAllTabScreens();
-    const targetScreen = getScreen(state.tabScreenMap[tabName]);
-    if (targetScreen) {
-      targetScreen.classList.add('active');
+    if (overlay && overlay.el) {
+      overlay.el.style.transform = `translateX(${currentDragX}px)`;
+      overlay.el.style.boxShadow = `-8px 0 30px rgba(0,0,0,${0.3 * (1 - progress)})`;
     }
-
-    // Ensure tab bar is visible
-    tabBar.classList.remove('hidden');
-  };
-
-  // ── pushScreen ──────────────────────────────────────────────
-  // Slide-from-right transition, hides tab bar
-  window.pushScreen = function(screenId) {
-    const screen = getScreen(screenId);
-    if (!screen) return;
-
-    // Determine what's currently visible
-    let currentVisible;
-    if (state.screenStack.length > 0) {
-      currentVisible = getScreen(state.screenStack[state.screenStack.length - 1]);
-    } else {
-      currentVisible = getScreen(state.tabScreenMap[state.currentTab]);
+    if (behindScreen) {
+      const t = -30 + (30 * progress);
+      const s = 0.95 + (0.05 * progress);
+      const o = 0.5 + (0.5 * progress);
+      behindScreen.style.transform = `translateX(${t}%) scale(${s})`;
+      behindScreen.style.opacity = String(o);
     }
+  }, { passive: false });
 
-    // Push to stack
-    state.screenStack.push(screenId);
+  function finishSwipe(complete) {
+    if (!tracking) return;
+    tracking = false;
 
-    // Animate current screen behind
-    if (currentVisible) {
-      clearPushAnimations(currentVisible);
-      currentVisible.classList.add('active', 'push-behind');
-    }
+    const dur = complete ? '220ms' : '280ms';
+    const ease = 'cubic-bezier(0.2, 0.9, 0.3, 1)';
 
-    // Animate new screen in from right
-    clearPushAnimations(screen);
-    screen.classList.add('active', 'push-enter');
-
-    // Hide tab bar
-    tabBar.classList.add('hidden');
-
-    // Clean up animations after they complete
-    screen.addEventListener('animationend', function handler() {
-      screen.removeEventListener('animationend', handler);
-      clearPushAnimations(screen);
-      screen.classList.add('active');
-      if (currentVisible && currentVisible !== screen) {
-        clearPushAnimations(currentVisible);
-        currentVisible.classList.remove('active');
-      }
-    });
-  };
-
-  // ── popScreen ───────────────────────────────────────────────
-  // Reverse slide transition, shows tab bar if stack empty
-  window.popScreen = function() {
-    if (state.screenStack.length === 0) return;
-
-    const screenId = state.screenStack.pop();
-    const screen = getScreen(screenId);
-
-    // Determine what to reveal
-    let revealScreen;
-    if (state.screenStack.length > 0) {
-      revealScreen = getScreen(state.screenStack[state.screenStack.length - 1]);
-    } else {
-      revealScreen = getScreen(state.tabScreenMap[state.currentTab]);
-    }
-
-    // Animate the reveal screen back
-    if (revealScreen) {
-      clearPushAnimations(revealScreen);
-      revealScreen.classList.add('active', 'push-behind-reverse');
-    }
-
-    // Animate current screen out to right
-    if (screen) {
-      clearPushAnimations(screen);
-      screen.classList.add('push-exit');
-
-      screen.addEventListener('animationend', function handler() {
-        screen.removeEventListener('animationend', handler);
-        clearPushAnimations(screen);
-        screen.classList.remove('active');
-        if (revealScreen) {
-          clearPushAnimations(revealScreen);
-          revealScreen.classList.add('active');
-        }
-      });
-    }
-
-    // Show tab bar if stack is empty
-    if (state.screenStack.length === 0) {
-      tabBar.classList.remove('hidden');
-    }
-  };
-
-  // ── popAllScreens ───────────────────────────────────────────
-  function popAllScreens() {
-    // Instantly clear all pushed screens
-    while (state.screenStack.length > 0) {
-      const id = state.screenStack.pop();
-      const s = getScreen(id);
-      if (s) {
-        clearPushAnimations(s);
-        s.classList.remove('active');
-      }
-    }
-    tabBar.classList.remove('hidden');
-  }
-
-  // ── SWIPE GESTURES ──────────────────────────────────────────
-
-  // 1. Swipe-from-left-edge to go back (iOS-style)
-  (function initEdgeSwipeBack() {
-    const EDGE_ZONE = 25;        // px from left edge to start gesture
-    const COMPLETE_THRESHOLD = 0.35; // 35% of screen width
-    const VELOCITY_THRESHOLD = 0.5;  // px/ms — fast swipe completes even if < threshold
-    const screensContainer = document.getElementById('screens');
-
-    let tracking = false;
-    let startX = 0, startY = 0, startTime = 0;
-    let currentX = 0;
-    let topScreen = null, behindScreen = null;
-    let screenWidth = 0;
-    let directionLocked = false;
-    let isHorizontal = false;
-
-    screensContainer.addEventListener('touchstart', function(e) {
-      if (state.screenStack.length === 0) return;
-      const touch = e.touches[0];
-      if (touch.clientX > EDGE_ZONE) return;
-
-      tracking = true;
-      directionLocked = false;
-      isHorizontal = false;
-      startX = touch.clientX;
-      startY = touch.clientY;
-      startTime = Date.now();
-      currentX = 0;
-      screenWidth = window.innerWidth;
-
-      // Identify screens
-      const topId = state.screenStack[state.screenStack.length - 1];
-      topScreen = getScreen(topId);
-
-      let behindId;
-      if (state.screenStack.length > 1) {
-        behindId = state.screenStack[state.screenStack.length - 2];
-      } else {
-        behindId = state.tabScreenMap[state.currentTab];
-      }
-      behindScreen = getScreen(behindId);
-
-      // Prepare screens for gesture (GPU acceleration)
-      if (topScreen) {
-        topScreen.style.willChange = 'transform';
-        topScreen.style.transition = 'none';
-        clearPushAnimations(topScreen);
-        topScreen.classList.add('active');
+    if (complete) {
+      if (overlay && overlay.el) {
+        overlay.el.style.transition = `transform ${dur} ${ease}, box-shadow ${dur} ${ease}`;
+        overlay.el.style.transform = 'translateX(100%)';
+        overlay.el.style.boxShadow = 'none';
       }
       if (behindScreen) {
-        behindScreen.style.willChange = 'transform, opacity';
-        behindScreen.style.transition = 'none';
-        clearPushAnimations(behindScreen);
-        behindScreen.classList.add('active');
+        behindScreen.style.transition = `transform ${dur} ${ease}, opacity ${dur} ${ease}`;
+        behindScreen.style.transform = 'translateX(0) scale(1)';
+        behindScreen.style.opacity = '1';
+      }
+
+      setTimeout(function() {
+        // Clean up and call the actual close function
+        if (overlay && overlay.el) {
+          overlay.el.style.cssText = '';
+          overlay.el.classList.remove('active');
+          overlay.el.classList.add('hidden-right');
+        }
+        if (behindScreen) {
+          behindScreen.style.cssText = '';
+          behindScreen.classList.remove('hidden-left');
+          behindScreen.classList.add('active');
+        }
+        document.getElementById('tab-bar').style.display = '';
+        overlay = null;
+        behindScreen = null;
+      }, 230);
+    } else {
+      // Spring back
+      if (overlay && overlay.el) {
+        overlay.el.style.transition = `transform ${dur} ${ease}, box-shadow ${dur} ${ease}`;
+        overlay.el.style.transform = 'translateX(0)';
+        overlay.el.style.boxShadow = '';
+      }
+      if (behindScreen) {
+        behindScreen.style.transition = `transform ${dur} ${ease}, opacity ${dur} ${ease}`;
         behindScreen.style.transform = 'translateX(-30%) scale(0.95)';
         behindScreen.style.opacity = '0.5';
       }
-    }, { passive: true });
 
-    screensContainer.addEventListener('touchmove', function(e) {
-      if (!tracking) return;
-      const touch = e.touches[0];
-      const dx = touch.clientX - startX;
-      const dy = touch.clientY - startY;
-
-      // Lock direction after 10px of movement
-      if (!directionLocked && (Math.abs(dx) > 10 || Math.abs(dy) > 10)) {
-        directionLocked = true;
-        isHorizontal = Math.abs(dx) > Math.abs(dy);
-        if (!isHorizontal) {
-          tracking = false;
-          cleanupGestureStyles();
-          return;
-        }
-      }
-
-      if (!directionLocked) return;
-      if (!isHorizontal) return;
-
-      // Prevent vertical scroll while swiping
-      e.preventDefault();
-
-      currentX = Math.max(0, dx); // Only allow right swipe
-      const progress = currentX / screenWidth;
-
-      // Move top screen with finger
-      if (topScreen) {
-        topScreen.style.transform = 'translateX(' + currentX + 'px)';
-      }
-
-      // Parallax behind screen: from -30%/0.95/0.5 toward 0/1/1
-      if (behindScreen) {
-        const behindTranslate = -30 + (30 * progress);
-        const behindScale = 0.95 + (0.05 * progress);
-        const behindOpacity = 0.5 + (0.5 * progress);
-        behindScreen.style.transform = 'translateX(' + behindTranslate + '%) scale(' + behindScale + ')';
-        behindScreen.style.opacity = String(behindOpacity);
-      }
-    }, { passive: false });
-
-    function finishGesture(complete) {
-      if (!tracking) return;
-      tracking = false;
-
-      const duration = complete ? '250ms' : '300ms';
-      const easing = complete ? 'cubic-bezier(0.2, 0.9, 0.3, 1)' : 'cubic-bezier(0.2, 0.9, 0.3, 1)';
-
-      if (complete) {
-        // Complete the pop
-        if (topScreen) {
-          topScreen.style.transition = 'transform ' + duration + ' ' + easing;
-          topScreen.style.transform = 'translateX(100%)';
-        }
-        if (behindScreen) {
-          behindScreen.style.transition = 'transform ' + duration + ' ' + easing + ', opacity ' + duration + ' ' + easing;
-          behindScreen.style.transform = 'translateX(0) scale(1)';
-          behindScreen.style.opacity = '1';
-        }
-
-        // After animation, do the actual popScreen logic
-        setTimeout(function() {
-          // Clean up inline styles
-          if (topScreen) {
-            topScreen.style.cssText = '';
-            topScreen.classList.remove('active');
-          }
-          if (behindScreen) {
-            behindScreen.style.cssText = '';
-            behindScreen.classList.add('active');
-          }
-
-          // Update state (manual pop without animation)
-          state.screenStack.pop();
-          if (state.screenStack.length === 0) {
-            tabBar.classList.remove('hidden');
-          }
-
-          topScreen = null;
-          behindScreen = null;
-        }, 260);
-      } else {
-        // Spring back
-        if (topScreen) {
-          topScreen.style.transition = 'transform ' + duration + ' ' + easing;
-          topScreen.style.transform = 'translateX(0)';
-        }
-        if (behindScreen) {
-          behindScreen.style.transition = 'transform ' + duration + ' ' + easing + ', opacity ' + duration + ' ' + easing;
-          behindScreen.style.transform = 'translateX(-30%) scale(0.95)';
-          behindScreen.style.opacity = '0.5';
-        }
-
-        setTimeout(function() {
-          cleanupGestureStyles();
-        }, 310);
-      }
+      setTimeout(function() {
+        cleanupSwipe();
+      }, 290);
     }
-
-    function cleanupGestureStyles() {
-      if (topScreen) {
-        topScreen.style.cssText = '';
-        topScreen.classList.add('active');
-      }
-      if (behindScreen) {
-        behindScreen.style.cssText = '';
-        behindScreen.classList.remove('active');
-      }
-      topScreen = null;
-      behindScreen = null;
-    }
-
-    screensContainer.addEventListener('touchend', function(e) {
-      if (!tracking) return;
-      const elapsed = Date.now() - startTime;
-      const velocity = currentX / elapsed; // px/ms
-      const progress = currentX / screenWidth;
-
-      const complete = progress > COMPLETE_THRESHOLD || velocity > VELOCITY_THRESHOLD;
-      finishGesture(complete);
-    }, { passive: true });
-
-    screensContainer.addEventListener('touchcancel', function() {
-      finishGesture(false);
-    }, { passive: true });
-  })();
-
-  // 2. Pull-to-refresh on home screen
-  (function initPullToRefresh() {
-    const homeScreen = getScreen('home');
-    if (!homeScreen) return;
-
-    const PULL_THRESHOLD = 60;
-    let pulling = false;
-    let startY = 0;
-    let pullDistance = 0;
-    let refreshIndicator = null;
-
-    // Create refresh indicator
-    refreshIndicator = document.createElement('div');
-    refreshIndicator.style.cssText = 'position:absolute;top:0;left:50%;transform:translateX(-50%) translateY(-40px);width:30px;height:30px;border-radius:50%;border:2px solid rgba(255,255,255,0.3);border-top-color:#6fa0ff;z-index:100;opacity:0;transition:opacity 0.2s;pointer-events:none;';
-    homeScreen.style.position = 'relative';
-    homeScreen.appendChild(refreshIndicator);
-
-    homeScreen.addEventListener('touchstart', function(e) {
-      // Only if screen is scrolled to top and no pushed screens
-      if (state.screenStack.length > 0) return;
-      if (state.currentTab !== 'home') return;
-      if (homeScreen.scrollTop > 5) return;
-      startY = e.touches[0].clientY;
-      pulling = true;
-      pullDistance = 0;
-    }, { passive: true });
-
-    homeScreen.addEventListener('touchmove', function(e) {
-      if (!pulling) return;
-      const dy = e.touches[0].clientY - startY;
-      if (dy < 0) { pulling = false; return; }
-
-      pullDistance = Math.min(dy * 0.5, 100); // Dampen the pull
-
-      // Rotate the indicator as you pull
-      const rotation = (pullDistance / PULL_THRESHOLD) * 360;
-      const opacity = Math.min(pullDistance / PULL_THRESHOLD, 1);
-      refreshIndicator.style.opacity = String(opacity);
-      refreshIndicator.style.transform = 'translateX(-50%) translateY(' + (pullDistance - 40) + 'px) rotate(' + rotation + 'deg)';
-
-      if (pullDistance > 10) {
-        e.preventDefault();
-      }
-    }, { passive: false });
-
-    homeScreen.addEventListener('touchend', function() {
-      if (!pulling) return;
-      pulling = false;
-
-      if (pullDistance >= PULL_THRESHOLD) {
-        // Trigger refresh animation
-        refreshIndicator.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
-        refreshIndicator.style.transform = 'translateX(-50%) translateY(20px)';
-        refreshIndicator.style.opacity = '1';
-
-        // Spin animation
-        refreshIndicator.style.animation = 'spin 0.6s linear infinite';
-
-        // After 1s, hide and reset
-        setTimeout(function() {
-          refreshIndicator.style.animation = '';
-          refreshIndicator.style.transition = 'opacity 0.2s ease';
-          refreshIndicator.style.opacity = '0';
-          setTimeout(function() {
-            refreshIndicator.style.transform = 'translateX(-50%) translateY(-40px)';
-          }, 200);
-        }, 1000);
-      } else {
-        // Snap back
-        refreshIndicator.style.transition = 'transform 0.2s ease, opacity 0.2s ease';
-        refreshIndicator.style.opacity = '0';
-        refreshIndicator.style.transform = 'translateX(-50%) translateY(-40px)';
-      }
-      pullDistance = 0;
-    }, { passive: true });
-
-    homeScreen.addEventListener('touchcancel', function() {
-      pulling = false;
-      refreshIndicator.style.opacity = '0';
-      refreshIndicator.style.transform = 'translateX(-50%) translateY(-40px)';
-      pullDistance = 0;
-    }, { passive: true });
-  })();
-
-  // 3. Swipe between tabs (horizontal swipe on tab content)
-  (function initTabSwipe() {
-    const screensContainer = document.getElementById('screens');
-    const tabOrder = ['home', 'cards', 'invest', 'lifestyle', 'hub'];
-
-    let swiping = false;
-    let startX = 0, startY = 0;
-    let dirLocked = false, isHoriz = false;
-
-    screensContainer.addEventListener('touchstart', function(e) {
-      if (state.screenStack.length > 0) return; // Only on tab screens
-      const touch = e.touches[0];
-      if (touch.clientX <= 25) return; // Don't conflict with edge-back
-      swiping = true;
-      dirLocked = false;
-      isHoriz = false;
-      startX = touch.clientX;
-      startY = touch.clientY;
-    }, { passive: true });
-
-    screensContainer.addEventListener('touchend', function(e) {
-      if (!swiping) return;
-      swiping = false;
-      if (!dirLocked || !isHoriz) return;
-
-      const dx = e.changedTouches[0].clientX - startX;
-      if (Math.abs(dx) < 60) return; // Min swipe distance
-
-      const currentIdx = tabOrder.indexOf(state.currentTab);
-      if (dx < -60 && currentIdx < tabOrder.length - 1) {
-        // Swipe left → next tab
-        switchTab(tabOrder[currentIdx + 1]);
-      } else if (dx > 60 && currentIdx > 0) {
-        // Swipe right → previous tab
-        switchTab(tabOrder[currentIdx - 1]);
-      }
-    }, { passive: true });
-
-    screensContainer.addEventListener('touchmove', function(e) {
-      if (!swiping) return;
-      if (dirLocked) return;
-      const dx = e.touches[0].clientX - startX;
-      const dy = e.touches[0].clientY - startY;
-      if (Math.abs(dx) > 10 || Math.abs(dy) > 10) {
-        dirLocked = true;
-        isHoriz = Math.abs(dx) > Math.abs(dy);
-      }
-    }, { passive: true });
-  })();
-
-  // ── Button press feedback ───────────────────────────────────
-  // Scale(0.95) on touchstart/mousedown, spring back on release
-  function initPressFeedback() {
-    const pressables = document.querySelectorAll('.pressable');
-    pressables.forEach(el => {
-      el.addEventListener('touchstart', () => el.classList.add('pressing'), { passive: true });
-      el.addEventListener('touchend', () => el.classList.remove('pressing'), { passive: true });
-      el.addEventListener('touchcancel', () => el.classList.remove('pressing'), { passive: true });
-      el.addEventListener('mousedown', () => el.classList.add('pressing'));
-      el.addEventListener('mouseup', () => el.classList.remove('pressing'));
-      el.addEventListener('mouseleave', () => el.classList.remove('pressing'));
-    });
   }
 
-  // ── Initialize ──────────────────────────────────────────────
-  function init() {
-    // Initialize Lucide icons
-    if (window.lucide) {
-      lucide.createIcons();
+  function cleanupSwipe() {
+    if (overlay && overlay.el) {
+      overlay.el.style.cssText = '';
     }
-
-    // Set up press feedback
-    initPressFeedback();
-
-    // Set initial tab
-    switchTab('home');
-    // Reset state since switchTab checks for same tab
-    state.currentTab = '';
-    switchTab('home');
-
-    // Expose state for debugging
-    window.__krevolut = { state, pushScreen, popScreen, switchTab };
+    if (behindScreen) {
+      behindScreen.style.cssText = '';
+      // Restore hidden state since we didn't actually navigate
+      behindScreen.classList.add('hidden-left');
+      behindScreen.classList.remove('active');
+    }
+    overlay = null;
+    behindScreen = null;
   }
 
-  // Wait for DOM and Lucide
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
+  app.addEventListener('touchend', function() {
+    if (!tracking) return;
+    const elapsed = Date.now() - startTime;
+    const velocity = currentDragX / Math.max(elapsed, 1);
+    const progress = currentDragX / screenWidth;
+    finishSwipe(progress > COMPLETE_THRESHOLD || velocity > VELOCITY_THRESHOLD);
+  }, { passive: true });
 
+  app.addEventListener('touchcancel', function() {
+    finishSwipe(false);
+  }, { passive: true });
+})();
+
+// 2. Pull-to-refresh on home screen
+(function initPullToRefresh() {
+  const homeScreen = document.getElementById('screen-home');
+  if (!homeScreen) return;
+
+  const PULL_THRESHOLD = 60;
+  let pulling = false;
+  let startY = 0;
+  let pullDistance = 0;
+
+  // Create refresh indicator
+  const indicator = document.createElement('div');
+  indicator.style.cssText = 'position:absolute;top:0;left:50%;transform:translateX(-50%) translateY(-40px);width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);border-top-color:var(--rui-color-accent,#6fa0ff);z-index:100;opacity:0;transition:opacity 0.2s;pointer-events:none;';
+  homeScreen.style.position = 'relative';
+  homeScreen.appendChild(indicator);
+
+  homeScreen.addEventListener('touchstart', function(e) {
+    if (getActiveOverlay()) return;
+    if (currentTab !== 'home') return;
+    if (homeScreen.scrollTop > 5) return;
+    startY = e.touches[0].clientY;
+    pulling = true;
+    pullDistance = 0;
+  }, { passive: true });
+
+  homeScreen.addEventListener('touchmove', function(e) {
+    if (!pulling) return;
+    const dy = e.touches[0].clientY - startY;
+    if (dy < 0) { pulling = false; return; }
+    pullDistance = Math.min(dy * 0.4, 80);
+    const rotation = (pullDistance / PULL_THRESHOLD) * 360;
+    const opacity = Math.min(pullDistance / PULL_THRESHOLD, 1);
+    indicator.style.opacity = String(opacity);
+    indicator.style.transform = `translateX(-50%) translateY(${pullDistance - 40}px) rotate(${rotation}deg)`;
+    if (pullDistance > 10) e.preventDefault();
+  }, { passive: false });
+
+  homeScreen.addEventListener('touchend', function() {
+    if (!pulling) return;
+    pulling = false;
+    if (pullDistance >= PULL_THRESHOLD) {
+      indicator.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+      indicator.style.transform = 'translateX(-50%) translateY(20px)';
+      indicator.style.opacity = '1';
+      indicator.style.animation = 'ptr-spin 0.6s linear infinite';
+      setTimeout(function() {
+        indicator.style.animation = '';
+        indicator.style.transition = 'opacity 0.2s ease';
+        indicator.style.opacity = '0';
+        setTimeout(() => { indicator.style.transform = 'translateX(-50%) translateY(-40px)'; }, 200);
+      }, 1000);
+    } else {
+      indicator.style.transition = 'transform 0.2s ease, opacity 0.2s ease';
+      indicator.style.opacity = '0';
+      indicator.style.transform = 'translateX(-50%) translateY(-40px)';
+    }
+    pullDistance = 0;
+  }, { passive: true });
+})();
+
+// 3. Swipe between tabs
+(function initTabSwipe() {
+  const app = document.querySelector('.app');
+  const tabOrder = ['home', 'cards', 'crypto', 'lifestyle', 'hub'];
+  let swiping = false, swStartX = 0, swStartY = 0, swDirLocked = false, swIsHoriz = false;
+
+  app.addEventListener('touchstart', function(e) {
+    if (getActiveOverlay()) return;
+    const touch = e.touches[0];
+    if (touch.clientX <= 30) return; // Don't conflict with edge-back
+    swiping = true;
+    swDirLocked = false;
+    swIsHoriz = false;
+    swStartX = touch.clientX;
+    swStartY = touch.clientY;
+  }, { passive: true });
+
+  app.addEventListener('touchmove', function(e) {
+    if (!swiping || swDirLocked) return;
+    const dx = e.touches[0].clientX - swStartX;
+    const dy = e.touches[0].clientY - swStartY;
+    if (Math.abs(dx) > 10 || Math.abs(dy) > 10) {
+      swDirLocked = true;
+      swIsHoriz = Math.abs(dx) > Math.abs(dy);
+    }
+  }, { passive: true });
+
+  app.addEventListener('touchend', function(e) {
+    if (!swiping) return;
+    swiping = false;
+    if (!swDirLocked || !swIsHoriz) return;
+    const dx = e.changedTouches[0].clientX - swStartX;
+    if (Math.abs(dx) < 50) return;
+    const idx = tabOrder.indexOf(currentTab);
+    if (dx < -50 && idx < tabOrder.length - 1) switchTab(tabOrder[idx + 1]);
+    else if (dx > 50 && idx > 0) switchTab(tabOrder[idx - 1]);
+  }, { passive: true });
 })();
 </script>
-
 </body>
 </html>
