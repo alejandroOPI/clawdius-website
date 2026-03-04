@@ -1,1301 +1,1390 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#000d19">
-<title>Revolut</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Krevolut</title>
 <style>
-/* ===== RUI DESIGN TOKENS (extracted from app.revolut.com production DOM) ===== */
-:root {
-  --rui-color-accent: #6fa0ff;
-  --rui-color-on-accent: #fff;
-  --rui-color-action-background: rgba(99,147,243,.2);
-  --rui-color-action-background-neutral: rgba(255,255,255,.2);
-  --rui-color-positive: #1ac097;
-  --rui-color-danger: #ff5363;
-  --rui-color-warning: #ff9f0a;
-  --rui-color-blue: #6fa0ff;
-  --rui-color-teal: #13d1a3;
-  --rui-color-purple: #bf5af2;
-  --rui-color-indigo: #5e5ce6;
-  --rui-color-deep-pink: #ff5777;
-  --rui-color-brown: #ac816e;
-  --rui-color-foreground: #fff;
-  --rui-color-inactive: rgba(255,255,255,.6);
-  --rui-color-grey-50: #717173;
-  --rui-color-grouped-background: #000d19;
-  --rui-color-widget-background: rgba(255,255,255,.1);
-  --rui-color-nested-background: rgba(0,0,0,.15);
-  --rui-color-popover-background: #28333d;
-  --rui-color-search-background: rgba(255,255,255,.14);
-  --rui-color-disabled-background: #1f1f1f;
-  --rui-font-brand: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
-  --rui-font-size-heading1: 1.5rem;
-  --rui-font-size-emphasis1: .9375rem;
-  --rui-font-size-body1: .9375rem;
-  --rui-font-size-body2: .875rem;
-  --rui-font-size-body3: .75rem;
-  --rui-radius-widget: .75rem;
-  --rui-radius-cell: .5rem;
-  --rui-radius-r6: .375rem;
-  --rui-radius-r8: .5rem;
-  --rui-radius-round: 9999px;
-  --rui-size-button-md: 2.75rem;
-  --rui-duration-sm: .2s;
-  --rui-duration-skeleton: 1.5s;
-  --rui-easing-toast: cubic-bezier(.175,.885,.21,1.65);
-}
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-html { height: 100%; }
+  :root {
+    --bg: #0a0e14;
+    --bg-card: rgba(255,255,255,0.05);
+    --bg-card-hover: rgba(255,255,255,0.08);
+    --border: rgba(255,255,255,0.07);
+    --text-primary: #ffffff;
+    --text-secondary: #8b95a3;
+    --text-tertiary: #5a6270;
+    --green: #00d26a;
+    --red: #ff3b30;
+    --blue: #0066ff;
+    --teal: #00c9b1;
+    --orange: #ff6b35;
+    --nav-bg: rgba(12,16,22,0.95);
+    --radius: 16px;
+    --radius-sm: 12px;
+    --radius-xs: 8px;
+  }
 
-body {
-  font-family: var(--rui-font-brand);
-  background: var(--rui-color-grouped-background);
-  color: var(--rui-color-foreground);
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  -webkit-font-smoothing: antialiased;
-  -webkit-text-size-adjust: 100%;
-  overflow: hidden;
-}
-@media (min-width: 500px) {
-  body { background: #0a0a0a; padding: 24px 0; align-items: flex-start; }
-}
+  html, body {
+    height: 100%;
+    background: #000;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--text-primary);
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
 
-/* ===== DEVICE FRAME ===== */
-.device-frame {
-  width: 100%;
-  height: 100%;
-  height: 100dvh;
-  background: var(--rui-color-grouped-background);
-  overflow: hidden;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-}
-@media (min-width: 500px) {
-  .device-frame {
-    width: 393px;
-    height: 852px;
-    border-radius: 44px;
-    box-shadow: 0 0 0 11px #1a1a1a, 0 0 0 13px #333, 0 30px 80px rgba(0,0,0,.6);
+  /* Phone Frame */
+  .phone-frame {
+    position: relative;
+    width: 390px;
+    height: 100vh;
+    height: 100dvh;
+    max-height: 844px;
+    margin: 0 auto;
+    background: var(--bg);
+    overflow: hidden;
+  }
+
+  @media (max-width: 420px) {
+    .phone-frame { width: 100%; max-height: 100vh; max-height: 100dvh; }
+  }
+
+  /* Background Glow */
+  .bg-glow {
+    position: absolute;
+    top: -80px;
+    left: -60px;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(0,102,255,0.12) 0%, rgba(0,201,177,0.06) 40%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Status Bar */
+  .status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px 8px;
+    font-size: 14px;
+    font-weight: 600;
+    position: relative;
+    z-index: 10;
+  }
+  .status-bar .time { letter-spacing: 0.5px; }
+  .status-bar .right { display: flex; align-items: center; gap: 6px; font-size: 12px; }
+  .status-bar .signal { display: flex; gap: 1px; align-items: flex-end; }
+  .status-bar .signal span { width: 3px; background: #fff; border-radius: 1px; }
+  .status-bar .battery {
+    width: 25px; height: 12px; border: 1.5px solid rgba(255,255,255,0.5);
+    border-radius: 3px; position: relative; padding: 1.5px;
+  }
+  .status-bar .battery::after {
+    content: ''; position: absolute; right: -4px; top: 3px;
+    width: 2px; height: 5px; background: rgba(255,255,255,0.5); border-radius: 0 1px 1px 0;
+  }
+  .status-bar .battery-fill {
+    width: 48%; height: 100%; background: #fff; border-radius: 1px;
+  }
+
+  /* Top Bar */
+  .top-bar {
+    display: flex;
+    align-items: center;
+    padding: 4px 16px 12px;
+    gap: 10px;
+    position: relative;
+    z-index: 10;
+  }
+  .avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: #3a3f47; display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 600; color: #fff;
+    position: relative; flex-shrink: 0;
+  }
+  .avatar::before {
+    content: ''; position: absolute; inset: -3px;
+    border-radius: 50%; border: 2px solid rgba(200,160,180,0.4);
+  }
+  .avatar .notif-dot {
+    position: absolute; top: -1px; right: -1px;
+    width: 8px; height: 8px; background: var(--red);
+    border-radius: 50%; border: 1.5px solid var(--bg);
+  }
+  .search-bar {
+    flex: 1; height: 38px; background: rgba(255,255,255,0.08);
+    border-radius: 20px; display: flex; align-items: center;
+    padding: 0 14px; gap: 8px; cursor: pointer;
+  }
+  .search-bar svg { opacity: 0.5; flex-shrink: 0; }
+  .search-bar span { color: var(--text-secondary); font-size: 15px; }
+  .top-icon {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: rgba(255,255,255,0.08); display: flex;
+    align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer;
+  }
+
+  /* Screen Container */
+  .screens-container {
+    position: relative;
+    height: calc(100% - 152px);
+    overflow: hidden;
+  }
+  .screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    opacity: 0;
+    transform: translateX(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+    padding-bottom: 20px;
+  }
+  .screen::-webkit-scrollbar { display: none; }
+  .screen.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin: 0 16px 12px;
+    padding: 16px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  /* Home Screen */
+  .balance-area {
+    text-align: center;
+    padding: 8px 16px 20px;
+    position: relative;
+  }
+  .accounts-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+    cursor: pointer;
+  }
+  .balance-amount {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+  .balance-currency {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+  }
+  .balance-dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 16px;
+  }
+  .balance-dots .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+  }
+  .balance-dots .dot.active { background: #fff; }
+
+  /* Quick Actions */
+  .quick-actions {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    padding: 0 16px 20px;
+  }
+  .quick-action {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+  .quick-action .icon-circle {
+    width: 52px; height: 52px; border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .quick-action span {
+    font-size: 12px; color: var(--text-secondary);
+  }
+
+  /* Promo Banner */
+  .promo-banner {
+    margin: 0 16px 12px;
+    border-radius: var(--radius);
+    overflow: hidden;
+    position: relative;
+    height: 120px;
+    background: linear-gradient(135deg, #0a2a1f 0%, #0d1f2d 50%, #1a0a2e 100%);
+    cursor: pointer;
+  }
+  .promo-banner .aurora {
+    position: absolute;
+    top: 0; right: 0;
+    width: 55%;
+    height: 100%;
+    background: linear-gradient(160deg, transparent 20%, rgba(0,200,120,0.3) 40%, rgba(0,100,200,0.2) 60%, rgba(100,0,200,0.15) 80%);
+    filter: blur(15px);
+  }
+  .promo-banner .close-btn {
+    position: absolute; top: 12px; right: 12px;
+    width: 24px; height: 24px; border-radius: 50%;
+    background: rgba(0,0,0,0.3); display: flex;
+    align-items: center; justify-content: center;
+    color: #fff; font-size: 14px; cursor: pointer; z-index: 2;
+  }
+  .promo-banner .content {
+    position: relative; z-index: 1;
+    padding: 20px;
+  }
+  .promo-banner h3 {
+    font-size: 17px; font-weight: 600; margin-bottom: 6px;
+  }
+  .promo-banner p {
+    font-size: 13px; color: var(--text-secondary); line-height: 1.4;
+  }
+  .promo-dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+  .promo-dots .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+  }
+  .promo-dots .dot.active { background: #fff; }
+
+  /* Transactions */
+  .transactions { margin: 0 16px; }
+  .transaction {
+    display: flex;
+    align-items: center;
+    padding: 14px 0;
+    gap: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    cursor: pointer;
+  }
+  .transaction:last-child { border-bottom: none; }
+  .tx-icon {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 600; flex-shrink: 0;
+    position: relative;
+  }
+  .tx-icon.viasat { background: #fff; }
+  .tx-icon.heart { background: var(--teal); }
+  .tx-icon.food { background: var(--orange); }
+  .tx-icon.person { background: #5a7aa0; }
+  .tx-icon .badge {
+    position: absolute; bottom: -2px; right: -2px;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: var(--blue); border: 2px solid var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: #fff;
+  }
+  .tx-details { flex: 1; min-width: 0; }
+  .tx-name {
+    font-size: 15px; font-weight: 500;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .tx-date { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+  .tx-amount { text-align: right; flex-shrink: 0; }
+  .tx-amount .primary { font-size: 15px; font-weight: 500; }
+  .tx-amount .primary.positive { color: var(--green); }
+  .tx-amount .secondary { font-size: 12px; color: var(--text-tertiary); margin-top: 2px; }
+
+  .see-all {
+    text-align: center;
+    padding: 16px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+
+  /* Welcome Card */
+  .welcome-card {
+    margin: 0 16px 16px;
+    border-radius: var(--radius);
+    overflow: hidden;
+    position: relative;
+    height: 160px;
+    background: linear-gradient(135deg, #1a3a2a 0%, #0d2520 100%);
+    cursor: pointer;
+  }
+  .welcome-card .bg-img {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%),
+                linear-gradient(135deg, rgba(34,139,34,0.15) 0%, rgba(139,69,19,0.1) 100%);
+  }
+  .welcome-card .pyramid {
+    position: absolute;
+    bottom: 10px; right: 20px;
+    width: 0; height: 0;
+    border-left: 60px solid transparent;
+    border-right: 60px solid transparent;
+    border-bottom: 80px solid rgba(139,119,42,0.3);
+  }
+  .welcome-card .pyramid-steps {
+    position: absolute;
+    bottom: 10px; right: 10px;
+    width: 130px; height: 85px;
+  }
+  .welcome-card .close-btn {
+    position: absolute; top: 12px; right: 12px;
+    width: 24px; height: 24px; border-radius: 50%;
+    background: rgba(0,0,0,0.3); display: flex;
+    align-items: center; justify-content: center;
+    color: #fff; font-size: 14px; cursor: pointer; z-index: 2;
+  }
+  .welcome-card .content {
+    position: relative; z-index: 1;
+    padding: 20px;
+  }
+  .welcome-card .subtitle {
+    font-size: 13px; color: rgba(255,255,255,0.7);
+  }
+  .welcome-card h2 {
+    font-size: 28px; font-weight: 700; margin: 2px 0 8px;
+  }
+  .welcome-card .rate {
+    font-size: 14px; color: rgba(255,255,255,0.6);
+  }
+
+  /* Invest Screen */
+  .invest-hero {
+    position: relative;
+    height: 320px;
+    margin: 0 0 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .invest-hero .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 30% 20%, rgba(20,40,80,0.6) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 60%, rgba(10,20,50,0.4) 0%, transparent 50%),
+      linear-gradient(160deg, #060a12 0%, #0a0f1a 30%, #080c14 60%, #050810 100%);
+  }
+  .invest-hero .silk-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(135deg, transparent 30%, rgba(30,50,90,0.15) 45%, transparent 55%),
+      linear-gradient(225deg, transparent 40%, rgba(20,40,70,0.1) 50%, transparent 60%);
+    animation: silkShimmer 8s ease-in-out infinite;
+  }
+  @keyframes silkShimmer {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+  .invest-hero h1 {
+    font-size: 30px;
+    font-weight: 700;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    letter-spacing: -0.5px;
+  }
+  .invest-hero p {
+    font-size: 15px;
+    color: var(--text-secondary);
+    margin-top: 8px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-button {
+    display: block;
+    margin: 0 16px 16px;
+    padding: 16px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 14px;
+    text-align: center;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .cta-button:active { background: rgba(255,255,255,0.18); }
+
+  .free-trades-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .free-trades-icon {
+    width: 48px; height: 48px; border-radius: 50%;
+    border: 2px dashed var(--blue);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; color: var(--blue);
     flex-shrink: 0;
   }
-}
-
-/* Status bar - only on desktop */
-.status-bar {
-  height: 54px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 28px 0;
-  font-size: 15px;
-  font-weight: 600;
-  flex-shrink: 0;
-}
-@media (max-width: 499px) {
-  .status-bar { height: env(safe-area-inset-top, 0px); padding: 0; min-height: 0; }
-  .status-bar * { display: none; }
-}
-.status-bar .time { font-weight: 700; font-size: 16px; letter-spacing: 0.5px; }
-.status-bar .icons { display: flex; gap: 6px; align-items: center; }
-.status-bar .icons svg { width: 16px; height: 16px; }
-
-/* ===== APP ===== */
-.app {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  overflow: hidden;
-}
-
-/* ===== SCREENS ===== */
-.screen {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%;
-  height: calc(100% - 68px);
-  overflow-y: auto;
-  overflow-x: hidden;
-  transition: transform 300ms cubic-bezier(.25,.1,.25,1), opacity 200ms ease;
-  will-change: transform;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior-y: contain;
-}
-.screen::-webkit-scrollbar { display: none; }
-.screen.hidden-left { transform: translateX(-30%); opacity: 0.4; pointer-events: none; }
-.screen.hidden-right { transform: translateX(100%); pointer-events: none; }
-.screen.active { transform: translateX(0); opacity: 1; }
-.screen.tab-hidden { display: none; }
-
-/* ===== HOME HEADER ===== */
-.home-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 20px 4px;
-  flex-shrink: 0;
-}
-.revolut-logo {
-  width: 32px; height: 32px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, #0066ff 0%, #0044cc 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 800;
-  font-size: 16px;
-  color: white;
-  letter-spacing: -1px;
-}
-.home-header .right-icons { display: flex; gap: 8px; align-items: center; }
-.icon-btn {
-  width: 36px; height: 36px;
-  display: flex; align-items: center; justify-content: center;
-  border-radius: var(--rui-radius-round);
-  background: transparent; border: none;
-  color: var(--rui-color-foreground);
-  cursor: pointer;
-  transition: background var(--rui-duration-sm) ease;
-}
-.icon-btn:active { background: var(--rui-color-widget-background); }
-.icon-btn svg { width: 22px; height: 22px; }
-
-.avatar-btn {
-  width: 32px; height: 32px;
-  border-radius: var(--rui-radius-round);
-  background: #3a4555;
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 600; font-size: 12px; color: #ccc;
-  cursor: pointer;
-}
-
-.page-title {
-  padding: 4px 20px 12px;
-  font-size: 26px;
-  font-weight: 700;
-  letter-spacing: -0.3px;
-}
-
-/* ===== MAIN CARD WIDGET (balance + transactions) ===== */
-.main-widget {
-  margin: 0 16px 16px;
-  background: rgba(255,255,255,.07);
-  border-radius: 16px;
-  overflow: hidden;
-  position: relative;
-}
-/* Subtle blue glow at top-left like the real app */
-.main-widget::before {
-  content: '';
-  position: absolute;
-  top: -40px; left: -40px;
-  width: 200px; height: 200px;
-  background: radial-gradient(circle, rgba(111,160,255,.08) 0%, transparent 70%);
-  pointer-events: none;
-}
-
-.widget-balance {
-  padding: 20px 20px 16px;
-}
-.balance-label {
-  font-size: var(--rui-font-size-body2);
-  color: var(--rui-color-inactive);
-  font-weight: 500;
-  display: flex; align-items: center; gap: 6px;
-  margin-bottom: 6px;
-}
-.balance-label svg { width: 14px; height: 14px; }
-.balance-amount {
-  font-size: 34px;
-  font-weight: 700;
-  letter-spacing: -1px;
-  display: flex; align-items: baseline; gap: 6px;
-}
-.balance-amount .currency {
-  font-size: 16px;
-  color: var(--rui-color-inactive);
-  font-weight: 500;
-}
-
-/* Quick actions row inside card */
-.quick-actions {
-  display: flex;
-  padding: 4px 12px 16px;
-  gap: 8px;
-}
-.quick-action {
-  flex: 1;
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
-  cursor: pointer; border: none; background: none; color: var(--rui-color-foreground);
-  -webkit-tap-highlight-color: transparent;
-}
-.quick-action:active .qa-icon { transform: scale(0.9); }
-.qa-icon {
-  width: 44px; height: 44px;
-  border-radius: var(--rui-radius-round);
-  background: var(--rui-color-action-background);
-  display: flex; align-items: center; justify-content: center;
-  transition: transform 200ms cubic-bezier(.175,.885,.21,1.65);
-}
-.qa-icon svg { width: 20px; height: 20px; color: var(--rui-color-accent); }
-.qa-label { font-size: 11px; color: var(--rui-color-inactive); font-weight: 400; }
-
-/* Divider */
-.widget-divider {
-  height: 1px;
-  background: rgba(255,255,255,.06);
-  margin: 0 20px;
-}
-
-/* Transaction feed inside widget */
-.widget-feed { padding: 0; }
-.feed-header {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 14px 20px 8px;
-}
-.feed-header h3 { font-size: 14px; font-weight: 600; }
-.feed-header .see-all {
-  font-size: 12px; color: var(--rui-color-accent);
-  cursor: pointer; border: none; background: none; font-weight: 500;
-}
-
-.date-label {
-  font-size: 11px;
-  color: var(--rui-color-inactive);
-  font-weight: 500;
-  padding: 8px 20px 4px;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-}
-
-.tx-card {
-  display: flex; align-items: center;
-  padding: 10px 20px;
-  cursor: pointer;
-  transition: background var(--rui-duration-sm) ease;
-  -webkit-tap-highlight-color: transparent;
-}
-.tx-card:active { background: rgba(255,255,255,.05); }
-
-.tx-icon {
-  width: 40px; height: 40px;
-  border-radius: var(--rui-radius-round);
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; margin-right: 12px;
-}
-.tx-icon svg { width: 18px; height: 18px; }
-.tx-icon.transport { background: rgba(111,160,255,.12); color: var(--rui-color-blue); }
-.tx-icon.entertainment { background: rgba(191,90,242,.12); color: var(--rui-color-purple); }
-.tx-icon.shopping { background: rgba(255,87,119,.12); color: var(--rui-color-deep-pink); }
-.tx-icon.income { background: rgba(26,192,151,.12); color: var(--rui-color-positive); }
-.tx-icon.food { background: rgba(255,159,10,.12); color: var(--rui-color-warning); }
-.tx-icon.tech { background: rgba(19,209,163,.12); color: var(--rui-color-teal); }
-
-.tx-info { flex: 1; min-width: 0; }
-.tx-merchant { font-size: 14px; font-weight: 500; line-height: 1.3; }
-.tx-category { font-size: 12px; color: var(--rui-color-inactive); margin-top: 1px; }
-
-.tx-amount-col { text-align: right; flex-shrink: 0; margin-left: 12px; }
-.tx-amt { font-size: 14px; font-weight: 500; }
-.tx-amt.positive { color: var(--rui-color-positive); }
-.tx-orig { font-size: 11px; color: var(--rui-color-inactive); margin-top: 1px; }
-
-.tx-card.pending { animation: pulse-pending 2s ease-in-out infinite; }
-@keyframes pulse-pending { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
-
-.widget-bottom-pad { height: 8px; }
-
-/* ===== Promo card below main widget ===== */
-.promo-card {
-  margin: 0 16px 16px;
-  padding: 16px 20px;
-  background: linear-gradient(135deg, rgba(111,160,255,.12) 0%, rgba(94,92,230,.08) 100%);
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  cursor: pointer;
-}
-.promo-icon {
-  width: 40px; height: 40px;
-  border-radius: 10px;
-  background: var(--rui-color-action-background);
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-.promo-icon svg { width: 20px; height: 20px; color: var(--rui-color-accent); }
-.promo-text { flex: 1; }
-.promo-title { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
-.promo-desc { font-size: 12px; color: var(--rui-color-inactive); line-height: 1.4; }
-
-/* ===== TRANSACTION DETAIL ===== */
-.detail-screen { background: var(--rui-color-grouped-background); }
-.detail-header {
-  display: flex; align-items: center; padding: 12px 16px; gap: 12px;
-  position: sticky; top: 0; background: var(--rui-color-grouped-background); z-index: 10;
-}
-.back-btn {
-  width: 36px; height: 36px;
-  display: flex; align-items: center; justify-content: center;
-  border: none; background: none; color: var(--rui-color-foreground);
-  cursor: pointer; border-radius: var(--rui-radius-round);
-}
-.back-btn:active { background: var(--rui-color-widget-background); }
-.detail-header h2 { font-size: 16px; font-weight: 600; }
-
-.detail-amount-section { text-align: center; padding: 24px 16px 28px; }
-.detail-icon-large {
-  width: 56px; height: 56px; border-radius: var(--rui-radius-round);
-  display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 16px;
-}
-.detail-icon-large svg { width: 26px; height: 26px; }
-.detail-big-amount { font-size: 36px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 6px; }
-.detail-merchant-name { font-size: 15px; color: var(--rui-color-inactive); margin-bottom: 10px; }
-.detail-status {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 5px 14px; border-radius: var(--rui-radius-round);
-  font-size: 12px; font-weight: 500;
-}
-.detail-status.completed { background: rgba(26,192,151,.1); color: var(--rui-color-positive); }
-.detail-status.pending { background: rgba(255,159,10,.1); color: var(--rui-color-warning); }
-.detail-status svg { width: 14px; height: 14px; }
-
-.detail-info {
-  margin: 0 16px; background: var(--rui-color-widget-background);
-  border-radius: var(--rui-radius-widget); overflow: hidden;
-}
-.detail-row {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,.05);
-}
-.detail-row:last-child { border-bottom: none; }
-.detail-row-label { font-size: 14px; color: var(--rui-color-inactive); }
-.detail-row-value { font-size: 14px; font-weight: 500; text-align: right; }
-
-.detail-note {
-  margin: 16px; padding: 14px 16px;
-  background: var(--rui-color-widget-background); border-radius: var(--rui-radius-widget);
-  font-size: 14px; color: var(--rui-color-inactive);
-  cursor: pointer; display: flex; align-items: center; gap: 10px;
-}
-.detail-note svg { width: 18px; height: 18px; flex-shrink: 0; }
-
-.detail-actions { padding: 8px 16px 20px; display: flex; flex-direction: column; gap: 12px; }
-.detail-btn {
-  height: var(--rui-size-button-md); border-radius: var(--rui-radius-r6);
-  font-size: 15px; font-weight: 600; font-family: var(--rui-font-brand);
-  border: none; cursor: pointer;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  transition: transform 150ms cubic-bezier(.175,.885,.21,1.65);
-}
-.detail-btn:active { transform: scale(0.95); }
-.detail-btn.primary { background: var(--rui-color-action-background); color: var(--rui-color-accent); }
-.detail-btn.ghost { background: transparent; color: var(--rui-color-accent); }
-.detail-btn svg { width: 18px; height: 18px; }
-
-/* ===== CARDS SCREEN ===== */
-.cards-title { padding: 8px 20px 16px; font-size: 26px; font-weight: 700; letter-spacing: -0.3px; }
-
-.card-visual {
-  margin: 0 16px 20px;
-  aspect-ratio: 1.586;
-  border-radius: 14px;
-  padding: 22px;
-  display: flex; flex-direction: column; justify-content: space-between;
-  position: relative; overflow: hidden;
-  cursor: pointer; transition: transform 200ms ease;
-}
-.card-visual:active { transform: scale(0.98); }
-.card-visual.platinum {
-  background: linear-gradient(155deg, #4a4a5e 0%, #2a2a3e 30%, #1e1e2e 60%, #2d2d40 100%);
-}
-/* Brushed metal texture */
-.card-visual::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: repeating-linear-gradient(
-    90deg,
-    transparent 0px,
-    rgba(255,255,255,.015) 1px,
-    transparent 2px,
-    transparent 4px
-  );
-  pointer-events: none;
-}
-/* Shine effect */
-.card-visual::after {
-  content: '';
-  position: absolute;
-  top: -50%; left: -50%; width: 200%; height: 200%;
-  background: radial-gradient(ellipse at 30% 20%, rgba(255,255,255,.06) 0%, transparent 50%);
-  pointer-events: none;
-}
-.card-logo { display: flex; justify-content: space-between; align-items: flex-start; position: relative; z-index: 1; }
-.card-logo .revolut-text { font-size: 17px; font-weight: 700; letter-spacing: 0.5px; }
-.card-logo .plan-badge {
-  font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px;
-  padding: 3px 8px; border-radius: var(--rui-radius-round);
-  background: rgba(255,255,255,.12);
-}
-.card-bottom { display: flex; justify-content: space-between; align-items: flex-end; position: relative; z-index: 1; }
-.card-number { font-size: 15px; font-weight: 500; letter-spacing: 2.5px; font-variant-numeric: tabular-nums; }
-.card-expiry { font-size: 12px; color: rgba(255,255,255,.5); margin-top: 4px; }
-.mastercard-logo { display: flex; }
-.mastercard-logo .circle { width: 24px; height: 24px; border-radius: 50%; }
-.mastercard-logo .circle.red { background: #eb001b; }
-.mastercard-logo .circle.yellow { background: #f79e1b; margin-left: -9px; opacity: 0.85; }
-
-.card-visual.frozen { filter: brightness(0.35) saturate(0.2); }
-.card-visual.frozen::after { background: rgba(100,180,255,.06); backdrop-filter: blur(2px); }
-
-.card-actions { display: flex; gap: 10px; padding: 0 16px 20px; }
-.card-action-btn {
-  flex: 1; height: var(--rui-size-button-md); border-radius: var(--rui-radius-r8);
-  background: var(--rui-color-widget-background); border: none;
-  color: var(--rui-color-foreground); font-family: var(--rui-font-brand);
-  font-size: 14px; font-weight: 600; cursor: pointer;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  transition: transform 150ms cubic-bezier(.175,.885,.21,1.65);
-}
-.card-action-btn:active { transform: scale(0.95); }
-.card-action-btn.freeze-active { background: var(--rui-color-action-background); color: var(--rui-color-accent); }
-.card-action-btn svg { width: 18px; height: 18px; }
-
-.card-config {
-  margin: 0 16px 16px; background: var(--rui-color-widget-background);
-  border-radius: var(--rui-radius-widget); overflow: hidden;
-}
-.config-section-title {
-  padding: 14px 16px 6px; font-size: 11px; color: var(--rui-color-inactive);
-  font-weight: 500; text-transform: uppercase; letter-spacing: 0.8px;
-}
-.config-toggle {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,.05);
-}
-.config-toggle:last-child { border-bottom: none; }
-.config-toggle-info { flex: 1; padding-right: 12px; }
-.config-toggle-label { font-size: 14px; font-weight: 500; }
-.config-toggle-desc { font-size: 12px; color: var(--rui-color-inactive); margin-top: 2px; }
-
-.toggle {
-  width: 51px; height: 31px; border-radius: 16px;
-  background: #39393d; position: relative; cursor: pointer; flex-shrink: 0;
-  transition: background 200ms ease;
-}
-.toggle.on { background: var(--rui-color-accent); }
-.toggle .thumb {
-  width: 27px; height: 27px; border-radius: 50%; background: #fff;
-  position: absolute; top: 2px; left: 2px;
-  transition: transform 200ms cubic-bezier(.175,.885,.21,1.65);
-  box-shadow: 0 2px 4px rgba(0,0,0,.3);
-}
-.toggle.on .thumb { transform: translateX(20px); }
-
-.other-cards { margin: 0 16px 20px; }
-.other-cards-title {
-  font-size: 11px; color: var(--rui-color-inactive); font-weight: 500;
-  text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px;
-}
-.other-card-item {
-  display: flex; align-items: center; padding: 14px 16px;
-  background: var(--rui-color-widget-background); border-radius: var(--rui-radius-widget);
-  cursor: pointer; gap: 12px;
-}
-.other-card-mini {
-  width: 44px; height: 28px; border-radius: 4px;
-  background: linear-gradient(135deg, #2a2a3e, #1e1e2e);
-  display: flex; align-items: center; justify-content: center;
-}
-.other-card-name { font-size: 14px; font-weight: 500; }
-.other-card-number { font-size: 12px; color: var(--rui-color-inactive); }
-
-/* ===== SEND MONEY FLOW ===== */
-.send-screen { background: var(--rui-color-grouped-background); }
-.send-header {
-  display: flex; align-items: center; padding: 12px 16px; gap: 12px;
-  position: sticky; top: 0; background: var(--rui-color-grouped-background); z-index: 10;
-}
-.send-header h2 { font-size: 16px; font-weight: 600; }
-
-.send-step { display: none; }
-.send-step.active { display: block; }
-
-.search-bar {
-  margin: 0 16px 16px; height: var(--rui-size-button-md);
-  background: var(--rui-color-search-background); border-radius: var(--rui-radius-r8);
-  display: flex; align-items: center; padding: 0 14px; gap: 10px;
-}
-.search-bar svg { width: 20px; height: 20px; color: var(--rui-color-inactive); flex-shrink: 0; }
-.search-bar input {
-  flex: 1; background: none; border: none; color: var(--rui-color-foreground);
-  font-family: var(--rui-font-brand); font-size: 15px; outline: none;
-}
-.search-bar input::placeholder { color: var(--rui-color-inactive); }
-
-.section-label {
-  font-size: 11px; color: var(--rui-color-inactive); font-weight: 500;
-  text-transform: uppercase; letter-spacing: 0.8px;
-  padding: 0 20px; margin-bottom: 12px;
-}
-
-.contacts-row {
-  display: flex; gap: 16px; padding: 0 20px 20px; overflow-x: auto;
-}
-.contacts-row::-webkit-scrollbar { display: none; }
-.contact-item {
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
-  cursor: pointer; min-width: 56px;
-  -webkit-tap-highlight-color: transparent;
-}
-.contact-item:active .contact-avatar { transform: scale(0.9); }
-.contact-avatar {
-  width: 48px; height: 48px; border-radius: var(--rui-radius-round);
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 600; font-size: 15px; transition: transform 150ms ease;
-}
-.contact-name { font-size: 11px; color: var(--rui-color-inactive); text-align: center; max-width: 56px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
-.contact-list { padding: 0 16px; }
-.contact-list-item {
-  display: flex; align-items: center; padding: 12px 4px; gap: 12px;
-  cursor: pointer; border-bottom: 1px solid rgba(255,255,255,.04);
-  -webkit-tap-highlight-color: transparent;
-}
-.contact-list-avatar {
-  width: 40px; height: 40px; border-radius: var(--rui-radius-round);
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 600; font-size: 14px; flex-shrink: 0;
-}
-.contact-list-name { font-size: 15px; font-weight: 500; }
-.contact-list-handle { font-size: 12px; color: var(--rui-color-inactive); }
-
-/* Amount entry */
-.amount-entry { display: flex; flex-direction: column; align-items: center; padding: 32px 16px 20px; }
-.amount-recipient { font-size: 14px; color: var(--rui-color-inactive); margin-bottom: 28px; }
-.amount-display {
-  font-size: 48px; font-weight: 700; letter-spacing: -1px; margin-bottom: 8px;
-  transition: transform 100ms cubic-bezier(.175,.885,.21,1.65);
-  display: flex; align-items: baseline;
-}
-.amount-display .cur-sym { font-size: 28px; color: var(--rui-color-inactive); margin-right: 4px; font-weight: 500; }
-.amount-balance-info { font-size: 12px; color: var(--rui-color-inactive); margin-bottom: 28px; }
-
-.numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; width: 100%; max-width: 300px; margin: 0 auto; }
-.numpad-key {
-  height: 54px; display: flex; align-items: center; justify-content: center;
-  font-size: 24px; font-weight: 500; font-family: var(--rui-font-brand);
-  border: none; background: none; color: var(--rui-color-foreground);
-  cursor: pointer; border-radius: var(--rui-radius-r8);
-  -webkit-tap-highlight-color: transparent; user-select: none;
-}
-.numpad-key:active { background: rgba(255,255,255,.08); }
-.numpad-key svg { width: 24px; height: 24px; }
-
-.cta-btn {
-  margin: 16px 16px 0; width: calc(100% - 32px);
-  height: var(--rui-size-button-md); border-radius: var(--rui-radius-r8);
-  background: var(--rui-color-accent); color: var(--rui-color-on-accent);
-  border: none; font-family: var(--rui-font-brand);
-  font-size: 15px; font-weight: 600; cursor: pointer;
-  transition: transform 150ms cubic-bezier(.175,.885,.21,1.65), opacity 150ms;
-}
-.cta-btn:active { transform: scale(0.97); }
-.cta-btn:disabled { opacity: 0.35; cursor: default; }
-.cta-btn:disabled:active { transform: none; }
-
-/* Review */
-.review-section { padding: 24px 16px; }
-.review-amount-display { text-align: center; margin-bottom: 28px; }
-.review-amount-display .amt { font-size: 40px; font-weight: 700; letter-spacing: -0.5px; }
-.review-amount-display .to-label { font-size: 14px; color: var(--rui-color-inactive); margin-top: 6px; }
-.review-details { background: var(--rui-color-widget-background); border-radius: var(--rui-radius-widget); overflow: hidden; margin-bottom: 24px; }
-
-/* Success */
-.success-section {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  padding: 100px 16px 24px; text-align: center;
-}
-.success-check {
-  width: 80px; height: 80px; border-radius: var(--rui-radius-round);
-  background: rgba(26,192,151,.12);
-  display: flex; align-items: center; justify-content: center;
-  margin-bottom: 24px; animation: success-pop 600ms cubic-bezier(.175,.885,.21,1.65);
-}
-.success-check svg { width: 40px; height: 40px; color: var(--rui-color-positive); }
-@keyframes success-pop { 0% { transform: scale(0); opacity: 0; } 60% { transform: scale(1.15); } 100% { transform: scale(1); opacity: 1; } }
-.success-title { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
-.success-subtitle { font-size: 14px; color: var(--rui-color-inactive); }
-
-/* Confetti */
-.confetti-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 50; }
-.confetti-piece { position: absolute; width: 8px; height: 8px; border-radius: 2px; animation: confetti-fall 2.5s ease-in forwards; }
-@keyframes confetti-fall { 0% { transform: translateY(-20px) rotate(0deg); opacity: 1; } 100% { transform: translateY(900px) rotate(720deg); opacity: 0; } }
-@keyframes ptr-spin { from { transform: translateX(-50%) translateY(20px) rotate(0deg); } to { transform: translateX(-50%) translateY(20px) rotate(360deg); } }
-
-/* ===== TAB BAR ===== */
-.tab-bar {
-  height: 68px;
-  display: flex; align-items: flex-start; justify-content: space-around;
-  background: var(--rui-color-grouped-background);
-  border-top: 1px solid rgba(255,255,255,.06);
-  position: absolute; bottom: 0; left: 0; right: 0; z-index: 50;
-  padding-top: 10px;
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-}
-@media (max-width: 499px) {
-  .tab-bar {
-    height: calc(68px + env(safe-area-inset-bottom, 0px));
+  .free-trades-card .close-x {
+    margin-left: auto; color: var(--text-tertiary); cursor: pointer; flex-shrink: 0;
   }
-}
-.tab-item {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  width: 48px; cursor: pointer; border: none; background: none;
-  color: var(--rui-color-grey-50);
-  -webkit-tap-highlight-color: transparent;
-}
-.tab-item.active { color: var(--rui-color-accent); }
-.tab-item svg { width: 24px; height: 24px; transition: transform 200ms cubic-bezier(.175,.885,.21,1.65); }
-.tab-item.active svg { transform: scale(1.08); }
 
-/* Placeholder screens */
-.placeholder-screen {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  height: 100%; color: var(--rui-color-inactive); gap: 12px;
-}
-.placeholder-screen svg { width: 48px; height: 48px; opacity: 0.2; }
-.placeholder-screen span { font-size: 15px; font-weight: 500; }
+  .section-title {
+    font-size: 15px;
+    color: var(--text-secondary);
+    padding: 8px 16px 12px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+  }
+  .section-title .chevron { font-size: 12px; }
+
+  .tabs-row {
+    display: flex;
+    margin: 0 16px 16px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-radius: 10px;
+    transition: all 0.2s;
+  }
+  .tab-btn.active {
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+  }
+
+  .stocks-row {
+    display: flex;
+    gap: 16px;
+    padding: 0 16px 20px;
+    overflow-x: auto;
+  }
+  .stocks-row::-webkit-scrollbar { display: none; }
+  .stock-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    min-width: 70px;
+    cursor: pointer;
+  }
+  .stock-logo {
+    width: 56px; height: 56px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+  }
+  .stock-item .ticker {
+    font-size: 13px; color: var(--text-secondary); font-weight: 500;
+  }
+
+  /* Crypto Screen */
+  .crypto-hero {
+    position: relative;
+    height: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .crypto-hero .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 40% 30%, rgba(20,30,60,0.5) 0%, transparent 50%),
+      linear-gradient(160deg, #060a12 0%, #0a0f1a 40%, #080c14 100%);
+  }
+  .crypto-hero .silk-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(135deg, transparent 25%, rgba(40,60,100,0.12) 40%, transparent 55%),
+      linear-gradient(200deg, transparent 45%, rgba(20,35,65,0.08) 55%, transparent 65%);
+    animation: silkShimmer 8s ease-in-out infinite;
+  }
+  .crypto-hero h1 {
+    font-size: 28px;
+    font-weight: 700;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    letter-spacing: -0.3px;
+    color: var(--red);
+  }
+  .crypto-hero p {
+    font-size: 15px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .revolut-x-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+  .revolut-x-card .rx-logo {
+    width: 60px; height: 60px; border-radius: 12px;
+    background: linear-gradient(135deg, #1a1a3a, #2a1a4a, #1a3a3a);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; font-weight: 800; flex-shrink: 0;
+    position: relative; overflow: hidden;
+  }
+  .revolut-x-card .rx-logo::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, transparent 30%, rgba(255,255,255,0.15) 50%, transparent 70%);
+    animation: holographic 3s ease-in-out infinite;
+  }
+  @keyframes holographic {
+    0%, 100% { transform: translateX(-100%) rotate(20deg); }
+    50% { transform: translateX(100%) rotate(20deg); }
+  }
+  .revolut-x-card .close-x {
+    position: absolute; top: 0; right: 0;
+    color: var(--text-tertiary); cursor: pointer;
+  }
+
+  .crypto-pair-cards {
+    display: flex;
+    gap: 12px;
+    padding: 0 16px 16px;
+  }
+  .crypto-card {
+    flex: 1;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .crypto-card .token-name {
+    font-size: 13px; color: var(--text-secondary); font-weight: 500;
+  }
+  .crypto-card .token-logo {
+    position: absolute; top: 14px; right: 14px;
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .crypto-card .price {
+    font-size: 20px; font-weight: 700; margin: 4px 0 2px;
+    letter-spacing: -0.3px;
+  }
+  .crypto-card .change { font-size: 13px; font-weight: 500; }
+  .crypto-card .change.up { color: var(--green); }
+  .crypto-card .change.up::before { content: '\25B2 '; font-size: 10px; }
+  .crypto-card .change.down { color: var(--red); }
+  .crypto-card .change.down::before { content: '\25BC '; font-size: 10px; }
+  .crypto-card .sparkline-container {
+    margin-top: 12px;
+    height: 40px;
+    position: relative;
+  }
+  .crypto-card .sparkline-container .baseline {
+    position: absolute;
+    top: 50%;
+    left: 0; right: 0;
+    border-top: 1px dotted rgba(255,255,255,0.15);
+  }
+
+  /* Top Movers Grid */
+  .movers-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    padding: 0 16px 16px;
+  }
+  .mover-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+  }
+  .mover-logo {
+    width: 48px; height: 48px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 700;
+  }
+  .mover-item .name { font-size: 11px; color: var(--text-secondary); font-weight: 500; }
+  .mover-item .pct { font-size: 12px; font-weight: 600; }
+  .mover-item .pct.up { color: var(--green); }
+  .mover-item .pct.up::before { content: '\25B2 '; font-size: 9px; }
+
+  .earn-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+  }
+  .earn-icon {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 700; color: var(--text-secondary);
+  }
+  .earn-row .chevron {
+    margin-left: auto;
+    color: var(--text-tertiary);
+  }
+
+  /* Payments Screen */
+  .payments-hero {
+    text-align: center;
+    padding: 40px 20px 30px;
+  }
+  .payments-hero h2 {
+    font-size: 22px; font-weight: 600; margin-bottom: 8px;
+  }
+  .payments-hero p {
+    font-size: 14px; color: var(--text-secondary);
+  }
+  .payment-option {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px;
+    cursor: pointer;
+  }
+  .payment-icon {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .payment-option .chevron {
+    margin-left: auto; color: var(--text-tertiary);
+  }
+
+  /* RevPoints Screen */
+  .revpoints-hero {
+    text-align: center;
+    padding: 60px 24px 30px;
+  }
+  .revpoints-hero .points-circle {
+    width: 120px; height: 120px; border-radius: 50%;
+    background: linear-gradient(135deg, rgba(0,102,255,0.2), rgba(0,201,177,0.15));
+    border: 2px solid rgba(0,102,255,0.3);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    margin: 0 auto 24px;
+  }
+  .revpoints-hero .points-number {
+    font-size: 32px; font-weight: 700;
+  }
+  .revpoints-hero .points-label {
+    font-size: 12px; color: var(--text-secondary);
+  }
+  .revpoints-hero h2 { font-size: 20px; font-weight: 600; margin-bottom: 8px; }
+  .revpoints-hero p { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
+
+  .rewards-list { padding: 0 16px; }
+  .reward-item {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    cursor: pointer;
+  }
+  .reward-icon {
+    width: 44px; height: 44px; border-radius: var(--radius-sm);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+  }
+  .reward-item .chevron { margin-left: auto; color: var(--text-tertiary); }
+
+  /* Bottom Nav */
+  .bottom-nav {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: calc(70px + env(safe-area-inset-bottom, 10px));
+    background: var(--nav-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+    padding: 8px 8px 0;
+    padding-bottom: env(safe-area-inset-bottom, 10px);
+    z-index: 100;
+  }
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 0;
+    cursor: pointer;
+    min-width: 60px;
+    transition: opacity 0.2s;
+  }
+  .nav-item .nav-icon {
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .nav-item .nav-label {
+    font-size: 10px;
+    color: var(--text-tertiary);
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-item.active .nav-label { color: #fff; }
+  .nav-item svg { transition: all 0.2s; }
+  .nav-item.active svg { opacity: 1; }
+  .nav-item:not(.active) svg { opacity: 0.4; }
+
+  /* Utility */
+  .spacer { height: 16px; }
+  .fade-enter { animation: fadeIn 0.3s ease forwards; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 </style>
 </head>
 <body>
+<div class="phone-frame">
+  <div class="bg-glow"></div>
 
-<div class="device-frame">
+  <!-- Status Bar -->
   <div class="status-bar">
-    <span class="time">9:41</span>
-    <div class="icons">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 6l5-3 5 3 5-3 5 3v14l-5-3-5 3-5-3-5 3V6z"/></svg>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>
-      <svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="7" width="18" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="4" y="9" width="12" height="8" rx="1" fill="currentColor" opacity=".9"/><path d="M22 11v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    <div class="time">4:09</div>
+    <div class="right">
+      <div class="signal">
+        <span style="height:4px"></span>
+        <span style="height:6px"></span>
+        <span style="height:8px"></span>
+        <span style="height:10px"></span>
+      </div>
+      <span style="font-size:11px;font-weight:500">4G</span>
+      <div class="battery"><div class="battery-fill"></div></div>
     </div>
   </div>
 
-  <div class="app">
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="avatar">
+      CJ
+      <div class="notif-dot"></div>
+    </div>
+    <div class="search-bar">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <span>Search</span>
+    </div>
+    <div class="top-icon" id="analyticsBtn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+    </div>
+    <div class="top-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </div>
+  </div>
+
+  <!-- Screens -->
+  <div class="screens-container">
+
     <!-- HOME -->
     <div class="screen active" id="screen-home">
-      <div class="home-header">
-        <div class="revolut-logo">R</div>
-        <div class="right-icons">
-          <button class="icon-btn"><i data-lucide="grid-2x2"></i></button>
-          <div class="avatar-btn">CJ</div>
+      <div class="balance-area">
+        <div class="accounts-pill">
+          Accounts
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="m6 9 6 6 6-6"/></svg>
         </div>
-      </div>
-      <div class="page-title">Inicio</div>
-
-      <div class="main-widget">
-        <div class="widget-balance">
-          <div class="balance-label">Cuentas <i data-lucide="chevron-down" style="width:14px;height:14px"></i></div>
-          <div class="balance-amount"><span>1.954,23</span> <span class="currency">EUR</span></div>
-        </div>
-
-        <div class="quick-actions">
-          <button class="quick-action" onclick="openSendFlow()">
-            <div class="qa-icon"><i data-lucide="plus"></i></div>
-            <span class="qa-label">Anadir</span>
-          </button>
-          <button class="quick-action" onclick="openSendFlow()">
-            <div class="qa-icon"><i data-lucide="arrow-up-right"></i></div>
-            <span class="qa-label">Enviar</span>
-          </button>
-          <button class="quick-action">
-            <div class="qa-icon"><i data-lucide="arrow-down-left"></i></div>
-            <span class="qa-label">Solicitar</span>
-          </button>
-          <button class="quick-action">
-            <div class="qa-icon"><i data-lucide="repeat"></i></div>
-            <span class="qa-label">Cambiar</span>
-          </button>
-          <button class="quick-action">
-            <div class="qa-icon"><i data-lucide="ellipsis"></i></div>
-            <span class="qa-label">Mas</span>
-          </button>
-        </div>
-
-        <div class="widget-divider"></div>
-
-        <div class="widget-feed">
-          <div class="feed-header">
-            <h3>Transacciones</h3>
-            <button class="see-all">Ver todo</button>
-          </div>
-
-          <div class="date-label">Hoy</div>
-          <div class="tx-card" onclick="openTransaction(0)">
-            <div class="tx-icon tech"><i data-lucide="wifi"></i></div>
-            <div class="tx-info"><div class="tx-merchant">Viasat</div><div class="tx-category">Servicios</div></div>
-            <div class="tx-amount-col"><div class="tx-amt">-10,25 EUR</div><div class="tx-orig">12,00 USD</div></div>
-          </div>
-          <div class="tx-card pending" onclick="openTransaction(1)">
-            <div class="tx-icon transport"><i data-lucide="car"></i></div>
-            <div class="tx-info"><div class="tx-merchant">Uber</div><div class="tx-category">Transporte</div></div>
-            <div class="tx-amount-col"><div class="tx-amt">-4,52 EUR</div><div class="tx-orig">85,00 MXN</div></div>
-          </div>
-
-          <div class="date-label">Ayer</div>
-          <div class="tx-card" onclick="openTransaction(2)">
-            <div class="tx-icon entertainment"><i data-lucide="music"></i></div>
-            <div class="tx-info"><div class="tx-merchant">Spotify</div><div class="tx-category">Entretenimiento</div></div>
-            <div class="tx-amount-col"><div class="tx-amt">-9,99 EUR</div></div>
-          </div>
-          <div class="tx-card" onclick="openTransaction(3)">
-            <div class="tx-icon income"><i data-lucide="arrow-down-left"></i></div>
-            <div class="tx-info"><div class="tx-merchant">Maria Garcia</div><div class="tx-category">Transferencia recibida</div></div>
-            <div class="tx-amount-col"><div class="tx-amt positive">+500,00 EUR</div></div>
-          </div>
-
-          <div class="date-label">1 Mar</div>
-          <div class="tx-card" onclick="openTransaction(4)">
-            <div class="tx-icon shopping"><i data-lucide="shopping-bag"></i></div>
-            <div class="tx-info"><div class="tx-merchant">Apple Store</div><div class="tx-category">Compras</div></div>
-            <div class="tx-amount-col"><div class="tx-amt">-149,99 EUR</div></div>
-          </div>
-          <div class="tx-card" onclick="openTransaction(5)">
-            <div class="tx-icon food"><i data-lucide="utensils"></i></div>
-            <div class="tx-info"><div class="tx-merchant">La Buena Vida</div><div class="tx-category">Restaurantes</div></div>
-            <div class="tx-amount-col"><div class="tx-amt">-42,50 EUR</div></div>
-          </div>
-          <div class="widget-bottom-pad"></div>
+        <div class="balance-amount">&euro;2,015.47</div>
+        <div class="balance-currency">M$41,417.91</div>
+        <div class="balance-dots">
+          <div class="dot active"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
         </div>
       </div>
 
-      <div class="promo-card">
-        <div class="promo-icon"><i data-lucide="gift"></i></div>
-        <div class="promo-text">
-          <div class="promo-title">Invita a tus amigos</div>
-          <div class="promo-desc">Gana hasta 100 EUR por cada amigo que invite</div>
+      <div class="quick-actions">
+        <div class="quick-action">
+          <div class="icon-circle">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          </div>
+          <span>Add money</span>
+        </div>
+        <div class="quick-action">
+          <div class="icon-circle">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 2a4 4 0 0 0-4 4c0 2 2 4 4 6 2-2 4-4 4-6a4 4 0 0 0-4-4z"/><path d="M12 22a4 4 0 0 0 4-4c0-2-2-4-4-6-2 2-4 4-4 6a4 4 0 0 0 4 4z"/></svg>
+          </div>
+          <span>Bizum</span>
+        </div>
+        <div class="quick-action">
+          <div class="icon-circle">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M7 16l-4-4 4-4"/><path d="M3 12h14"/><path d="M17 8l4 4-4 4"/><path d="M21 12H7"/></svg>
+          </div>
+          <span>Move</span>
+        </div>
+        <div class="quick-action">
+          <div class="icon-circle">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>
+          </div>
+          <span>More</span>
         </div>
       </div>
 
-      <div style="height: 80px"></div>
+      <!-- Promo Banner -->
+      <div class="promo-banner">
+        <div class="aurora"></div>
+        <div class="close-btn">&times;</div>
+        <div class="content">
+          <h3>New Experiences await</h3>
+          <p>Choose from 300,000 activities<br>and book in-app. T&Cs apply</p>
+        </div>
+      </div>
+      <div class="promo-dots">
+        <div class="dot active"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+
+      <!-- Transactions -->
+      <div class="card" style="padding:4px 16px;">
+        <div class="transaction">
+          <div class="tx-icon viasat">
+            <svg width="28" height="14" viewBox="0 0 60 20"><text x="2" y="16" font-family="Inter" font-weight="700" font-size="14" fill="#1a1a2e">Viasat</text></svg>
+          </div>
+          <div class="tx-details">
+            <div class="tx-name">Viasat</div>
+            <div class="tx-date">1 Mar, 11:54 a.m.</div>
+          </div>
+          <div class="tx-amount">
+            <div class="primary">-&euro;10.26</div>
+            <div class="secondary">-$12</div>
+          </div>
+        </div>
+        <div class="transaction">
+          <div class="tx-icon heart">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </div>
+          <div class="tx-details">
+            <div class="tx-name">Myt017 2201 Hud Mxn</div>
+            <div class="tx-date">1 Mar, 9:39 a.m.</div>
+          </div>
+          <div class="tx-amount">
+            <div class="primary">-&euro;27.05</div>
+            <div class="secondary">-M$545</div>
+          </div>
+        </div>
+        <div class="transaction">
+          <div class="tx-icon food">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M7 2v9a4 4 0 0 0 4 4h0a4 4 0 0 0 4-4V2"/><path d="M7 2h4"/><path d="M11 2v6"/><path d="M17 2v20"/><path d="M17 2a3 3 0 0 1 0 6"/></svg>
+          </div>
+          <div class="tx-details">
+            <div class="tx-name">Rest Take Oof</div>
+            <div class="tx-date">1 Mar, 9:10 a.m.</div>
+          </div>
+          <div class="tx-amount">
+            <div class="primary">-&euro;9.28</div>
+            <div class="secondary">-M$187</div>
+          </div>
+        </div>
+        <div class="transaction">
+          <div class="tx-icon person">
+            GC
+            <div class="badge">+</div>
+          </div>
+          <div class="tx-details">
+            <div class="tx-name">GARCIA CARLOS JULIO</div>
+            <div class="tx-date">26 Feb, 8:42 a.m.</div>
+          </div>
+          <div class="tx-amount">
+            <div class="primary positive">+&euro;2,000</div>
+          </div>
+        </div>
+        <div class="see-all">See all</div>
+      </div>
+
+      <!-- Welcome to Mexico -->
+      <div class="welcome-card">
+        <div class="bg-img"></div>
+        <svg class="pyramid-steps" viewBox="0 0 130 85" fill="none">
+          <polygon points="65,5 25,85 105,85" fill="rgba(160,140,60,0.25)" stroke="rgba(160,140,60,0.15)" stroke-width="0.5"/>
+          <line x1="30" y1="75" x2="100" y2="75" stroke="rgba(160,140,60,0.2)" stroke-width="0.5"/>
+          <line x1="38" y1="62" x2="92" y2="62" stroke="rgba(160,140,60,0.2)" stroke-width="0.5"/>
+          <line x1="45" y1="50" x2="85" y2="50" stroke="rgba(160,140,60,0.2)" stroke-width="0.5"/>
+          <line x1="50" y1="38" x2="80" y2="38" stroke="rgba(160,140,60,0.2)" stroke-width="0.5"/>
+          <line x1="56" y1="26" x2="74" y2="26" stroke="rgba(160,140,60,0.2)" stroke-width="0.5"/>
+        </svg>
+        <div class="close-btn">&times;</div>
+        <div class="content">
+          <div class="subtitle">Welcome to</div>
+          <h2>Mexico</h2>
+          <div class="rate">&euro;1 = M$20.55</div>
+        </div>
+      </div>
+      <div class="spacer"></div>
     </div>
 
-    <!-- TRANSACTION DETAIL -->
-    <div class="screen hidden-right detail-screen" id="screen-detail">
-      <div class="detail-header">
-        <button class="back-btn" onclick="closeDetail()"><i data-lucide="chevron-left"></i></button>
-        <h2 id="detail-title">Detalle</h2>
+    <!-- INVEST -->
+    <div class="screen" id="screen-invest">
+      <div class="invest-hero">
+        <div class="hero-bg"></div>
+        <div class="silk-overlay"></div>
+        <h1>Grow your wealth</h1>
+        <p>Invest today, from &euro;1</p>
       </div>
-      <div class="detail-amount-section">
-        <div class="detail-icon-large tx-icon tech" id="detail-icon"><i data-lucide="wifi"></i></div>
-        <div class="detail-big-amount" id="detail-amount">-10,25 EUR</div>
-        <div class="detail-merchant-name" id="detail-merchant">Viasat</div>
-        <div class="detail-status completed" id="detail-status"><i data-lucide="check-circle-2"></i><span>Completado</span></div>
+      <div class="cta-button">Start investing</div>
+      <div class="card free-trades-card">
+        <div class="free-trades-icon">10</div>
+        <div>
+          <div style="font-size:15px;font-weight:600">You've got free trades</div>
+          <div style="font-size:13px;color:var(--text-secondary);margin-top:2px">Enjoy 10 free stocks and ETF trades every month</div>
+        </div>
+        <div class="close-x">&times;</div>
       </div>
-      <div class="detail-info" id="detail-info">
-        <div class="detail-row"><span class="detail-row-label">Cargo del comercio</span><span class="detail-row-value">12,00 USD</span></div>
-        <div class="detail-row"><span class="detail-row-label">Tipo de cambio</span><span class="detail-row-value">1 EUR = 1,170542 USD</span></div>
-        <div class="detail-row"><span class="detail-row-label">Comision</span><span class="detail-row-value">Sin comision</span></div>
-        <div class="detail-row"><span class="detail-row-label">Tarjeta</span><span class="detail-row-value">Platinum ....2403</span></div>
+      <div class="section-title">Popular first time buys <span class="chevron">&#8250;</span></div>
+      <div class="tabs-row">
+        <div class="tab-btn active">Stocks</div>
+        <div class="tab-btn">ETFs</div>
       </div>
-      <div class="detail-note"><i data-lucide="pencil"></i><span>Anadir una nota</span></div>
-      <div class="detail-actions">
-        <button class="detail-btn primary"><i data-lucide="download"></i>Descargar recibo</button>
-        <button class="detail-btn ghost"><i data-lucide="help-circle"></i>Obtener ayuda</button>
+      <div class="stocks-row">
+        <div class="stock-item">
+          <div class="stock-logo" style="background:#76b900">
+            <svg width="30" height="30" viewBox="0 0 24 24"><path d="M3 12l3-3v6l-3-3zm6-6l3-3v18l-3-3V6zm6 2l3-3v14l-3-3V8z" fill="#fff"/></svg>
+          </div>
+          <span class="ticker">NVDA</span>
+        </div>
+        <div class="stock-item">
+          <div class="stock-logo" style="background:#1a1a1a;border:1px solid rgba(255,255,255,0.1)">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83"/><path d="M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          </div>
+          <span class="ticker">AAPL</span>
+        </div>
+        <div class="stock-item">
+          <div class="stock-logo" style="background:#cc0000">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff"><path d="M12 4L4 20h4l1.5-3h5l1.5 3h4L12 4zm0 5.5L14.5 15h-5L12 9.5z"/></svg>
+          </div>
+          <span class="ticker">TSLA</span>
+        </div>
+        <div class="stock-item">
+          <div class="stock-logo" style="background:#e50914">
+            <span style="font-size:22px;font-weight:800;color:#fff">N</span>
+          </div>
+          <span class="ticker">NFLX</span>
+        </div>
+        <div class="stock-item">
+          <div class="stock-logo" style="background:#ff9900">
+            <span style="font-size:16px;font-weight:800;color:#fff">amzn</span>
+          </div>
+          <span class="ticker">AMZN</span>
+        </div>
       </div>
+      <div class="spacer"></div>
     </div>
 
-    <!-- CARDS -->
-    <div class="screen tab-hidden" id="screen-cards">
-      <div class="cards-title">Tarjetas</div>
-      <div class="card-visual platinum" id="main-card">
-        <div class="card-logo">
-          <span class="revolut-text">Revolut</span>
-          <span class="plan-badge">Platinum</span>
-        </div>
-        <div class="card-bottom">
+    <!-- PAYMENTS -->
+    <div class="screen" id="screen-payments">
+      <div class="payments-hero">
+        <h2>Payments</h2>
+        <p>Send and receive money instantly</p>
+      </div>
+      <div class="card" style="padding:0">
+        <div class="payment-option">
+          <div class="payment-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="m22 2-7 20-4-9-9-4z"/><path d="m22 2-11 11"/></svg>
+          </div>
           <div>
-            <div class="card-number">....  ....  ....  2403</div>
-            <div class="card-expiry">05/30</div>
+            <div style="font-size:15px;font-weight:500">Send</div>
+            <div style="font-size:13px;color:var(--text-secondary)">Send money to anyone</div>
           </div>
-          <div class="mastercard-logo"><div class="circle red"></div><div class="circle yellow"></div></div>
+          <div class="chevron">&#8250;</div>
+        </div>
+        <div class="payment-option" style="border-top:1px solid rgba(255,255,255,0.04)">
+          <div class="payment-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 22V8"/><path d="m5 15 7-7 7 7"/></svg>
+          </div>
+          <div>
+            <div style="font-size:15px;font-weight:500">Request</div>
+            <div style="font-size:13px;color:var(--text-secondary)">Request money from contacts</div>
+          </div>
+          <div class="chevron">&#8250;</div>
+        </div>
+        <div class="payment-option" style="border-top:1px solid rgba(255,255,255,0.04)">
+          <div class="payment-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+          </div>
+          <div>
+            <div style="font-size:15px;font-weight:500">Transfer</div>
+            <div style="font-size:13px;color:var(--text-secondary)">Bank transfers &amp; SEPA</div>
+          </div>
+          <div class="chevron">&#8250;</div>
+        </div>
+        <div class="payment-option" style="border-top:1px solid rgba(255,255,255,0.04)">
+          <div class="payment-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <div>
+            <div style="font-size:15px;font-weight:500">Vaults</div>
+            <div style="font-size:13px;color:var(--text-secondary)">Save for your goals</div>
+          </div>
+          <div class="chevron">&#8250;</div>
         </div>
       </div>
-      <div class="card-actions">
-        <button class="card-action-btn" id="freeze-btn" onclick="toggleFreeze()"><i data-lucide="lock"></i>Bloquear</button>
-        <button class="card-action-btn"><i data-lucide="settings"></i>Configuracion</button>
-      </div>
-      <div class="card-config">
-        <div class="config-section-title">Seguridad</div>
-        <div class="config-toggle">
-          <div class="config-toggle-info"><div class="config-toggle-label">Transacciones online</div><div class="config-toggle-desc">Permitir pagos por internet</div></div>
-          <div class="toggle on" onclick="this.classList.toggle('on')"><div class="thumb"></div></div>
-        </div>
-        <div class="config-toggle">
-          <div class="config-toggle-info"><div class="config-toggle-label">Seguridad por ubicacion</div><div class="config-toggle-desc">Verificar ubicacion del dispositivo</div></div>
-          <div class="toggle" onclick="this.classList.toggle('on')"><div class="thumb"></div></div>
-        </div>
-        <div class="config-toggle">
-          <div class="config-toggle-info"><div class="config-toggle-label">Banda magnetica</div><div class="config-toggle-desc">Pagos con banda magnetica</div></div>
-          <div class="toggle on" onclick="this.classList.toggle('on')"><div class="thumb"></div></div>
-        </div>
-        <div class="config-toggle">
-          <div class="config-toggle-info"><div class="config-toggle-label">Retiradas de cajero</div><div class="config-toggle-desc">Permitir retiradas en cajeros</div></div>
-          <div class="toggle on" onclick="this.classList.toggle('on')"><div class="thumb"></div></div>
+      <div class="card" style="padding:0">
+        <div class="payment-option">
+          <div class="payment-icon" style="background:rgba(0,210,106,0.15)">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M17 11h1a3 3 0 0 1 0 6h-1"/><path d="M9 12v6"/><path d="M13 12v6"/><circle cx="12" cy="5" r="3"/></svg>
+          </div>
+          <div>
+            <div style="font-size:15px;font-weight:500">Bizum</div>
+            <div style="font-size:13px;color:var(--text-secondary)">Pay with your phone</div>
+          </div>
+          <div class="chevron">&#8250;</div>
         </div>
       </div>
-      <div class="other-cards">
-        <div class="other-cards-title">Otras tarjetas</div>
-        <div class="other-card-item">
-          <div class="other-card-mini"><svg width="16" height="12" viewBox="0 0 24 18" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="1.5"><rect x="1" y="1" width="22" height="16" rx="2"/><path d="M1 7h22"/></svg></div>
-          <div><div class="other-card-name">Virtual</div><div class="other-card-number">....7568 . 05/30</div></div>
-        </div>
-      </div>
-      <div style="height: 80px"></div>
+      <div class="spacer"></div>
     </div>
 
-    <!-- SEND MONEY -->
-    <div class="screen hidden-right send-screen" id="screen-send">
-      <div class="send-header">
-        <button class="back-btn" onclick="closeSendFlow()"><i data-lucide="x"></i></button>
-        <h2 id="send-title">Enviar dinero</h2>
+    <!-- CRYPTO -->
+    <div class="screen" id="screen-crypto">
+      <div class="crypto-hero">
+        <div class="hero-bg"></div>
+        <div class="silk-overlay"></div>
+        <h1>Trade crypto from<br>0% fees</h1>
       </div>
-      <!-- Step 1 -->
-      <div class="send-step active" id="send-step-1">
-        <div class="search-bar"><i data-lucide="search"></i><input type="text" placeholder="Buscar contacto..."></div>
-        <div class="section-label">Recientes</div>
-        <div class="contacts-row">
-          <div class="contact-item" onclick="selectRecipient('Maria G.')"><div class="contact-avatar" style="background:rgba(26,192,151,.15);color:#1ac097">MG</div><div class="contact-name">Maria G.</div></div>
-          <div class="contact-item" onclick="selectRecipient('Pablo R.')"><div class="contact-avatar" style="background:rgba(111,160,255,.15);color:#6fa0ff">PR</div><div class="contact-name">Pablo R.</div></div>
-          <div class="contact-item" onclick="selectRecipient('Ana L.')"><div class="contact-avatar" style="background:rgba(191,90,242,.15);color:#bf5af2">AL</div><div class="contact-name">Ana L.</div></div>
-          <div class="contact-item" onclick="selectRecipient('Carlos O.')"><div class="contact-avatar" style="background:rgba(255,159,10,.15);color:#ff9f0a">CO</div><div class="contact-name">Carlos O.</div></div>
-          <div class="contact-item" onclick="selectRecipient('Lucia M.')"><div class="contact-avatar" style="background:rgba(255,87,119,.15);color:#ff5777">LM</div><div class="contact-name">Lucia M.</div></div>
+      <div class="cta-button">Start trading</div>
+      <div class="card revolut-x-card">
+        <div class="rx-logo">
+          <span style="font-size:22px;font-weight:800;color:#fff">R</span>
         </div>
-        <div class="contact-list">
-          <div class="contact-list-item" onclick="selectRecipient('Ana Lopez')"><div class="contact-list-avatar" style="background:rgba(191,90,242,.15);color:#bf5af2">AL</div><div><div class="contact-list-name">Ana Lopez</div><div class="contact-list-handle">@analopez</div></div></div>
-          <div class="contact-list-item" onclick="selectRecipient('Carlos Ottati')"><div class="contact-list-avatar" style="background:rgba(255,159,10,.15);color:#ff9f0a">CO</div><div><div class="contact-list-name">Carlos Ottati</div><div class="contact-list-handle">@cgarciaottati</div></div></div>
-          <div class="contact-list-item" onclick="selectRecipient('Maria Garcia')"><div class="contact-list-avatar" style="background:rgba(26,192,151,.15);color:#1ac097">MG</div><div><div class="contact-list-name">Maria Garcia</div><div class="contact-list-handle">@mariagarcia</div></div></div>
-          <div class="contact-list-item" onclick="selectRecipient('Pablo Rodriguez')"><div class="contact-list-avatar" style="background:rgba(111,160,255,.15);color:#6fa0ff">PR</div><div><div class="contact-list-name">Pablo Rodriguez</div><div class="contact-list-handle">@pablor</div></div></div>
+        <div>
+          <div style="font-size:15px;font-weight:600">Explore Revolut X</div>
+          <div style="font-size:13px;color:var(--text-secondary);margin-top:2px;line-height:1.4">Trade crypto with 0% maker and<br>0.09% taker fees. T&Cs apply</div>
         </div>
+        <div class="close-x">&times;</div>
       </div>
-      <!-- Step 2 -->
-      <div class="send-step" id="send-step-2">
-        <div class="amount-entry">
-          <div class="amount-recipient" id="send-to-name">Para Maria G.</div>
-          <div class="amount-display" id="amount-display"><span class="cur-sym">EUR</span><span id="amount-value">0</span></div>
-          <div class="amount-balance-info">Disponible: 1.954,23 EUR</div>
-        </div>
-        <div class="numpad">
-          <button class="numpad-key" onclick="numpadInput('1')">1</button>
-          <button class="numpad-key" onclick="numpadInput('2')">2</button>
-          <button class="numpad-key" onclick="numpadInput('3')">3</button>
-          <button class="numpad-key" onclick="numpadInput('4')">4</button>
-          <button class="numpad-key" onclick="numpadInput('5')">5</button>
-          <button class="numpad-key" onclick="numpadInput('6')">6</button>
-          <button class="numpad-key" onclick="numpadInput('7')">7</button>
-          <button class="numpad-key" onclick="numpadInput('8')">8</button>
-          <button class="numpad-key" onclick="numpadInput('9')">9</button>
-          <button class="numpad-key" onclick="numpadInput('.')">.</button>
-          <button class="numpad-key" onclick="numpadInput('0')">0</button>
-          <button class="numpad-key" onclick="numpadInput('del')"><i data-lucide="delete"></i></button>
-        </div>
-        <button class="cta-btn" id="send-continue" disabled onclick="goToReview()">Continuar</button>
+      <div class="promo-dots" style="margin-top:-4px">
+        <div class="dot active"></div>
+        <div class="dot"></div>
       </div>
-      <!-- Step 3 -->
-      <div class="send-step" id="send-step-3">
-        <div class="review-section">
-          <div class="review-amount-display">
-            <div class="amt" id="review-amount">EUR 50,00</div>
-            <div class="to-label" id="review-to">Para Maria G.</div>
+
+      <!-- BTC / ETH Cards -->
+      <div class="crypto-pair-cards">
+        <div class="crypto-card">
+          <div class="token-name">BTC</div>
+          <div class="token-logo" style="background:#f7931a;border-radius:50%">
+            <span style="font-size:16px;font-weight:800;color:#fff">&#8383;</span>
           </div>
-          <div class="review-details">
-            <div class="detail-row"><span class="detail-row-label">De</span><span class="detail-row-value">Cuenta EUR . 1.954,23</span></div>
-            <div class="detail-row"><span class="detail-row-label">Comision</span><span class="detail-row-value" style="color:var(--rui-color-positive)">Sin comision</span></div>
-            <div class="detail-row"><span class="detail-row-label">Llegada</span><span class="detail-row-value">Instantaneo</span></div>
+          <div class="price">&euro;58,877</div>
+          <div class="change up">0.03%</div>
+          <div class="sparkline-container">
+            <div class="baseline"></div>
+            <svg width="100%" height="40" viewBox="0 0 150 40" preserveAspectRatio="none">
+              <polyline points="0,38 8,36 16,30 24,32 32,28 40,25 48,20 56,22 64,18 72,15 80,20 88,18 96,14 104,16 112,12 120,10 128,8 136,6 142,5 150,4" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
           </div>
-          <button class="cta-btn" style="width:100%;margin:0" onclick="sendSuccess()">Enviar <span id="review-send-amount">EUR 50,00</span></button>
+        </div>
+        <div class="crypto-card">
+          <div class="token-name">ETH</div>
+          <div class="token-logo" style="background:rgba(98,126,234,0.2);border-radius:50%">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#627eea"><path d="M12 1.5l-8 13 8 4.5 8-4.5-8-13zM4 14.5L12 22l8-7.5-8 4.5-8-4.5z"/></svg>
+          </div>
+          <div class="price">&euro;1,706.44</div>
+          <div class="change down">1.56%</div>
+          <div class="sparkline-container">
+            <div class="baseline"></div>
+            <svg width="100%" height="40" viewBox="0 0 150 40" preserveAspectRatio="none">
+              <polyline points="0,8 10,10 20,6 30,12 40,14 50,10 60,16 70,20 80,18 90,24 100,22 110,28 120,26 130,32 140,30 150,34" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
         </div>
       </div>
-      <!-- Step 4 -->
-      <div class="send-step" id="send-step-4">
-        <div class="success-section">
-          <div class="success-check"><i data-lucide="check"></i></div>
-          <div class="success-title">Enviado</div>
-          <div class="success-subtitle" id="success-msg">EUR 50,00 enviado a Maria G.</div>
-        </div>
-        <button class="cta-btn" style="background:var(--rui-color-widget-background);color:var(--rui-color-foreground)" onclick="closeSendFlow()">Hecho</button>
+
+      <!-- Top Movers -->
+      <div class="section-title">Top movers <span class="chevron">&#8250;</span></div>
+      <div class="tabs-row">
+        <div class="tab-btn active">Top gainers</div>
+        <div class="tab-btn">Top losers</div>
       </div>
+      <div class="movers-grid">
+        <div class="mover-item">
+          <div class="mover-logo" style="background:#daa520"><span style="font-size:14px;color:#fff;font-weight:800">&#9830;</span></div>
+          <span class="name">PNG</span>
+          <span class="pct up">48.52%</span>
+        </div>
+        <div class="mover-item">
+          <div class="mover-logo" style="background:#2ecc40">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M12 2l10 18H2z"/></svg>
+          </div>
+          <span class="name">AURORA</span>
+          <span class="pct up">25.93%</span>
+        </div>
+        <div class="mover-item">
+          <div class="mover-logo" style="background:#e85d04">
+            <span style="font-size:18px">&#9760;</span>
+          </div>
+          <span class="name">PIRATE</span>
+          <span class="pct up">14.90%</span>
+        </div>
+        <div class="mover-item">
+          <div class="mover-logo" style="background:#dc2626">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M13 3L4 14h7l-2 7 9-11h-7l2-7z"/></svg>
+          </div>
+          <span class="name">AKT</span>
+          <span class="pct up">12.45%</span>
+        </div>
+        <div class="mover-item">
+          <div class="mover-logo" style="background:#e63946">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><circle cx="8" cy="16" r="3"/><circle cx="16" cy="16" r="3"/></svg>
+          </div>
+          <span class="name">SPA</span>
+          <span class="pct up">10.96%</span>
+        </div>
+        <div class="mover-item">
+          <div class="mover-logo" style="background:#b8ffc6">
+            <span style="font-size:16px;color:#1a3a1a;font-weight:800">C</span>
+          </div>
+          <span class="name">COOKIE</span>
+          <span class="pct up">11.16%</span>
+        </div>
+        <div class="mover-item">
+          <div class="mover-logo" style="background:#6c5ce7">
+            <span style="font-size:14px;color:#fff;font-weight:800">T</span>
+          </div>
+          <span class="name">TAI</span>
+          <span class="pct up">8.80%</span>
+        </div>
+        <div class="mover-item">
+          <div class="mover-logo" style="background:#00cec9">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M12 2l3 7h7l-5.5 4.5 2 7.5L12 16l-6.5 5 2-7.5L2 9h7z"/></svg>
+          </div>
+          <span class="name">KAITO</span>
+          <span class="pct up">8.30%</span>
+        </div>
+      </div>
+
+      <!-- Earn -->
+      <div class="card earn-row">
+        <div class="earn-icon">%</div>
+        <div>
+          <div style="font-size:15px;font-weight:600">Earn</div>
+          <div style="font-size:13px;color:var(--text-secondary)">Up to 21.80% APY</div>
+        </div>
+        <div class="chevron">&#8250;</div>
+      </div>
+      <div class="spacer"></div>
+      <div class="spacer"></div>
     </div>
 
-    <!-- Placeholder tabs -->
-    <div class="screen tab-hidden" id="screen-crypto"><div class="placeholder-screen"><i data-lucide="trending-up"></i><span>Crypto</span></div></div>
-    <div class="screen tab-hidden" id="screen-lifestyle"><div class="placeholder-screen"><i data-lucide="compass"></i><span>Estilo de vida</span></div></div>
-    <div class="screen tab-hidden" id="screen-hub"><div class="placeholder-screen"><i data-lucide="layout-grid"></i><span>Hub</span></div></div>
+    <!-- REVPOINTS -->
+    <div class="screen" id="screen-revpoints">
+      <div class="revpoints-hero">
+        <div class="points-circle">
+          <div class="points-number">142</div>
+          <div class="points-label">RevPoints</div>
+        </div>
+        <h2>Earn &amp; spend points</h2>
+        <p>Get RevPoints every time you pay with Revolut. Redeem for rewards, upgrades, and more.</p>
+      </div>
+      <div class="rewards-list">
+        <div class="card" style="padding:0">
+          <div class="reward-item" style="padding:14px 16px">
+            <div class="reward-icon" style="background:rgba(0,102,255,0.15)">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0 0 4h4v-4z"/></svg>
+            </div>
+            <div>
+              <div style="font-size:15px;font-weight:500">Cashback</div>
+              <div style="font-size:13px;color:var(--text-secondary)">Convert points to cash</div>
+            </div>
+            <div class="chevron">&#8250;</div>
+          </div>
+          <div class="reward-item" style="padding:14px 16px;border-top:1px solid rgba(255,255,255,0.04)">
+            <div class="reward-icon" style="background:rgba(0,210,106,0.15)">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-5"/></svg>
+            </div>
+            <div>
+              <div style="font-size:15px;font-weight:500">Upgrade plan</div>
+              <div style="font-size:13px;color:var(--text-secondary)">Use points for premium</div>
+            </div>
+            <div class="chevron">&#8250;</div>
+          </div>
+          <div class="reward-item" style="padding:14px 16px;border-top:1px solid rgba(255,255,255,0.04)">
+            <div class="reward-icon" style="background:rgba(255,107,53,0.15)">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2"/><path d="M12 6v6l4 2"/></svg>
+            </div>
+            <div>
+              <div style="font-size:15px;font-weight:500">Experiences</div>
+              <div style="font-size:13px;color:var(--text-secondary)">Book activities &amp; events</div>
+            </div>
+            <div class="chevron">&#8250;</div>
+          </div>
+        </div>
+      </div>
+      <div class="spacer"></div>
+    </div>
+  </div>
 
-    <!-- TAB BAR -->
-    <div class="tab-bar" id="tab-bar">
-      <button class="tab-item active" data-tab="home" onclick="switchTab('home')"><i data-lucide="home"></i></button>
-      <button class="tab-item" data-tab="cards" onclick="switchTab('cards')"><i data-lucide="credit-card"></i></button>
-      <button class="tab-item" data-tab="crypto" onclick="switchTab('crypto')"><i data-lucide="trending-up"></i></button>
-      <button class="tab-item" data-tab="lifestyle" onclick="switchTab('lifestyle')"><i data-lucide="compass"></i></button>
-      <button class="tab-item" data-tab="hub" onclick="switchTab('hub')"><i data-lucide="layout-grid"></i></button>
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav">
+    <div class="nav-item active" data-screen="home">
+      <div class="nav-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff" stroke="none">
+          <path d="M6 4h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm8 0h4a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm0 8h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2zM6 14h4a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2z"/>
+        </svg>
+      </div>
+      <span class="nav-label">Home</span>
+    </div>
+    <div class="nav-item" data-screen="invest">
+      <div class="nav-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 20V10M12 20V4M6 20v-6"/>
+        </svg>
+      </div>
+      <span class="nav-label">Invest</span>
+    </div>
+    <div class="nav-item" data-screen="payments">
+      <div class="nav-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M7 10l5-5 5 5"/><path d="M7 14l5 5 5-5"/>
+        </svg>
+      </div>
+      <span class="nav-label">Payments</span>
+    </div>
+    <div class="nav-item" data-screen="crypto">
+      <div class="nav-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M11.767 19.089c4.924.868 6.14-6.025 1.216-6.894m-1.216 6.894L5.86 18.047m5.908 1.042-.347 1.97m1.563-8.864c4.924.869 6.14-6.025 1.215-6.893m-1.215 6.893-3.94-.694m5.155-6.2L8.29 4.26m5.908 1.042.348-1.97M7.48 20.364l3.126-17.727"/>
+        </svg>
+      </div>
+      <span class="nav-label">Crypto</span>
+    </div>
+    <div class="nav-item" data-screen="revpoints">
+      <div class="nav-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/><path d="M12 6v12"/><path d="M6 12h12"/>
+        </svg>
+      </div>
+      <span class="nav-label">RevPoints</span>
     </div>
   </div>
 </div>
 
 <script>
-lucide.createIcons();
+  // Navigation - use both click and touchend for reliability on mobile
+  var navItems = document.querySelectorAll('.nav-item');
+  var screens = document.querySelectorAll('.screen');
 
-const transactions = [
-  { merchant:'Viasat', category:'Servicios', amount:'-10,25 EUR', original:'12,00 USD', rate:'1 EUR = 1,170542 USD', card:'Platinum ....2403', status:'completed', iconClass:'tech', icon:'wifi' },
-  { merchant:'Uber', category:'Transporte', amount:'-4,52 EUR', original:'85,00 MXN', rate:'1 EUR = 18,80531 MXN', card:'Platinum ....2403', status:'pending', iconClass:'transport', icon:'car' },
-  { merchant:'Spotify', category:'Entretenimiento', amount:'-9,99 EUR', original:null, rate:null, card:'Virtual ....7568', status:'completed', iconClass:'entertainment', icon:'music' },
-  { merchant:'Maria Garcia', category:'Transferencia recibida', amount:'+500,00 EUR', original:null, rate:null, card:null, status:'completed', iconClass:'income', icon:'arrow-down-left', positive:true },
-  { merchant:'Apple Store', category:'Compras', amount:'-149,99 EUR', original:null, rate:null, card:'Platinum ....2403', status:'completed', iconClass:'shopping', icon:'shopping-bag' },
-  { merchant:'La Buena Vida', category:'Restaurantes', amount:'-42,50 EUR', original:null, rate:null, card:'Platinum ....2403', status:'completed', iconClass:'food', icon:'utensils' },
-];
+  function switchScreen(target) {
+    navItems.forEach(function(n) { n.classList.remove('active'); });
+    document.querySelector('[data-screen="' + target + '"]').classList.add('active');
 
-let currentTab = 'home';
-function switchTab(tab) {
-  if (tab === currentTab) return;
-  closeSendFlowSilent();
-  closeDetailSilent();
-  document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-  document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
-  ['home','cards','crypto','lifestyle','hub'].forEach(s => {
-    const el = document.getElementById(`screen-${s}`);
-    if (s === tab) { el.classList.remove('tab-hidden'); el.classList.add('active'); el.classList.remove('hidden-left','hidden-right'); }
-    else { el.classList.add('tab-hidden'); el.classList.remove('active'); }
+    screens.forEach(function(s) {
+      if (s.id === 'screen-' + target) {
+        s.classList.add('active');
+      } else {
+        s.classList.remove('active');
+      }
+    });
+  }
+
+  navItems.forEach(function(item) {
+    // Prevent double-fire: track touch
+    var touched = false;
+
+    item.addEventListener('touchstart', function(e) {
+      touched = true;
+      e.preventDefault();
+      switchScreen(item.dataset.screen);
+    }, { passive: false });
+
+    item.addEventListener('click', function(e) {
+      if (!touched) {
+        switchScreen(item.dataset.screen);
+      }
+      touched = false;
+    });
   });
-  currentTab = tab;
-  lucide.createIcons();
-}
 
-function openTransaction(idx) {
-  const tx = transactions[idx];
-  document.getElementById('detail-title').textContent = tx.merchant;
-  document.getElementById('detail-amount').textContent = tx.amount;
-  document.getElementById('detail-amount').style.color = tx.positive ? 'var(--rui-color-positive)' : '';
-  document.getElementById('detail-merchant').textContent = tx.category;
-  const iconEl = document.getElementById('detail-icon');
-  iconEl.className = `detail-icon-large tx-icon ${tx.iconClass}`;
-  iconEl.innerHTML = `<i data-lucide="${tx.icon}"></i>`;
-  const statusEl = document.getElementById('detail-status');
-  statusEl.className = tx.status === 'pending' ? 'detail-status pending' : 'detail-status completed';
-  statusEl.innerHTML = tx.status === 'pending' ? '<i data-lucide="clock"></i><span>Pendiente</span>' : '<i data-lucide="check-circle-2"></i><span>Completado</span>';
-  let info = '';
-  if (tx.original) info += `<div class="detail-row"><span class="detail-row-label">Cargo del comercio</span><span class="detail-row-value">${tx.original}</span></div>`;
-  if (tx.rate) info += `<div class="detail-row"><span class="detail-row-label">Tipo de cambio</span><span class="detail-row-value">${tx.rate}</span></div>`;
-  info += `<div class="detail-row"><span class="detail-row-label">Comision</span><span class="detail-row-value">Sin comision</span></div>`;
-  if (tx.card) info += `<div class="detail-row"><span class="detail-row-label">Tarjeta</span><span class="detail-row-value">${tx.card}</span></div>`;
-  document.getElementById('detail-info').innerHTML = info;
-  document.getElementById(`screen-${currentTab}`).classList.add('hidden-left');
-  document.getElementById(`screen-${currentTab}`).classList.remove('active');
-  const d = document.getElementById('screen-detail');
-  d.classList.remove('hidden-right','tab-hidden');
-  d.classList.add('active');
-  document.getElementById('tab-bar').style.display = 'none';
-  lucide.createIcons();
-}
-function closeDetail() {
-  const d = document.getElementById('screen-detail');
-  if (!d.classList.contains('active')) return;
-  d.classList.remove('active'); d.classList.add('hidden-right');
-  const c = document.getElementById(`screen-${currentTab}`);
-  c.classList.remove('hidden-left'); c.classList.add('active');
-  document.getElementById('tab-bar').style.display = '';
-}
-function closeDetailSilent() { const d = document.getElementById('screen-detail'); d.classList.remove('active'); d.classList.add('hidden-right'); document.getElementById('tab-bar').style.display = ''; }
+  // Tab switching
+  document.querySelectorAll('.tabs-row').forEach(function(row) {
+    row.querySelectorAll('.tab-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        row.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+      });
+    });
+  });
 
-let isFrozen = false;
-function toggleFreeze() {
-  isFrozen = !isFrozen;
-  const card = document.getElementById('main-card');
-  const btn = document.getElementById('freeze-btn');
-  card.classList.toggle('frozen', isFrozen);
-  btn.classList.toggle('freeze-active', isFrozen);
-  btn.innerHTML = isFrozen ? '<i data-lucide="unlock"></i>Desbloquear' : '<i data-lucide="lock"></i>Bloquear';
-  lucide.createIcons();
-}
-
-let selectedRecipient = '', sendAmount = '';
-function openSendFlow() {
-  sendAmount = ''; selectedRecipient = '';
-  showSendStep(1);
-  const s = document.getElementById('screen-send');
-  s.classList.remove('hidden-right','tab-hidden'); s.classList.add('active');
-  document.getElementById(`screen-${currentTab}`).classList.add('hidden-left');
-  document.getElementById(`screen-${currentTab}`).classList.remove('active');
-  document.getElementById('tab-bar').style.display = 'none';
-  document.getElementById('send-title').textContent = 'Enviar dinero';
-  lucide.createIcons();
-}
-function closeSendFlow() {
-  const s = document.getElementById('screen-send');
-  s.classList.remove('active'); s.classList.add('hidden-right');
-  const c = document.getElementById(`screen-${currentTab}`);
-  c.classList.remove('hidden-left'); c.classList.add('active');
-  document.getElementById('tab-bar').style.display = '';
-  sendAmount = '';
-  document.getElementById('amount-value').textContent = '0';
-  document.getElementById('send-continue').disabled = true;
-}
-function closeSendFlowSilent() { const s = document.getElementById('screen-send'); s.classList.remove('active'); s.classList.add('hidden-right'); document.getElementById('tab-bar').style.display = ''; }
-
-function showSendStep(step) { document.querySelectorAll('.send-step').forEach((el, i) => { el.classList.toggle('active', i === step - 1); }); }
-function selectRecipient(name) {
-  selectedRecipient = name;
-  document.getElementById('send-to-name').textContent = `Para ${name}`;
-  document.getElementById('send-title').textContent = name;
-  showSendStep(2);
-}
-function numpadInput(key) {
-  if (key === 'del') sendAmount = sendAmount.slice(0, -1);
-  else if (key === '.') { if (!sendAmount.includes('.')) sendAmount += sendAmount ? '.' : '0.'; }
-  else if (sendAmount.length < 8) sendAmount += key;
-  document.getElementById('amount-value').textContent = sendAmount || '0';
-  const d = document.getElementById('amount-display');
-  d.style.transform = 'scale(1.03)';
-  setTimeout(() => d.style.transform = '', 100);
-  const v = parseFloat(sendAmount);
-  document.getElementById('send-continue').disabled = !(v > 0 && v <= 1954.23);
-}
-function goToReview() {
-  const f = `EUR ${parseFloat(sendAmount).toFixed(2).replace('.',',')}`;
-  document.getElementById('review-amount').textContent = f;
-  document.getElementById('review-to').textContent = `Para ${selectedRecipient}`;
-  document.getElementById('review-send-amount').textContent = f;
-  document.getElementById('send-title').textContent = 'Revisar';
-  showSendStep(3);
-}
-function sendSuccess() {
-  const f = `EUR ${parseFloat(sendAmount).toFixed(2).replace('.',',')}`;
-  document.getElementById('success-msg').textContent = `${f} enviado a ${selectedRecipient}`;
-  document.getElementById('send-title').textContent = '';
-  showSendStep(4);
-  spawnConfetti();
-  lucide.createIcons();
-}
-function spawnConfetti() {
-  const c = document.createElement('div'); c.className = 'confetti-container';
-  document.querySelector('.app').appendChild(c);
-  const colors = ['#6fa0ff','#1ac097','#ff5363','#ffd60a','#bf5af2','#ff9f0a','#5e5ce6'];
-  for (let i = 0; i < 50; i++) {
-    const p = document.createElement('div'); p.className = 'confetti-piece';
-    p.style.cssText = `left:${Math.random()*100}%;top:-10px;background:${colors[Math.floor(Math.random()*colors.length)]};animation-delay:${Math.random()*.5}s;animation-duration:${1.5+Math.random()*1.5}s;width:${4+Math.random()*6}px;height:${4+Math.random()*6}px;`;
-    c.appendChild(p);
-  }
-  setTimeout(() => c.remove(), 3000);
-}
-
-// ══════════════════════════════════════════════════════════════
-// SWIPE GESTURES (appended — do NOT modify anything above)
-// ══════════════════════════════════════════════════════════════
-
-function getActiveOverlay() {
-  const detail = document.getElementById('screen-detail');
-  const send = document.getElementById('screen-send');
-  if (detail && detail.classList.contains('active')) return { el: detail, type: 'detail' };
-  if (send && send.classList.contains('active')) return { el: send, type: 'send' };
-  return null;
-}
-
-// 1. Swipe-from-left-edge to go back (iOS-style)
-(function initEdgeSwipeBack() {
-  const EDGE_ZONE = 30;
-  const COMPLETE_THRESHOLD = 0.35;
-  const VELOCITY_THRESHOLD = 0.4;
-  const app = document.querySelector('.app');
-  let tracking = false, startX = 0, startY = 0, startTime = 0, currentDragX = 0;
-  let overlay = null, behindScreen = null, screenWidth = 0;
-  let directionLocked = false, isHorizontal = false;
-
-  app.addEventListener('touchstart', function(e) {
-    overlay = getActiveOverlay();
-    if (!overlay) return;
-    const touch = e.touches[0];
-    if (touch.clientX > EDGE_ZONE) return;
-    tracking = true; directionLocked = false; isHorizontal = false;
-    startX = touch.clientX; startY = touch.clientY;
-    startTime = Date.now(); currentDragX = 0;
-    screenWidth = app.offsetWidth || window.innerWidth;
-    behindScreen = document.getElementById('screen-' + currentTab);
-    if (overlay.el) { overlay.el.style.willChange = 'transform'; overlay.el.style.transition = 'none'; }
-    if (behindScreen) {
-      behindScreen.style.willChange = 'transform, opacity';
-      behindScreen.style.transition = 'none';
-      behindScreen.classList.remove('tab-hidden', 'hidden-left');
-      behindScreen.classList.add('active');
-      behindScreen.style.transform = 'translateX(-30%) scale(0.95)';
-      behindScreen.style.opacity = '0.5';
-    }
-  }, { passive: true });
-
-  app.addEventListener('touchmove', function(e) {
-    if (!tracking) return;
-    var dx = e.touches[0].clientX - startX, dy = e.touches[0].clientY - startY;
-    if (!directionLocked && (Math.abs(dx) > 8 || Math.abs(dy) > 8)) {
-      directionLocked = true;
-      isHorizontal = Math.abs(dx) > Math.abs(dy);
-      if (!isHorizontal) { tracking = false; cleanupSwipe(); return; }
-    }
-    if (!directionLocked || !isHorizontal) return;
-    e.preventDefault();
-    currentDragX = Math.max(0, dx);
-    var progress = Math.min(currentDragX / screenWidth, 1);
-    if (overlay && overlay.el) {
-      overlay.el.style.transform = 'translateX(' + currentDragX + 'px)';
-      overlay.el.style.boxShadow = '-8px 0 30px rgba(0,0,0,' + (0.3 * (1 - progress)) + ')';
-    }
-    if (behindScreen) {
-      behindScreen.style.transform = 'translateX(' + (-30 + 30 * progress) + '%) scale(' + (0.95 + 0.05 * progress) + ')';
-      behindScreen.style.opacity = String(0.5 + 0.5 * progress);
-    }
-  }, { passive: false });
-
-  function finishSwipe(complete) {
-    if (!tracking) return;
-    tracking = false;
-    var dur = complete ? '220ms' : '280ms';
-    var ease = 'cubic-bezier(0.2, 0.9, 0.3, 1)';
-    if (complete) {
-      if (overlay && overlay.el) {
-        overlay.el.style.transition = 'transform ' + dur + ' ' + ease + ', box-shadow ' + dur + ' ' + ease;
-        overlay.el.style.transform = 'translateX(100%)'; overlay.el.style.boxShadow = 'none';
+  // Close buttons
+  document.querySelectorAll('.close-btn, .close-x').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var card = btn.closest('.card, .promo-banner, .welcome-card');
+      if (card) {
+        card.style.transition = 'opacity 0.3s, transform 0.3s, height 0.3s, margin 0.3s, padding 0.3s';
+        card.style.opacity = '0';
+        card.style.transform = 'scale(0.95)';
+        setTimeout(function() {
+          card.style.height = '0';
+          card.style.margin = '0';
+          card.style.padding = '0';
+          card.style.overflow = 'hidden';
+          card.style.border = 'none';
+        }, 200);
       }
-      if (behindScreen) {
-        behindScreen.style.transition = 'transform ' + dur + ' ' + ease + ', opacity ' + dur + ' ' + ease;
-        behindScreen.style.transform = 'translateX(0) scale(1)'; behindScreen.style.opacity = '1';
-      }
-      setTimeout(function() {
-        if (overlay && overlay.el) { overlay.el.style.cssText = ''; overlay.el.classList.remove('active'); overlay.el.classList.add('hidden-right'); }
-        if (behindScreen) { behindScreen.style.cssText = ''; behindScreen.classList.remove('hidden-left'); behindScreen.classList.add('active'); }
-        document.getElementById('tab-bar').style.display = '';
-        overlay = null; behindScreen = null;
-      }, 230);
-    } else {
-      if (overlay && overlay.el) {
-        overlay.el.style.transition = 'transform ' + dur + ' ' + ease + ', box-shadow ' + dur + ' ' + ease;
-        overlay.el.style.transform = 'translateX(0)'; overlay.el.style.boxShadow = '';
-      }
-      if (behindScreen) {
-        behindScreen.style.transition = 'transform ' + dur + ' ' + ease + ', opacity ' + dur + ' ' + ease;
-        behindScreen.style.transform = 'translateX(-30%) scale(0.95)'; behindScreen.style.opacity = '0.5';
-      }
-      setTimeout(function() { cleanupSwipe(); }, 290);
-    }
-  }
+    });
+  });
 
-  function cleanupSwipe() {
-    if (overlay && overlay.el) overlay.el.style.cssText = '';
-    if (behindScreen) { behindScreen.style.cssText = ''; behindScreen.classList.add('hidden-left'); behindScreen.classList.remove('active'); }
-    overlay = null; behindScreen = null;
-  }
+  // Transaction tap feedback
+  document.querySelectorAll('.transaction').forEach(function(tx) {
+    tx.addEventListener('click', function() {
+      tx.style.background = 'rgba(255,255,255,0.04)';
+      setTimeout(function() { tx.style.background = 'transparent'; }, 200);
+    });
+  });
 
-  app.addEventListener('touchend', function() {
-    if (!tracking) return;
-    var elapsed = Date.now() - startTime;
-    var velocity = currentDragX / Math.max(elapsed, 1);
-    var progress = currentDragX / screenWidth;
-    finishSwipe(progress > COMPLETE_THRESHOLD || velocity > VELOCITY_THRESHOLD);
-  }, { passive: true });
-
-  app.addEventListener('touchcancel', function() { finishSwipe(false); }, { passive: true });
-})();
-
-// 2. Pull-to-refresh on home screen
-(function initPullToRefresh() {
-  var homeScreen = document.getElementById('screen-home');
-  if (!homeScreen) return;
-  var PULL_THRESHOLD = 60, pulling = false, startY = 0, pullDistance = 0;
-  var indicator = document.createElement('div');
-  indicator.style.cssText = 'position:absolute;top:0;left:50%;transform:translateX(-50%) translateY(-40px);width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);border-top-color:#6fa0ff;z-index:100;opacity:0;transition:opacity 0.2s;pointer-events:none;';
-  homeScreen.style.position = 'relative';
-  homeScreen.appendChild(indicator);
-
-  homeScreen.addEventListener('touchstart', function(e) {
-    if (getActiveOverlay()) return;
-    if (currentTab !== 'home') return;
-    if (homeScreen.scrollTop > 5) return;
-    startY = e.touches[0].clientY; pulling = true; pullDistance = 0;
-  }, { passive: true });
-
-  homeScreen.addEventListener('touchmove', function(e) {
-    if (!pulling) return;
-    var dy = e.touches[0].clientY - startY;
-    if (dy < 0) { pulling = false; return; }
-    pullDistance = Math.min(dy * 0.4, 80);
-    var rotation = (pullDistance / PULL_THRESHOLD) * 360;
-    indicator.style.opacity = String(Math.min(pullDistance / PULL_THRESHOLD, 1));
-    indicator.style.transform = 'translateX(-50%) translateY(' + (pullDistance - 40) + 'px) rotate(' + rotation + 'deg)';
-    if (pullDistance > 10) e.preventDefault();
-  }, { passive: false });
-
-  homeScreen.addEventListener('touchend', function() {
-    if (!pulling) return;
-    pulling = false;
-    if (pullDistance >= PULL_THRESHOLD) {
-      indicator.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
-      indicator.style.transform = 'translateX(-50%) translateY(20px)';
-      indicator.style.opacity = '1';
-      indicator.style.animation = 'ptr-spin 0.6s linear infinite';
-      setTimeout(function() {
-        indicator.style.animation = '';
-        indicator.style.transition = 'opacity 0.2s ease';
-        indicator.style.opacity = '0';
-        setTimeout(function() { indicator.style.transform = 'translateX(-50%) translateY(-40px)'; }, 200);
-      }, 1000);
-    } else {
-      indicator.style.transition = 'transform 0.2s ease, opacity 0.2s ease';
-      indicator.style.opacity = '0';
-      indicator.style.transform = 'translateX(-50%) translateY(-40px)';
-    }
-    pullDistance = 0;
-  }, { passive: true });
-})();
-
-// 3. Swipe between tabs
-(function initTabSwipe() {
-  var app = document.querySelector('.app');
-  var tabOrder = ['home', 'cards', 'crypto', 'lifestyle', 'hub'];
-  var swiping = false, swStartX = 0, swStartY = 0, swDirLocked = false, swIsHoriz = false;
-
-  app.addEventListener('touchstart', function(e) {
-    if (getActiveOverlay()) return;
-    var touch = e.touches[0];
-    if (touch.clientX <= 30) return;
-    swiping = true; swDirLocked = false; swIsHoriz = false;
-    swStartX = touch.clientX; swStartY = touch.clientY;
-  }, { passive: true });
-
-  app.addEventListener('touchmove', function(e) {
-    if (!swiping || swDirLocked) return;
-    var dx = e.touches[0].clientX - swStartX, dy = e.touches[0].clientY - swStartY;
-    if (Math.abs(dx) > 10 || Math.abs(dy) > 10) { swDirLocked = true; swIsHoriz = Math.abs(dx) > Math.abs(dy); }
-  }, { passive: true });
-
-  app.addEventListener('touchend', function(e) {
-    if (!swiping) return;
-    swiping = false;
-    if (!swDirLocked || !swIsHoriz) return;
-    var dx = e.changedTouches[0].clientX - swStartX;
-    if (Math.abs(dx) < 50) return;
-    var idx = tabOrder.indexOf(currentTab);
-    if (dx < -50 && idx < tabOrder.length - 1) switchTab(tabOrder[idx + 1]);
-    else if (dx > 50 && idx > 0) switchTab(tabOrder[idx - 1]);
-  }, { passive: true });
-})();
+  // Quick action tap feedback
+  document.querySelectorAll('.quick-action, .payment-option, .reward-item, .stock-item, .mover-item, .cta-button, .earn-row').forEach(function(el) {
+    el.addEventListener('touchstart', function() {
+      el.style.transform = 'scale(0.96)';
+      el.style.transition = 'transform 0.1s';
+    }, { passive: true });
+    el.addEventListener('touchend', function() {
+      el.style.transform = 'scale(1)';
+    }, { passive: true });
+  });
 </script>
 </body>
 </html>
