@@ -1,1409 +1,1359 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#000d19">
-<title>Revolut</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Krevolut</title>
 <style>
-/* ===== RUI DESIGN TOKENS ===== */
-:root {
-  --bg: #000d19;
-  --fg: #fff;
-  --inactive: rgba(255,255,255,.55);
-  --widget: rgba(255,255,255,.07);
-  --widget-border: rgba(255,255,255,.06);
-  --nested: rgba(0,0,0,.15);
-  --popover: #1c2730;
-  --accent: #6393f3;
-  --accent-bg: rgba(99,147,243,.15);
-  --positive: #1ac097;
-  --danger: #ff5363;
-  --warning: #ff9f0a;
-  --blue: #2bb2ff;
-  --teal: #13d1a3;
-  --purple: #bf5af2;
-  --indigo: #5e5ce6;
-  --pink: #ff5777;
-  --brown: #ac816e;
-  --search-bg: rgba(255,255,255,.1);
-  --r-widget: 16px;
-  --r-cell: 10px;
-  --r-round: 9999px;
-  --font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --ease-spring: cubic-bezier(.175,.885,.32,1.275);
-  --ease-out: cubic-bezier(.25,.46,.45,.94);
-  --dur: .28s;
-  --safe-b: env(safe-area-inset-bottom, 0px);
-}
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-html { height:100%; overflow:hidden; }
-body {
-  font-family: var(--font);
-  background: var(--bg);
-  color: var(--fg);
-  height: 100%; height: 100dvh;
-  display: flex; justify-content: center;
-  -webkit-font-smoothing: antialiased;
-  -webkit-text-size-adjust: 100%;
-  overflow: hidden;
-  position: relative;
-}
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-/* ===== AMBIENT GLOW ===== */
-body::before {
-  content: '';
-  position: fixed; top: -20%; left: -15%;
-  width: 70%; height: 60%;
-  background: radial-gradient(ellipse, rgba(99,147,243,.10) 0%, rgba(99,147,243,.04) 35%, transparent 70%);
-  pointer-events: none; z-index: 0;
-}
-body::after {
-  content: '';
-  position: fixed; top: 30%; right: -20%;
-  width: 50%; height: 50%;
-  background: radial-gradient(ellipse, rgba(26,192,151,.04) 0%, transparent 65%);
-  pointer-events: none; z-index: 0;
-}
+  :root {
+    --bg: #0a0e14;
+    --bg-card: rgba(255,255,255,0.05);
+    --bg-card-hover: rgba(255,255,255,0.08);
+    --border: rgba(255,255,255,0.07);
+    --text-primary: #ffffff;
+    --text-secondary: #8b95a3;
+    --text-tertiary: #5a6270;
+    --green: #00d26a;
+    --red: #ff3b30;
+    --blue: #0066ff;
+    --teal: #00c9b1;
+    --orange: #ff6b35;
+    --nav-bg: rgba(12,16,22,0.95);
+    --radius: 16px;
+    --radius-sm: 12px;
+    --radius-xs: 8px;
+  }
 
-/* ===== DEVICE FRAME ===== */
-.device {
-  width: 100%; max-width: 430px;
-  height: 100%; height: 100dvh;
-  position: relative; overflow: hidden;
-  display: flex; flex-direction: column;
-  z-index: 1;
-}
+  html, body {
+    height: 100%;
+    background: #000;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--text-primary);
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
 
-/* ===== STATUS BAR ===== */
-.status-bar {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 12px 24px 0;
-  height: 54px; flex-shrink: 0;
-  font-size: 15px; font-weight: 600;
-  position: relative; z-index: 100;
-}
-.status-bar .time { letter-spacing: .5px; }
-.status-bar .icons { display: flex; gap: 5px; align-items: center; }
-.status-bar .icons svg { width: 17px; height: 17px; }
+  /* Phone Frame */
+  .phone-frame {
+    position: relative;
+    width: 390px;
+    height: 100vh;
+    max-height: 844px;
+    margin: 0 auto;
+    background: var(--bg);
+    overflow: hidden;
+  }
 
-/* ===== HEADER ===== */
-.header {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 4px 20px 8px;
-  flex-shrink: 0;
-}
-.header-left { display: flex; align-items: center; gap: 12px; }
-.r-logo {
-  width: 34px; height: 34px; border-radius: 10px;
-  background: linear-gradient(135deg, #00c6ae 0%, #6393f3 100%);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 16px; font-weight: 700; color: #fff;
-}
-.screen-title { font-size: 26px; font-weight: 700; letter-spacing: -.3px; }
-.header-right { display: flex; align-items: center; gap: 10px; }
-.icon-btn {
-  width: 34px; height: 34px; border-radius: 10px;
-  background: var(--widget); border: 1px solid var(--widget-border);
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer; transition: transform .15s var(--ease-spring);
-}
-.icon-btn:active { transform: scale(.92); }
-.icon-btn svg { width: 16px; height: 16px; color: var(--inactive); }
-.avatar {
-  width: 34px; height: 34px; border-radius: 10px;
-  background: #28333d;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 600; color: var(--inactive);
-}
+  @media (max-width: 420px) {
+    .phone-frame { width: 100%; max-height: 100vh; }
+  }
 
-/* ===== SCREEN CONTAINER ===== */
-.screens {
-  flex: 1; position: relative; overflow: hidden;
-}
-.screen {
-  position: absolute; inset: 0;
-  overflow-y: auto; overflow-x: hidden;
-  padding: 0 20px 24px;
-  opacity: 0; transform: translateX(30px);
-  pointer-events: none;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  will-change: opacity, transform;
-}
-.screen::-webkit-scrollbar { display: none; }
-.screen.active {
-  opacity: 1 !important; transform: translateX(0) !important;
-  pointer-events: auto;
-  transition: opacity .25s ease, transform .25s var(--ease-out);
-}
+  /* Background Glow */
+  .bg-glow {
+    position: absolute;
+    top: -80px;
+    left: -60px;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(0,102,255,0.12) 0%, rgba(0,201,177,0.06) 40%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
 
-/* ===== GLASS CARD ===== */
-.card {
-  background: var(--widget);
-  border: 1px solid var(--widget-border);
-  border-radius: var(--r-widget);
-  padding: 20px;
-  backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
-  position: relative;
-  overflow: hidden;
-}
-.card::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,.03) 0%, transparent 50%);
-  pointer-events: none; border-radius: inherit;
-}
-.card + .card { margin-top: 16px; }
+  /* Status Bar */
+  .status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px 8px;
+    font-size: 14px;
+    font-weight: 600;
+    position: relative;
+    z-index: 10;
+  }
+  .status-bar .time { letter-spacing: 0.5px; }
+  .status-bar .right { display: flex; align-items: center; gap: 6px; font-size: 12px; }
+  .status-bar .signal { display: flex; gap: 1px; align-items: flex-end; }
+  .status-bar .signal span { width: 3px; background: #fff; border-radius: 1px; }
+  .status-bar .battery {
+    width: 25px; height: 12px; border: 1.5px solid rgba(255,255,255,0.5);
+    border-radius: 3px; position: relative; padding: 1.5px;
+  }
+  .status-bar .battery::after {
+    content: ''; position: absolute; right: -4px; top: 3px;
+    width: 2px; height: 5px; background: rgba(255,255,255,0.5); border-radius: 0 1px 1px 0;
+  }
+  .status-bar .battery-fill {
+    width: 48%; height: 100%; background: #fff; border-radius: 1px;
+  }
 
-/* ===== BALANCE CARD ===== */
-.balance-label {
-  font-size: 13px; font-weight: 500; color: var(--inactive);
-  display: flex; align-items: center; gap: 4px;
-  margin-bottom: 4px;
-}
-.balance-label svg { width: 14px; height: 14px; }
-.balance {
-  font-size: 34px; font-weight: 700; letter-spacing: -1px;
-  line-height: 1.1; margin-bottom: 2px;
-}
-.balance .currency {
-  font-size: 16px; font-weight: 500; color: var(--inactive);
-  margin-left: 6px; letter-spacing: 0;
-}
+  /* Top Bar */
+  .top-bar {
+    display: flex;
+    align-items: center;
+    padding: 4px 16px 12px;
+    gap: 10px;
+    position: relative;
+    z-index: 10;
+  }
+  .avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: #3a3f47; display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 600; color: #fff;
+    position: relative; flex-shrink: 0;
+  }
+  .avatar::before {
+    content: ''; position: absolute; inset: -3px;
+    border-radius: 50%; border: 2px solid rgba(200,160,180,0.4);
+  }
+  .avatar .notif-dot {
+    position: absolute; top: -1px; right: -1px;
+    width: 8px; height: 8px; background: var(--red);
+    border-radius: 50%; border: 1.5px solid var(--bg);
+  }
+  .search-bar {
+    flex: 1; height: 38px; background: rgba(255,255,255,0.08);
+    border-radius: 20px; display: flex; align-items: center;
+    padding: 0 14px; gap: 8px; cursor: pointer;
+  }
+  .search-bar svg { opacity: 0.5; flex-shrink: 0; }
+  .search-bar span { color: var(--text-secondary); font-size: 15px; }
+  .top-icon {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: rgba(255,255,255,0.08); display: flex;
+    align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer;
+  }
 
-/* ===== QUICK ACTIONS ===== */
-.quick-actions {
-  display: flex; justify-content: space-between;
-  padding: 20px 0 4px;
-}
-.action-item {
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
-  cursor: pointer;
-}
-.action-item:active .action-circle { transform: scale(.9); }
-.action-circle {
-  width: 52px; height: 52px; border-radius: 50%;
-  background: rgba(255,255,255,.07);
-  border: 1px solid rgba(255,255,255,.05);
-  display: flex; align-items: center; justify-content: center;
-  transition: transform .15s var(--ease-spring), background .15s;
-}
-.action-circle svg { width: 22px; height: 22px; color: #fff; }
-.action-label {
-  font-size: 11px; font-weight: 500; color: var(--inactive);
-  letter-spacing: .2px;
-}
+  /* Screen Container */
+  .screens-container {
+    position: relative;
+    height: calc(100% - 150px);
+    overflow: hidden;
+  }
+  .screen {
+    position: absolute;
+    inset: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    opacity: 0;
+    transform: translateX(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 20px;
+  }
+  .screen::-webkit-scrollbar { display: none; }
+  .screen.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
 
-/* ===== TRANSACTIONS ===== */
-.section-header {
-  display: flex; justify-content: space-between; align-items: center;
-  margin: 24px 0 14px;
-}
-.section-title { font-size: 18px; font-weight: 700; }
-.section-link { font-size: 13px; font-weight: 600; color: var(--accent); cursor: pointer; }
-.date-group {
-  font-size: 11px; font-weight: 600; color: var(--inactive);
-  text-transform: uppercase; letter-spacing: 1px;
-  padding: 14px 0 8px;
-}
-.tx-row {
-  display: flex; align-items: center; gap: 14px;
-  padding: 12px 0;
-  cursor: pointer;
-  transition: transform .1s, opacity .1s;
-}
-.tx-row:active { transform: scale(.98); opacity: .8; }
-.tx-icon {
-  width: 44px; height: 44px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-.tx-icon svg { width: 20px; height: 20px; color: #fff; }
-.tx-info { flex: 1; min-width: 0; }
-.tx-name { font-size: 15px; font-weight: 600; line-height: 1.3; }
-.tx-cat { font-size: 12px; color: var(--inactive); margin-top: 1px; }
-.tx-amount { text-align: right; flex-shrink: 0; }
-.tx-main { font-size: 15px; font-weight: 600; line-height: 1.3; }
-.tx-sub { font-size: 12px; color: var(--inactive); margin-top: 1px; }
-.tx-positive .tx-main { color: var(--positive); }
+  /* Cards */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin: 0 16px 12px;
+    padding: 16px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
 
-/* Pending pulse */
-@keyframes pulse-pending {
-  0%, 100% { opacity: 1; }
-  50% { opacity: .5; }
-}
-.tx-pending { animation: pulse-pending 2s ease-in-out infinite; }
+  /* Home Screen */
+  .balance-area {
+    text-align: center;
+    padding: 8px 16px 20px;
+    position: relative;
+  }
+  .accounts-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+    cursor: pointer;
+  }
+  .balance-amount {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+  .balance-currency {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+  }
+  .balance-dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 16px;
+  }
+  .balance-dots .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+  }
+  .balance-dots .dot.active { background: #fff; }
 
-/* ===== BOTTOM TAB BAR ===== */
-.tab-bar {
-  display: flex; justify-content: space-around; align-items: center;
-  height: 56px;
-  padding-bottom: var(--safe-b);
-  background: rgba(0,13,25,.92);
-  backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
-  border-top: 1px solid rgba(255,255,255,.06);
-  flex-shrink: 0;
-  position: relative; z-index: 100;
-}
-.tab {
-  display: flex; flex-direction: column; align-items: center; gap: 3px;
-  cursor: pointer; padding: 6px 16px 2px;
-  position: relative;
-  transition: transform .15s var(--ease-spring);
-}
-.tab:active { transform: scale(.9); }
-.tab svg { width: 24px; height: 24px; color: var(--inactive); transition: color .2s; }
-.tab .tab-label {
-  font-size: 10px; font-weight: 500; color: var(--inactive);
-  transition: color .2s;
-}
-.tab.active svg { color: #fff; }
-.tab.active .tab-label { color: #fff; }
-.tab.active::before {
-  content: '';
-  position: absolute; top: 2px; left: 50%; transform: translateX(-50%);
-  width: 4px; height: 4px; border-radius: 50%;
-  background: var(--accent);
-}
+  /* Quick Actions */
+  .quick-actions {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    padding: 0 16px 20px;
+  }
+  .quick-action {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+  .quick-action .icon-circle {
+    width: 52px; height: 52px; border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .quick-action span {
+    font-size: 12px; color: var(--text-secondary);
+  }
 
-/* ===== CARDS SCREEN ===== */
-.card-render {
-  width: 100%; aspect-ratio: 1.586; border-radius: 14px;
-  position: relative; overflow: hidden;
-  background: linear-gradient(145deg, #2d3544 0%, #1a2233 40%, #2d3544 100%);
-  padding: 24px;
-  display: flex; flex-direction: column; justify-content: space-between;
-  box-shadow: 0 8px 40px rgba(0,0,0,.4);
-  transform: perspective(800px) rotateX(2deg);
-  transition: transform .4s var(--ease-spring);
-}
-.card-render:active { transform: perspective(800px) rotateX(0deg) scale(.98); }
-/* shimmer */
-.card-render::after {
-  content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,.05) 45%, rgba(255,255,255,.1) 50%, rgba(255,255,255,.05) 55%, transparent 60%);
-  background-size: 300% 100%;
-  animation: shimmer 4s ease-in-out infinite;
-}
-@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
-.card-chip {
-  width: 36px; height: 28px; border-radius: 5px;
-  background: linear-gradient(135deg, #c9b87a, #e8d9a0, #c9b87a);
-}
-.card-number { font-size: 13px; font-weight: 500; letter-spacing: 2.5px; color: rgba(255,255,255,.7); }
-.card-bottom { display: flex; justify-content: space-between; align-items: flex-end; }
-.card-holder { font-size: 11px; font-weight: 500; color: rgba(255,255,255,.6); text-transform: uppercase; letter-spacing: 1px; }
-.card-brand { display: flex; align-items: center; gap: -8px; }
-.mc-circle {
-  width: 30px; height: 30px; border-radius: 50%; opacity: .85;
-}
-.mc-red { background: #eb001b; }
-.mc-orange { background: #f79e1b; margin-left: -12px; mix-blend-mode: screen; }
-.card-r-logo {
-  position: absolute; top: 24px; right: 24px;
-  width: 28px; height: 28px; border-radius: 8px;
-  background: rgba(255,255,255,.12);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 14px; font-weight: 700; color: rgba(255,255,255,.7);
-}
+  /* Promo Banner */
+  .promo-banner {
+    margin: 0 16px 12px;
+    border-radius: var(--radius);
+    overflow: hidden;
+    position: relative;
+    height: 120px;
+    background: linear-gradient(135deg, #0a2a1f 0%, #0d1f2d 50%, #1a0a2e 100%);
+    cursor: pointer;
+  }
+  .promo-banner .aurora {
+    position: absolute;
+    top: 0; right: 0;
+    width: 55%;
+    height: 100%;
+    background: linear-gradient(160deg, transparent 20%, rgba(0,200,120,0.3) 40%, rgba(0,100,200,0.2) 60%, rgba(100,0,200,0.15) 80%);
+    filter: blur(15px);
+  }
+  .promo-banner .close-btn {
+    position: absolute; top: 12px; right: 12px;
+    width: 24px; height: 24px; border-radius: 50%;
+    background: rgba(0,0,0,0.3); display: flex;
+    align-items: center; justify-content: center;
+    color: #fff; font-size: 14px; cursor: pointer; z-index: 2;
+  }
+  .promo-banner .content {
+    position: relative; z-index: 1;
+    padding: 20px;
+  }
+  .promo-banner h3 {
+    font-size: 17px; font-weight: 600; margin-bottom: 6px;
+  }
+  .promo-banner p {
+    font-size: 13px; color: var(--text-secondary); line-height: 1.4;
+  }
+  .promo-dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+  .promo-dots .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+  }
+  .promo-dots .dot.active { background: #fff; }
 
-/* Card list items */
-.card-list-item {
-  display: flex; align-items: center; gap: 14px;
-  padding: 14px 0;
-  cursor: pointer;
-}
-.card-list-item:active { opacity: .7; }
-.card-mini {
-  width: 52px; height: 34px; border-radius: 6px;
-  background: linear-gradient(135deg, #3a4555, #1e2a3a);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 8px; font-weight: 700; color: rgba(255,255,255,.5);
-}
-.card-list-info { flex: 1; }
-.card-list-name { font-size: 15px; font-weight: 600; }
-.card-list-num { font-size: 12px; color: var(--inactive); margin-top: 2px; }
+  /* Transactions */
+  .transactions { margin: 0 16px; }
+  .transaction {
+    display: flex;
+    align-items: center;
+    padding: 14px 0;
+    gap: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    cursor: pointer;
+  }
+  .transaction:last-child { border-bottom: none; }
+  .tx-icon {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 600; flex-shrink: 0;
+    position: relative;
+  }
+  .tx-icon.viasat { background: #fff; }
+  .tx-icon.heart { background: var(--teal); }
+  .tx-icon.food { background: var(--orange); }
+  .tx-icon.person { background: #5a7aa0; }
+  .tx-icon .badge {
+    position: absolute; bottom: -2px; right: -2px;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: var(--blue); border: 2px solid var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: #fff;
+  }
+  .tx-details { flex: 1; min-width: 0; }
+  .tx-name {
+    font-size: 15px; font-weight: 500;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .tx-date { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+  .tx-amount { text-align: right; flex-shrink: 0; }
+  .tx-amount .primary { font-size: 15px; font-weight: 500; }
+  .tx-amount .primary.positive { color: var(--green); }
+  .tx-amount .secondary { font-size: 12px; color: var(--text-tertiary); margin-top: 2px; }
 
-/* Toggle switch */
-.toggle-row {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 14px 0;
-}
-.toggle-row .label { font-size: 15px; font-weight: 500; }
-.toggle {
-  width: 50px; height: 30px; border-radius: 15px;
-  background: rgba(255,255,255,.15);
-  position: relative; cursor: pointer;
-  transition: background .2s;
-}
-.toggle.on { background: var(--positive); }
-.toggle .thumb {
-  width: 26px; height: 26px; border-radius: 13px;
-  background: #fff;
-  position: absolute; top: 2px; left: 2px;
-  transition: transform .2s var(--ease-spring);
-  box-shadow: 0 2px 6px rgba(0,0,0,.3);
-}
-.toggle.on .thumb { transform: translateX(20px); }
+  .see-all {
+    text-align: center;
+    padding: 16px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
 
-/* ===== INVEST SCREEN ===== */
-.chart-container {
-  height: 160px; position: relative; overflow: hidden;
-  margin: 8px 0;
-}
-.chart-container svg { width: 100%; height: 100%; }
-.segment-control {
-  display: flex; gap: 2px;
-  background: rgba(255,255,255,.07);
-  border-radius: var(--r-round);
-  padding: 3px;
-}
-.segment {
-  flex: 1; text-align: center;
-  padding: 8px 0;
-  font-size: 13px; font-weight: 600;
-  color: var(--inactive);
-  border-radius: var(--r-round);
-  cursor: pointer;
-  transition: all .2s;
-}
-.segment.active {
-  background: rgba(255,255,255,.12);
-  color: #fff;
-}
-.asset-row {
-  display: flex; align-items: center; gap: 14px;
-  padding: 14px 0;
-}
-.asset-icon {
-  width: 40px; height: 40px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 16px; font-weight: 700;
-}
-.asset-info { flex: 1; }
-.asset-name { font-size: 15px; font-weight: 600; }
-.asset-ticker { font-size: 12px; color: var(--inactive); }
-.asset-right { text-align: right; }
-.asset-price { font-size: 15px; font-weight: 600; }
-.asset-change { font-size: 12px; }
-.asset-up { color: var(--positive); }
-.asset-down { color: var(--danger); }
-.sparkline { width: 56px; height: 24px; margin-left: auto; margin-right: 12px; }
-.sparkline polyline { fill: none; stroke-width: 1.5; stroke-linecap: round; }
+  /* Welcome Card */
+  .welcome-card {
+    margin: 0 16px 16px;
+    border-radius: var(--radius);
+    overflow: hidden;
+    position: relative;
+    height: 160px;
+    background: linear-gradient(135deg, #1a3a2a 0%, #0d2520 100%);
+    cursor: pointer;
+  }
+  .welcome-card .bg-img {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%),
+                linear-gradient(135deg, rgba(34,139,34,0.15) 0%, rgba(139,69,19,0.1) 100%);
+  }
+  .welcome-card .pyramid {
+    position: absolute;
+    bottom: 10px; right: 20px;
+    width: 0; height: 0;
+    border-left: 60px solid transparent;
+    border-right: 60px solid transparent;
+    border-bottom: 80px solid rgba(139,119,42,0.3);
+  }
+  .welcome-card .pyramid-steps {
+    position: absolute;
+    bottom: 10px; right: 10px;
+    width: 130px; height: 85px;
+  }
+  .welcome-card .close-btn {
+    position: absolute; top: 12px; right: 12px;
+    width: 24px; height: 24px; border-radius: 50%;
+    background: rgba(0,0,0,0.3); display: flex;
+    align-items: center; justify-content: center;
+    color: #fff; font-size: 14px; cursor: pointer; z-index: 2;
+  }
+  .welcome-card .content {
+    position: relative; z-index: 1;
+    padding: 20px;
+  }
+  .welcome-card .subtitle {
+    font-size: 13px; color: rgba(255,255,255,0.7);
+  }
+  .welcome-card h2 {
+    font-size: 28px; font-weight: 700; margin: 2px 0 8px;
+  }
+  .welcome-card .rate {
+    font-size: 14px; color: rgba(255,255,255,0.6);
+  }
 
-/* ===== LIFESTYLE SCREEN ===== */
-.promo-card {
-  border-radius: var(--r-widget);
-  padding: 28px 24px;
-  position: relative; overflow: hidden;
-  margin-bottom: 14px;
-}
-.promo-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 6px; position: relative; z-index: 1; }
-.promo-card p { font-size: 13px; color: rgba(255,255,255,.75); line-height: 1.5; position: relative; z-index: 1; }
-.promo-btn {
-  display: inline-block; margin-top: 16px;
-  padding: 10px 24px; border-radius: var(--r-round);
-  font-size: 13px; font-weight: 600;
-  background: rgba(255,255,255,.15); color: #fff;
-  cursor: pointer; position: relative; z-index: 1;
-  transition: transform .15s var(--ease-spring), background .15s;
-}
-.promo-btn:active { transform: scale(.95); background: rgba(255,255,255,.25); }
-.feature-grid {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 12px; margin-top: 4px;
-}
-.feature-tile {
-  border-radius: var(--r-widget); padding: 20px 16px;
-  background: var(--widget); border: 1px solid var(--widget-border);
-  cursor: pointer;
-  transition: transform .15s var(--ease-spring);
-}
-.feature-tile:active { transform: scale(.96); }
-.feature-tile .ft-icon {
-  width: 40px; height: 40px; border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  margin-bottom: 14px;
-}
-.feature-tile .ft-icon svg { width: 20px; height: 20px; color: #fff; }
-.feature-tile .ft-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
-.feature-tile .ft-desc { font-size: 11px; color: var(--inactive); line-height: 1.4; }
+  /* Invest Screen */
+  .invest-hero {
+    position: relative;
+    height: 320px;
+    margin: 0 0 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .invest-hero .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 30% 20%, rgba(20,40,80,0.6) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 60%, rgba(10,20,50,0.4) 0%, transparent 50%),
+      linear-gradient(160deg, #060a12 0%, #0a0f1a 30%, #080c14 60%, #050810 100%);
+  }
+  .invest-hero .silk-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(135deg, transparent 30%, rgba(30,50,90,0.15) 45%, transparent 55%),
+      linear-gradient(225deg, transparent 40%, rgba(20,40,70,0.1) 50%, transparent 60%);
+    animation: silkShimmer 8s ease-in-out infinite;
+  }
+  @keyframes silkShimmer {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+  .invest-hero h1 {
+    font-size: 30px;
+    font-weight: 700;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    letter-spacing: -0.5px;
+  }
+  .invest-hero p {
+    font-size: 15px;
+    color: var(--text-secondary);
+    margin-top: 8px;
+    position: relative;
+    z-index: 1;
+  }
 
-/* ===== HUB SCREEN ===== */
-.profile-card {
-  display: flex; align-items: center; gap: 14px;
-  padding: 8px 0 16px;
-}
-.profile-avatar {
-  width: 56px; height: 56px; border-radius: 50%;
-  background: linear-gradient(135deg, #28333d, #3a4858);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 20px; font-weight: 600; color: var(--inactive);
-}
-.profile-name { font-size: 18px; font-weight: 700; }
-.profile-plan { font-size: 13px; color: var(--inactive); margin-top: 2px; }
-.hub-section { margin-top: 20px; }
-.hub-section-title {
-  font-size: 12px; font-weight: 600; color: var(--inactive);
-  text-transform: uppercase; letter-spacing: .8px;
-  margin-bottom: 10px;
-}
-.hub-row {
-  display: flex; align-items: center; gap: 14px;
-  padding: 14px 16px;
-  background: var(--widget); border: 1px solid var(--widget-border);
-  cursor: pointer;
-  transition: transform .1s;
-}
-.hub-row:active { transform: scale(.98); opacity: .8; }
-.hub-row:first-of-type { border-radius: var(--r-widget) var(--r-widget) 0 0; }
-.hub-row:last-of-type { border-radius: 0 0 var(--r-widget) var(--r-widget); }
-.hub-row:only-of-type { border-radius: var(--r-widget); }
-.hub-row + .hub-row { border-top: none; }
-.hub-icon {
-  width: 36px; height: 36px; border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-}
-.hub-icon svg { width: 18px; height: 18px; color: #fff; }
-.hub-label { flex: 1; font-size: 15px; font-weight: 500; }
-.hub-chevron { color: var(--inactive); }
-.hub-chevron svg { width: 18px; height: 18px; }
+  .cta-button {
+    display: block;
+    margin: 0 16px 16px;
+    padding: 16px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 14px;
+    text-align: center;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .cta-button:active { background: rgba(255,255,255,0.18); }
 
-/* ===== OVERLAYS ===== */
-.overlay {
-  position: fixed; inset: 0;
-  z-index: 200;
-  opacity: 0; pointer-events: none;
-  transition: opacity .25s;
-}
-.overlay.open { opacity: 1; pointer-events: auto; }
-.overlay-backdrop {
-  position: absolute; inset: 0;
-  background: rgba(0,0,0,.6);
-  backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
-}
-.overlay-content {
-  position: absolute; inset: 0;
-  background: var(--bg);
-  transform: translateX(100%);
-  transition: transform .3s var(--ease-out);
-  overflow-y: auto; overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-}
-.overlay.open .overlay-content { transform: translateX(0); }
-.overlay-close {
-  position: absolute; top: 16px; left: 20px;
-  width: 36px; height: 36px; border-radius: 50%;
-  background: var(--widget); border: 1px solid var(--widget-border);
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer; z-index: 10;
-  transition: transform .15s var(--ease-spring);
-}
-.overlay-close:active { transform: scale(.85); }
-.overlay-close svg { width: 18px; height: 18px; }
+  .free-trades-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .free-trades-icon {
+    width: 48px; height: 48px; border-radius: 50%;
+    border: 2px dashed var(--blue);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; color: var(--blue);
+    flex-shrink: 0;
+  }
+  .free-trades-card .close-x {
+    margin-left: auto; color: var(--text-tertiary); cursor: pointer; flex-shrink: 0;
+  }
 
-/* ===== SEND FLOW ===== */
-.send-overlay .overlay-content {
-  transform: translateY(100%);
-  display: flex; flex-direction: column;
-}
-.send-overlay.open .overlay-content { transform: translateY(0); }
-.send-header {
-  padding: 54px 20px 16px;
-  display: flex; justify-content: space-between; align-items: center;
-}
-.send-header h2 { font-size: 20px; font-weight: 700; }
-.send-contacts {
-  padding: 0 20px; flex: 1; overflow-y: auto;
-}
-.send-search {
-  width: 100%;
-  padding: 12px 16px; border-radius: 12px;
-  background: var(--search-bg);
-  border: none; outline: none;
-  color: var(--fg); font-family: var(--font);
-  font-size: 15px;
-  margin-bottom: 20px;
-}
-.send-search::placeholder { color: var(--inactive); }
-.contact-grid {
-  display: flex; flex-wrap: wrap; gap: 20px;
-  justify-content: flex-start;
-}
-.contact-item {
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
-  width: 64px; cursor: pointer;
-}
-.contact-item:active { opacity: .7; }
-.contact-avatar {
-  width: 52px; height: 52px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px; font-weight: 600; color: #fff;
-}
-.contact-name {
-  font-size: 11px; font-weight: 500; color: var(--inactive);
-  text-align: center; line-height: 1.3;
-  max-width: 64px; overflow: hidden; text-overflow: ellipsis;
-}
+  .section-title {
+    font-size: 15px;
+    color: var(--text-secondary);
+    padding: 8px 16px 12px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+  }
+  .section-title .chevron { font-size: 12px; }
 
-/* Amount screen */
-.amount-screen {
-  flex: 1; display: none; flex-direction: column;
-  padding: 54px 20px 0;
-}
-.amount-screen.active { display: flex; }
-.amount-to {
-  text-align: center; margin-bottom: 24px;
-}
-.amount-to .to-avatar {
-  width: 48px; height: 48px; border-radius: 50%;
-  margin: 0 auto 8px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px; font-weight: 600; color: #fff;
-}
-.amount-to .to-name { font-size: 15px; font-weight: 600; }
-.amount-display {
-  text-align: center; flex: 1;
-  display: flex; align-items: center; justify-content: center;
-  flex-direction: column;
-}
-.amount-value {
-  font-size: 48px; font-weight: 700; letter-spacing: -2px;
-  transition: transform .1s var(--ease-spring);
-  min-height: 60px;
-}
-.amount-value.bounce { transform: scale(1.05); }
-.amount-currency { font-size: 14px; color: var(--inactive); margin-top: 4px; }
-.numpad {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 2px; padding: 16px 0;
-  max-width: 320px; margin: 0 auto; width: 100%;
-}
-.numpad-key {
-  height: 56px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 24px; font-weight: 500;
-  cursor: pointer; border-radius: 14px;
-  transition: background .1s, transform .1s var(--ease-spring);
-  user-select: none;
-}
-.numpad-key:active { background: rgba(255,255,255,.08); transform: scale(.92); }
-.numpad-key svg { width: 24px; height: 24px; }
-.send-btn {
-  margin: 8px 20px; padding: 16px;
-  border-radius: 14px;
-  background: var(--accent);
-  color: #fff; font-size: 16px; font-weight: 600;
-  text-align: center; cursor: pointer;
-  transition: transform .15s var(--ease-spring), opacity .15s;
-  margin-bottom: calc(20px + var(--safe-b));
-}
-.send-btn:active { transform: scale(.97); }
-.send-btn.disabled { opacity: .3; pointer-events: none; }
+  .tabs-row {
+    display: flex;
+    margin: 0 16px 16px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-radius: 10px;
+    transition: all 0.2s;
+  }
+  .tab-btn.active {
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+  }
 
-/* Success screen */
-.success-screen {
-  display: none; flex-direction: column;
-  align-items: center; justify-content: center;
-  flex: 1; padding: 40px 20px;
-}
-.success-screen.active { display: flex; }
-.check-circle {
-  width: 80px; height: 80px; border-radius: 50%;
-  background: var(--positive);
-  display: flex; align-items: center; justify-content: center;
-  animation: scaleIn .4s var(--ease-spring) both;
-}
-@keyframes scaleIn { from { transform: scale(0); } to { transform: scale(1); } }
-.check-circle svg { width: 36px; height: 36px; color: #fff; }
-.success-amount {
-  font-size: 36px; font-weight: 700; margin-top: 24px;
-  animation: fadeUp .4s .2s both;
-}
-.success-to {
-  font-size: 15px; color: var(--inactive); margin-top: 8px;
-  animation: fadeUp .4s .3s both;
-}
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.success-done {
-  margin-top: 40px; padding: 14px 48px;
-  border-radius: var(--r-round);
-  background: var(--widget); border: 1px solid var(--widget-border);
-  font-size: 15px; font-weight: 600; color: #fff;
-  cursor: pointer; animation: fadeUp .4s .4s both;
-  transition: transform .15s var(--ease-spring);
-}
-.success-done:active { transform: scale(.95); }
+  .stocks-row {
+    display: flex;
+    gap: 16px;
+    padding: 0 16px 20px;
+    overflow-x: auto;
+  }
+  .stocks-row::-webkit-scrollbar { display: none; }
+  .stock-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    min-width: 70px;
+    cursor: pointer;
+  }
+  .stock-logo {
+    width: 56px; height: 56px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+  }
+  .stock-item .ticker {
+    font-size: 13px; color: var(--text-secondary); font-weight: 500;
+  }
 
-/* Confetti */
-.confetti-container {
-  position: fixed; inset: 0; pointer-events: none; z-index: 300;
-}
-.confetti-piece {
-  position: absolute; width: 8px; height: 8px;
-  border-radius: 2px;
-  animation: confettiFall 2.5s ease-out forwards;
-}
-@keyframes confettiFall {
-  0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
-  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-}
+  /* Crypto Screen */
+  .crypto-hero {
+    position: relative;
+    height: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .crypto-hero .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 40% 30%, rgba(20,30,60,0.5) 0%, transparent 50%),
+      linear-gradient(160deg, #060a12 0%, #0a0f1a 40%, #080c14 100%);
+  }
+  .crypto-hero .silk-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(135deg, transparent 25%, rgba(40,60,100,0.12) 40%, transparent 55%),
+      linear-gradient(200deg, transparent 45%, rgba(20,35,65,0.08) 55%, transparent 65%);
+    animation: silkShimmer 8s ease-in-out infinite;
+  }
+  .crypto-hero h1 {
+    font-size: 28px;
+    font-weight: 700;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    letter-spacing: -0.3px;
+    color: var(--red);
+  }
+  .crypto-hero p {
+    font-size: 15px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+    position: relative;
+    z-index: 1;
+  }
 
-/* ===== TRANSACTION DETAIL ===== */
-.tx-detail-header {
-  text-align: center; padding: 64px 20px 24px;
-}
-.tx-detail-icon {
-  width: 56px; height: 56px; border-radius: 50%;
-  margin: 0 auto 16px;
-  display: flex; align-items: center; justify-content: center;
-}
-.tx-detail-icon svg { width: 24px; height: 24px; color: #fff; }
-.tx-detail-amount { font-size: 32px; font-weight: 700; }
-.tx-detail-status { font-size: 13px; color: var(--positive); margin-top: 6px; font-weight: 500; }
-.tx-detail-date { font-size: 12px; color: var(--inactive); margin-top: 4px; }
-.detail-rows {
-  margin: 0 20px; border-radius: var(--r-widget); overflow: hidden;
-}
-.detail-row {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 16px 20px;
-  background: var(--widget);
-  border-bottom: 1px solid rgba(255,255,255,.04);
-}
-.detail-row:last-child { border-bottom: none; }
-.detail-row .dr-label { font-size: 14px; color: var(--inactive); }
-.detail-row .dr-value { font-size: 14px; font-weight: 500; }
-.detail-row .dr-value.link { color: var(--accent); }
-.detail-row .dr-value.green { color: var(--positive); }
+  .revolut-x-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+  .revolut-x-card .rx-logo {
+    width: 60px; height: 60px; border-radius: 12px;
+    background: linear-gradient(135deg, #1a1a3a, #2a1a4a, #1a3a3a);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; font-weight: 800; flex-shrink: 0;
+    position: relative; overflow: hidden;
+  }
+  .revolut-x-card .rx-logo::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, transparent 30%, rgba(255,255,255,0.15) 50%, transparent 70%);
+    animation: holographic 3s ease-in-out infinite;
+  }
+  @keyframes holographic {
+    0%, 100% { transform: translateX(-100%) rotate(20deg); }
+    50% { transform: translateX(100%) rotate(20deg); }
+  }
+  .revolut-x-card .close-x {
+    position: absolute; top: 0; right: 0;
+    color: var(--text-tertiary); cursor: pointer;
+  }
 
-/* ===== UTILITIES ===== */
-.mt16 { margin-top: 16px; }
-.mt24 { margin-top: 24px; }
-.gap-divider { height: 1px; background: rgba(255,255,255,.04); margin: 0 -20px; }
+  .crypto-pair-cards {
+    display: flex;
+    gap: 12px;
+    padding: 0 16px 16px;
+  }
+  .crypto-card {
+    flex: 1;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .crypto-card .token-name {
+    font-size: 13px; color: var(--text-secondary); font-weight: 500;
+  }
+  .crypto-card .token-logo {
+    position: absolute; top: 14px; right: 14px;
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .crypto-card .price {
+    font-size: 20px; font-weight: 700; margin: 4px 0 2px;
+    letter-spacing: -0.3px;
+  }
+  .crypto-card .change { font-size: 13px; font-weight: 500; }
+  .crypto-card .change.up { color: var(--green); }
+  .crypto-card .change.up::before { content: '\25B2 '; font-size: 10px; }
+  .crypto-card .change.down { color: var(--red); }
+  .crypto-card .change.down::before { content: '\25BC '; font-size: 10px; }
+  .crypto-card .sparkline-container {
+    margin-top: 12px;
+    height: 40px;
+    position: relative;
+  }
+  .crypto-card .sparkline-container .baseline {
+    position: absolute;
+    top: 50%;
+    left: 0; right: 0;
+    border-top: 1px dotted rgba(255,255,255,0.15);
+  }
+
+  /* Top Movers Grid */
+  .movers-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    padding: 0 16px 16px;
+  }
+  .mover-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+  }
+  .mover-logo {
+    width: 48px; height: 48px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 700;
+  }
+  .mover-item .name { font-size: 11px; color: var(--text-secondary); font-weight: 500; }
+  .mover-item .pct { font-size: 12px; font-weight: 600; }
+  .mover-item .pct.up { color: var(--green); }
+  .mover-item .pct.up::before { content: '\25B2 '; font-size: 9px; }
+
+  .earn-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+  }
+  .earn-icon {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 700; color: var(--text-secondary);
+  }
+  .earn-row .chevron {
+    margin-left: auto;
+    color: var(--text-tertiary);
+  }
+
+  /* Payments Screen */
+  .payments-hero {
+    text-align: center;
+    padding: 40px 20px 30px;
+  }
+  .payments-hero h2 {
+    font-size: 22px; font-weight: 600; margin-bottom: 8px;
+  }
+  .payments-hero p {
+    font-size: 14px; color: var(--text-secondary);
+  }
+  .payment-option {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px;
+    cursor: pointer;
+  }
+  .payment-icon {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .payment-option .chevron {
+    margin-left: auto; color: var(--text-tertiary);
+  }
+
+  /* RevPoints Screen */
+  .revpoints-hero {
+    text-align: center;
+    padding: 60px 24px 30px;
+  }
+  .revpoints-hero .points-circle {
+    width: 120px; height: 120px; border-radius: 50%;
+    background: linear-gradient(135deg, rgba(0,102,255,0.2), rgba(0,201,177,0.15));
+    border: 2px solid rgba(0,102,255,0.3);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    margin: 0 auto 24px;
+  }
+  .revpoints-hero .points-number {
+    font-size: 32px; font-weight: 700;
+  }
+  .revpoints-hero .points-label {
+    font-size: 12px; color: var(--text-secondary);
+  }
+  .revpoints-hero h2 { font-size: 20px; font-weight: 600; margin-bottom: 8px; }
+  .revpoints-hero p { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
+
+  .rewards-list { padding: 0 16px; }
+  .reward-item {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    cursor: pointer;
+  }
+  .reward-icon {
+    width: 44px; height: 44px; border-radius: var(--radius-sm);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+  }
+  .reward-item .chevron { margin-left: auto; color: var(--text-tertiary); }
+
+  /* Bottom Nav */
+  .bottom-nav {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: var(--nav-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 8px;
+    padding-bottom: env(safe-area-inset-bottom, 10px);
+    z-index: 100;
+  }
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 0;
+    cursor: pointer;
+    min-width: 60px;
+    transition: opacity 0.2s;
+  }
+  .nav-item .nav-icon {
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .nav-item .nav-label {
+    font-size: 10px;
+    color: var(--text-tertiary);
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-item.active .nav-label { color: #fff; }
+  .nav-item svg { transition: all 0.2s; }
+  .nav-item.active svg { opacity: 1; }
+  .nav-item:not(.active) svg { opacity: 0.4; }
+
+  /* Utility */
+  .spacer { height: 16px; }
+  .fade-enter { animation: fadeIn 0.3s ease forwards; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 </style>
 </head>
 <body>
+<div class="phone-frame">
+  <div class="bg-glow"></div>
 
-<div class="device">
   <!-- Status Bar -->
   <div class="status-bar">
-    <div class="time">9:41</div>
-    <div class="icons">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1"/></svg>
-      <svg viewBox="0 0 24 24" fill="currentColor"><rect x="1" y="6" width="3" height="12" rx="1" opacity=".3"/><rect x="6" y="4" width="3" height="14" rx="1" opacity=".5"/><rect x="11" y="2" width="3" height="16" rx="1" opacity=".7"/><rect x="16" y="0" width="3" height="18" rx="1"/></svg>
-      <svg viewBox="0 0 28 14" fill="none"><rect x=".5" y=".5" width="22" height="13" rx="3" stroke="currentColor" opacity=".35"/><rect x="2" y="2" width="16" height="10" rx="1.5" fill="currentColor"/><rect x="24" y="4" width="2.5" height="6" rx="1" fill="currentColor" opacity=".4"/></svg>
+    <div class="time">4:09</div>
+    <div class="right">
+      <div class="signal">
+        <span style="height:4px"></span>
+        <span style="height:6px"></span>
+        <span style="height:8px"></span>
+        <span style="height:10px"></span>
+      </div>
+      <span style="font-size:11px;font-weight:500">4G</span>
+      <div class="battery"><div class="battery-fill"></div></div>
     </div>
   </div>
 
-  <!-- Header -->
-  <div class="header" id="mainHeader">
-    <div class="header-left">
-      <div class="r-logo">R</div>
-      <span class="screen-title" id="screenTitle">Inicio</span>
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="avatar">
+      CJ
+      <div class="notif-dot"></div>
     </div>
-    <div class="header-right">
-      <div class="icon-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
-      </div>
-      <div class="avatar">CJ</div>
+    <div class="search-bar">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <span>Search</span>
+    </div>
+    <div class="top-icon" id="analyticsBtn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+    </div>
+    <div class="top-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
     </div>
   </div>
 
   <!-- Screens -->
-  <div class="screens">
+  <div class="screens-container">
 
     <!-- HOME -->
     <div class="screen active" id="screen-home">
-      <div class="card">
-        <div class="balance-label">
-          Cuentas
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+      <div class="balance-area">
+        <div class="accounts-pill">
+          Accounts
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="m6 9 6 6 6-6"/></svg>
         </div>
-        <div class="balance">1.954,23 <span class="currency">EUR</span></div>
-        <div class="quick-actions">
-          <div class="action-item" onclick="openSend()">
-            <div class="action-circle">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
-            </div>
-            <span class="action-label">Anadir</span>
+        <div class="balance-amount">&euro;2,015.47</div>
+        <div class="balance-currency">M$41,417.91</div>
+        <div class="balance-dots">
+          <div class="dot active"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+      </div>
+
+      <div class="quick-actions">
+        <div class="quick-action">
+          <div class="icon-circle">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
           </div>
-          <div class="action-item" onclick="openSend()">
-            <div class="action-circle">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
-            </div>
-            <span class="action-label">Enviar</span>
+          <span>Add money</span>
+        </div>
+        <div class="quick-action">
+          <div class="icon-circle">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 2a4 4 0 0 0-4 4c0 2 2 4 4 6 2-2 4-4 4-6a4 4 0 0 0-4-4z"/><path d="M12 22a4 4 0 0 0 4-4c0-2-2-4-4-6-2 2-4 4-4 6a4 4 0 0 0 4 4z"/></svg>
           </div>
-          <div class="action-item">
-            <div class="action-circle">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="17" y1="7" x2="7" y2="17"/><polyline points="17 17 7 17 7 7"/></svg>
-            </div>
-            <span class="action-label">Solicitar</span>
+          <span>Bizum</span>
+        </div>
+        <div class="quick-action">
+          <div class="icon-circle">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M7 16l-4-4 4-4"/><path d="M3 12h14"/><path d="M17 8l4 4-4 4"/><path d="M21 12H7"/></svg>
           </div>
-          <div class="action-item">
-            <div class="action-circle">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
-            </div>
-            <span class="action-label">Cambiar</span>
+          <span>Move</span>
+        </div>
+        <div class="quick-action">
+          <div class="icon-circle">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>
           </div>
-          <div class="action-item">
-            <div class="action-circle">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
-            </div>
-            <span class="action-label">Mas</span>
+          <span>More</span>
+        </div>
+      </div>
+
+      <!-- Promo Banner -->
+      <div class="promo-banner">
+        <div class="aurora"></div>
+        <div class="close-btn">&times;</div>
+        <div class="content">
+          <h3>New Experiences await</h3>
+          <p>Choose from 300,000 activities<br>and book in-app. T&Cs apply</p>
+        </div>
+      </div>
+      <div class="promo-dots">
+        <div class="dot active"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+
+      <!-- Transactions -->
+      <div class="card" style="padding:4px 16px;">
+        <div class="transaction">
+          <div class="tx-icon viasat">
+            <svg width="28" height="14" viewBox="0 0 60 20"><text x="2" y="16" font-family="Inter" font-weight="700" font-size="14" fill="#1a1a2e">Viasat</text></svg>
           </div>
-        </div>
-      </div>
-
-      <div class="section-header">
-        <span class="section-title">Transacciones</span>
-        <span class="section-link">Ver todo</span>
-      </div>
-
-      <div class="date-group">Hoy</div>
-
-      <div class="tx-row" onclick="openTxDetail('Viasat','Servicios','-10,26','EUR','12,00 USD','#2bb2ff')">
-        <div class="tx-icon" style="background:#2bb2ff">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1"/></svg>
-        </div>
-        <div class="tx-info"><div class="tx-name">Viasat</div><div class="tx-cat">Servicios</div></div>
-        <div class="tx-amount"><div class="tx-main">-10,26 EUR</div><div class="tx-sub">12,00 USD</div></div>
-      </div>
-
-      <div class="tx-row tx-pending" onclick="openTxDetail('Uber','Transporte','-4,52','EUR','85,00 MXN','#1ac097')">
-        <div class="tx-icon" style="background:#1ac097">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="m16 8 4 2.5v5l-4 2.5"/></svg>
-        </div>
-        <div class="tx-info"><div class="tx-name">Uber</div><div class="tx-cat">Transporte <span style="color:var(--warning);font-size:10px;font-weight:600">PENDIENTE</span></div></div>
-        <div class="tx-amount"><div class="tx-main">-4,52 EUR</div><div class="tx-sub">85,00 MXN</div></div>
-      </div>
-
-      <div class="date-group">Ayer</div>
-
-      <div class="tx-row" onclick="openTxDetail('Spotify','Entretenimiento','-9,99','EUR','','#ff5777')">
-        <div class="tx-icon" style="background:#ff5777">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 11.973c2.5-1.473 5.5-.973 7.5.527"/><path d="M9 15c1.5-1 4-.5 5 .5"/><path d="M7 9c3-2 7-1.5 10 1"/></svg>
-        </div>
-        <div class="tx-info"><div class="tx-name">Spotify</div><div class="tx-cat">Entretenimiento</div></div>
-        <div class="tx-amount"><div class="tx-main">-9,99 EUR</div></div>
-      </div>
-
-      <div class="tx-row tx-positive" onclick="openTxDetail('Maria Garcia','Transferencia recibida','+500,00','EUR','','#1ac097')">
-        <div class="tx-icon" style="background:#1ac097">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="17" y1="7" x2="7" y2="17"/><polyline points="17 17 7 17 7 7"/></svg>
-        </div>
-        <div class="tx-info"><div class="tx-name">Maria Garcia</div><div class="tx-cat">Transferencia recibida</div></div>
-        <div class="tx-amount"><div class="tx-main">+500,00 EUR</div></div>
-      </div>
-
-      <div class="date-group">1 Mar</div>
-
-      <div class="tx-row" onclick="openTxDetail('Apple Store','Compras','-149,99','EUR','','#ff5363')">
-        <div class="tx-icon" style="background:var(--inactive)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-        </div>
-        <div class="tx-info"><div class="tx-name">Apple Store</div><div class="tx-cat">Compras</div></div>
-        <div class="tx-amount"><div class="tx-main">-149,99 EUR</div></div>
-      </div>
-
-      <div class="tx-row" onclick="openTxDetail('La Buena Vida','Restaurantes','-42,50','EUR','','#bf5af2')">
-        <div class="tx-icon" style="background:#bf5af2">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/></svg>
-        </div>
-        <div class="tx-info"><div class="tx-name">La Buena Vida</div><div class="tx-cat">Restaurantes</div></div>
-        <div class="tx-amount"><div class="tx-main">-42,50 EUR</div></div>
-      </div>
-
-      <div class="tx-row" onclick="openTxDetail('Amazon','Compras en linea','-23,97','EUR','27,99 USD','#ff9f0a')">
-        <div class="tx-icon" style="background:#ff9f0a">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
-        </div>
-        <div class="tx-info"><div class="tx-name">Amazon</div><div class="tx-cat">Compras en linea</div></div>
-        <div class="tx-amount"><div class="tx-main">-23,97 EUR</div><div class="tx-sub">27,99 USD</div></div>
-      </div>
-
-      <div class="tx-row tx-positive">
-        <div class="tx-icon" style="background:#5e5ce6">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 15h0M2 9.5h20"/></svg>
-        </div>
-        <div class="tx-info"><div class="tx-name">Reembolso Zara</div><div class="tx-cat">Compras</div></div>
-        <div class="tx-amount"><div class="tx-main">+34,95 EUR</div></div>
-      </div>
-
-      <div style="height:24px"></div>
-    </div>
-
-    <!-- CARDS -->
-    <div class="screen" id="screen-cards">
-      <div class="card-render">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start">
-          <div class="card-chip"></div>
-          <div class="card-r-logo">R</div>
-        </div>
-        <div>
-          <div class="card-number">•••• •••• •••• 2403</div>
-          <div style="height:12px"></div>
-          <div class="card-bottom">
-            <div>
-              <div class="card-holder">CARLOS J. GARCIA</div>
-              <div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:4px">05/30</div>
-            </div>
-            <div class="card-brand">
-              <div class="mc-circle mc-red"></div>
-              <div class="mc-circle mc-orange"></div>
-            </div>
+          <div class="tx-details">
+            <div class="tx-name">Viasat</div>
+            <div class="tx-date">1 Mar, 11:54 a.m.</div>
+          </div>
+          <div class="tx-amount">
+            <div class="primary">-&euro;10.26</div>
+            <div class="secondary">-$12</div>
           </div>
         </div>
+        <div class="transaction">
+          <div class="tx-icon heart">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </div>
+          <div class="tx-details">
+            <div class="tx-name">Myt017 2201 Hud Mxn</div>
+            <div class="tx-date">1 Mar, 9:39 a.m.</div>
+          </div>
+          <div class="tx-amount">
+            <div class="primary">-&euro;27.05</div>
+            <div class="secondary">-M$545</div>
+          </div>
+        </div>
+        <div class="transaction">
+          <div class="tx-icon food">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M7 2v9a4 4 0 0 0 4 4h0a4 4 0 0 0 4-4V2"/><path d="M7 2h4"/><path d="M11 2v6"/><path d="M17 2v20"/><path d="M17 2a3 3 0 0 1 0 6"/></svg>
+          </div>
+          <div class="tx-details">
+            <div class="tx-name">Rest Take Oof</div>
+            <div class="tx-date">1 Mar, 9:10 a.m.</div>
+          </div>
+          <div class="tx-amount">
+            <div class="primary">-&euro;9.28</div>
+            <div class="secondary">-M$187</div>
+          </div>
+        </div>
+        <div class="transaction">
+          <div class="tx-icon person">
+            GC
+            <div class="badge">+</div>
+          </div>
+          <div class="tx-details">
+            <div class="tx-name">GARCIA CARLOS JULIO</div>
+            <div class="tx-date">26 Feb, 8:42 a.m.</div>
+          </div>
+          <div class="tx-amount">
+            <div class="primary positive">+&euro;2,000</div>
+          </div>
+        </div>
+        <div class="see-all">See all</div>
       </div>
 
-      <div class="section-header">
-        <span class="section-title">Mis tarjetas</span>
-      </div>
-
-      <div class="card">
-        <div class="card-list-item">
-          <div class="card-mini">
-            <div style="display:flex;gap:-4px"><div style="width:10px;height:10px;border-radius:50%;background:#eb001b"></div><div style="width:10px;height:10px;border-radius:50%;background:#f79e1b;margin-left:-4px"></div></div>
-          </div>
-          <div class="card-list-info">
-            <div class="card-list-name">Platinum</div>
-            <div class="card-list-num">••2403, 05/30</div>
-          </div>
-          <div style="color:var(--inactive)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
-        </div>
-        <div style="height:1px;background:rgba(255,255,255,.04)"></div>
-        <div class="card-list-item">
-          <div class="card-mini" style="background:linear-gradient(135deg,#4a5a6a,#2a3a4a)">
-            <div style="display:flex;gap:-4px"><div style="width:10px;height:10px;border-radius:50%;background:#eb001b"></div><div style="width:10px;height:10px;border-radius:50%;background:#f79e1b;margin-left:-4px"></div></div>
-          </div>
-          <div class="card-list-info">
-            <div class="card-list-name">Virtual</div>
-            <div class="card-list-num">••7568, 05/30</div>
-          </div>
-          <div style="color:var(--inactive)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+      <!-- Welcome to Mexico -->
+      <div class="welcome-card">
+        <div class="bg-img"></div>
+        <svg class="pyramid-steps" viewBox="0 0 130 85" fill="none">
+          <polygon points="65,5 25,85 105,85" fill="rgba(160,140,60,0.25)" stroke="rgba(160,140,60,0.15)" stroke-width="0.5"/>
+          <line x1="30" y1="75" x2="100" y2="75" stroke="rgba(160,140,60,0.2)" stroke-width="0.5"/>
+          <line x1="38" y1="62" x2="92" y2="62" stroke="rgba(160,140,60,0.2)" stroke-width="0.5"/>
+          <line x1="45" y1="50" x2="85" y2="50" stroke="rgba(160,140,60,0.2)" stroke-width="0.5"/>
+          <line x1="50" y1="38" x2="80" y2="38" stroke="rgba(160,140,60,0.2)" stroke-width="0.5"/>
+          <line x1="56" y1="26" x2="74" y2="26" stroke="rgba(160,140,60,0.2)" stroke-width="0.5"/>
+        </svg>
+        <div class="close-btn">&times;</div>
+        <div class="content">
+          <div class="subtitle">Welcome to</div>
+          <h2>Mexico</h2>
+          <div class="rate">&euro;1 = M$20.55</div>
         </div>
       </div>
-
-      <div class="section-header">
-        <span class="section-title">Configuracion</span>
-      </div>
-
-      <div class="card" style="padding:4px 20px">
-        <div class="toggle-row">
-          <span class="label">Pagos contactless</span>
-          <div class="toggle on" onclick="this.classList.toggle('on')"><div class="thumb"></div></div>
-        </div>
-        <div style="height:1px;background:rgba(255,255,255,.04)"></div>
-        <div class="toggle-row">
-          <span class="label">Pagos online</span>
-          <div class="toggle on" onclick="this.classList.toggle('on')"><div class="thumb"></div></div>
-        </div>
-        <div style="height:1px;background:rgba(255,255,255,.04)"></div>
-        <div class="toggle-row">
-          <span class="label">Retiradas ATM</span>
-          <div class="toggle" onclick="this.classList.toggle('on')"><div class="thumb"></div></div>
-        </div>
-        <div style="height:1px;background:rgba(255,255,255,.04)"></div>
-        <div class="toggle-row">
-          <span class="label">Seguridad basada en ubicacion</span>
-          <div class="toggle on" onclick="this.classList.toggle('on')"><div class="thumb"></div></div>
-        </div>
-      </div>
-      <div style="height:24px"></div>
+      <div class="spacer"></div>
     </div>
 
     <!-- INVEST -->
     <div class="screen" id="screen-invest">
-      <div class="card">
-        <div class="balance-label">Portafolio total</div>
-        <div class="balance" style="font-size:28px">3.241,87 <span class="currency">EUR</span></div>
-        <div style="font-size:13px;color:var(--positive);font-weight:600;margin-top:2px">+127,43 (4,09%) <span style="color:var(--inactive);font-weight:400">hoy</span></div>
-        <div class="chart-container">
-          <svg viewBox="0 0 340 120" preserveAspectRatio="none">
-            <defs>
-              <linearGradient id="cg" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#1ac097" stop-opacity=".3"/>
-                <stop offset="100%" stop-color="#1ac097" stop-opacity="0"/>
-              </linearGradient>
-            </defs>
-            <path d="M0,90 C20,85 40,80 60,70 C80,60 100,75 120,65 C140,55 160,40 180,45 C200,50 220,35 240,25 C260,15 280,30 300,20 C320,10 340,15 340,12 L340,120 L0,120 Z" fill="url(#cg)"/>
-            <polyline fill="none" stroke="#1ac097" stroke-width="2" stroke-linecap="round" points="0,90 60,70 120,65 180,45 240,25 300,20 340,12"/>
-          </svg>
-        </div>
+      <div class="invest-hero">
+        <div class="hero-bg"></div>
+        <div class="silk-overlay"></div>
+        <h1>Grow your wealth</h1>
+        <p>Invest today, from &euro;1</p>
       </div>
-
-      <div style="margin-top:16px">
-        <div class="segment-control">
-          <div class="segment active">Acciones</div>
-          <div class="segment" onclick="this.parentElement.querySelector('.active').classList.remove('active');this.classList.add('active')">Cripto</div>
-          <div class="segment" onclick="this.parentElement.querySelector('.active').classList.remove('active');this.classList.add('active')">Materias</div>
-        </div>
-      </div>
-
-      <div class="mt16">
-        <div class="asset-row">
-          <div class="asset-icon" style="background:#5e5ce6">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M16 8h-4a2 2 0 0 0 0 4h2a2 2 0 0 1 0 4H8"/><path d="M12 2v2m0 16v2"/></svg>
-          </div>
-          <div class="asset-info"><div class="asset-name">Apple</div><div class="asset-ticker">AAPL</div></div>
-          <svg class="sparkline" viewBox="0 0 56 24"><polyline points="0,20 8,16 16,18 24,12 32,14 40,8 48,6 56,4" stroke="#1ac097"/></svg>
-          <div class="asset-right"><div class="asset-price">1.248,50</div><div class="asset-change asset-up">+2,31%</div></div>
-        </div>
-        <div class="asset-row">
-          <div class="asset-icon" style="background:#2bb2ff">T</div>
-          <div class="asset-info"><div class="asset-name">Tesla</div><div class="asset-ticker">TSLA</div></div>
-          <svg class="sparkline" viewBox="0 0 56 24"><polyline points="0,4 8,8 16,6 24,12 32,10 40,16 48,18 56,20" stroke="#ff5363"/></svg>
-          <div class="asset-right"><div class="asset-price">892,15</div><div class="asset-change asset-down">-1,45%</div></div>
-        </div>
-        <div class="asset-row">
-          <div class="asset-icon" style="background:#ff9f0a">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M11.767 19.089c4.924.868 6.14-6.025 1.216-6.894m-1.216 6.894L5.86 18.047m5.908 1.042-.347 1.97m1.563-8.864c4.924.869 6.14-6.025 1.215-6.893m-1.215 6.893-3.94-.694m5.155-6.2L8.29 4.26m5.908 1.042.348-1.97"/></svg>
-          </div>
-          <div class="asset-info"><div class="asset-name">Bitcoin</div><div class="asset-ticker">BTC</div></div>
-          <svg class="sparkline" viewBox="0 0 56 24"><polyline points="0,16 8,14 16,10 24,12 32,6 40,4 48,8 56,6" stroke="#1ac097"/></svg>
-          <div class="asset-right"><div class="asset-price">84.230</div><div class="asset-change asset-up">+5,12%</div></div>
-        </div>
-        <div class="asset-row">
-          <div class="asset-icon" style="background:#bf5af2">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-          </div>
-          <div class="asset-info"><div class="asset-name">Ethereum</div><div class="asset-ticker">ETH</div></div>
-          <svg class="sparkline" viewBox="0 0 56 24"><polyline points="0,12 8,10 16,14 24,8 32,10 40,6 48,4 56,8" stroke="#1ac097"/></svg>
-          <div class="asset-right"><div class="asset-price">3.421,80</div><div class="asset-change asset-up">+3,87%</div></div>
-        </div>
-        <div class="asset-row">
-          <div class="asset-icon" style="background:#1ac097">N</div>
-          <div class="asset-info"><div class="asset-name">Nvidia</div><div class="asset-ticker">NVDA</div></div>
-          <svg class="sparkline" viewBox="0 0 56 24"><polyline points="0,18 8,14 16,16 24,10 32,8 40,4 48,6 56,2" stroke="#1ac097"/></svg>
-          <div class="asset-right"><div class="asset-price">1.102,37</div><div class="asset-change asset-up">+1,89%</div></div>
-        </div>
-      </div>
-      <div style="height:24px"></div>
-    </div>
-
-    <!-- LIFESTYLE -->
-    <div class="screen" id="screen-lifestyle">
-      <div class="promo-card" style="background:linear-gradient(135deg, #1a3a5c 0%, #0d2240 100%)">
-        <h3>Revolut Premium</h3>
-        <p>Seguro de viaje, retiros ATM sin limite, tarjeta metal exclusiva y mas.</p>
-        <div class="promo-btn">Explorar planes</div>
-      </div>
-
-      <div class="promo-card" style="background:linear-gradient(135deg, #2d1854 0%, #1a0d33 100%)">
-        <h3>Estancias</h3>
-        <p>Reserva hoteles con hasta un 10% de cashback y precios exclusivos.</p>
-        <div class="promo-btn">Ver ofertas</div>
-      </div>
-
-      <div class="section-header">
-        <span class="section-title">Descubre</span>
-      </div>
-
-      <div class="feature-grid">
-        <div class="feature-tile">
-          <div class="ft-icon" style="background:var(--accent-bg)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
-          </div>
-          <div class="ft-title">Seguros</div>
-          <div class="ft-desc">Viaje, movil, medico</div>
-        </div>
-        <div class="feature-tile">
-          <div class="ft-icon" style="background:rgba(26,192,151,.15)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-          </div>
-          <div class="ft-title">Suscripciones</div>
-          <div class="ft-desc">Gestiona tus pagos</div>
-        </div>
-        <div class="feature-tile">
-          <div class="ft-icon" style="background:rgba(255,159,10,.15)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
-          </div>
-          <div class="ft-title">Ahorros</div>
-          <div class="ft-desc">Vaults con interes</div>
-        </div>
-        <div class="feature-tile">
-          <div class="ft-icon" style="background:rgba(191,90,242,.15)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M2 7h20"/></svg>
-          </div>
-          <div class="ft-title">Estancias</div>
-          <div class="ft-desc">Hoteles con cashback</div>
-        </div>
-      </div>
-      <div style="height:24px"></div>
-    </div>
-
-    <!-- HUB -->
-    <div class="screen" id="screen-hub">
-      <div class="profile-card">
-        <div class="profile-avatar">CJ</div>
+      <div class="cta-button">Start investing</div>
+      <div class="card free-trades-card">
+        <div class="free-trades-icon">10</div>
         <div>
-          <div class="profile-name">Carlos J. Garcia</div>
-          <div class="profile-plan">Platinum &middot; desde ene 2024</div>
+          <div style="font-size:15px;font-weight:600">You've got free trades</div>
+          <div style="font-size:13px;color:var(--text-secondary);margin-top:2px">Enjoy 10 free stocks and ETF trades every month</div>
+        </div>
+        <div class="close-x">&times;</div>
+      </div>
+      <div class="section-title">Popular first time buys <span class="chevron">&#8250;</span></div>
+      <div class="tabs-row">
+        <div class="tab-btn active">Stocks</div>
+        <div class="tab-btn">ETFs</div>
+      </div>
+      <div class="stocks-row">
+        <div class="stock-item">
+          <div class="stock-logo" style="background:#76b900">
+            <svg width="30" height="30" viewBox="0 0 24 24"><path d="M3 12l3-3v6l-3-3zm6-6l3-3v18l-3-3V6zm6 2l3-3v14l-3-3V8z" fill="#fff"/></svg>
+          </div>
+          <span class="ticker">NVDA</span>
+        </div>
+        <div class="stock-item">
+          <div class="stock-logo" style="background:#1a1a1a;border:1px solid rgba(255,255,255,0.1)">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83"/><path d="M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          </div>
+          <span class="ticker">AAPL</span>
+        </div>
+        <div class="stock-item">
+          <div class="stock-logo" style="background:#cc0000">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff"><path d="M12 4L4 20h4l1.5-3h5l1.5 3h4L12 4zm0 5.5L14.5 15h-5L12 9.5z"/></svg>
+          </div>
+          <span class="ticker">TSLA</span>
+        </div>
+        <div class="stock-item">
+          <div class="stock-logo" style="background:#e50914">
+            <span style="font-size:22px;font-weight:800;color:#fff">N</span>
+          </div>
+          <span class="ticker">NFLX</span>
+        </div>
+        <div class="stock-item">
+          <div class="stock-logo" style="background:#ff9900">
+            <span style="font-size:16px;font-weight:800;color:#fff">amzn</span>
+          </div>
+          <span class="ticker">AMZN</span>
+        </div>
+      </div>
+      <div class="spacer"></div>
+    </div>
+
+    <!-- PAYMENTS -->
+    <div class="screen" id="screen-payments">
+      <div class="payments-hero">
+        <h2>Payments</h2>
+        <p>Send and receive money instantly</p>
+      </div>
+      <div class="card" style="padding:0">
+        <div class="payment-option">
+          <div class="payment-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="m22 2-7 20-4-9-9-4z"/><path d="m22 2-11 11"/></svg>
+          </div>
+          <div>
+            <div style="font-size:15px;font-weight:500">Send</div>
+            <div style="font-size:13px;color:var(--text-secondary)">Send money to anyone</div>
+          </div>
+          <div class="chevron">&#8250;</div>
+        </div>
+        <div class="payment-option" style="border-top:1px solid rgba(255,255,255,0.04)">
+          <div class="payment-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 22V8"/><path d="m5 15 7-7 7 7"/></svg>
+          </div>
+          <div>
+            <div style="font-size:15px;font-weight:500">Request</div>
+            <div style="font-size:13px;color:var(--text-secondary)">Request money from contacts</div>
+          </div>
+          <div class="chevron">&#8250;</div>
+        </div>
+        <div class="payment-option" style="border-top:1px solid rgba(255,255,255,0.04)">
+          <div class="payment-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+          </div>
+          <div>
+            <div style="font-size:15px;font-weight:500">Transfer</div>
+            <div style="font-size:13px;color:var(--text-secondary)">Bank transfers &amp; SEPA</div>
+          </div>
+          <div class="chevron">&#8250;</div>
+        </div>
+        <div class="payment-option" style="border-top:1px solid rgba(255,255,255,0.04)">
+          <div class="payment-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <div>
+            <div style="font-size:15px;font-weight:500">Vaults</div>
+            <div style="font-size:13px;color:var(--text-secondary)">Save for your goals</div>
+          </div>
+          <div class="chevron">&#8250;</div>
+        </div>
+      </div>
+      <div class="card" style="padding:0">
+        <div class="payment-option">
+          <div class="payment-icon" style="background:rgba(0,210,106,0.15)">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M17 11h1a3 3 0 0 1 0 6h-1"/><path d="M9 12v6"/><path d="M13 12v6"/><circle cx="12" cy="5" r="3"/></svg>
+          </div>
+          <div>
+            <div style="font-size:15px;font-weight:500">Bizum</div>
+            <div style="font-size:13px;color:var(--text-secondary)">Pay with your phone</div>
+          </div>
+          <div class="chevron">&#8250;</div>
+        </div>
+      </div>
+      <div class="spacer"></div>
+    </div>
+
+    <!-- CRYPTO -->
+    <div class="screen" id="screen-crypto">
+      <div class="crypto-hero">
+        <div class="hero-bg"></div>
+        <div class="silk-overlay"></div>
+        <h1>Trade crypto from<br>0% fees</h1>
+      </div>
+      <div class="cta-button">Start trading</div>
+      <div class="card revolut-x-card">
+        <div class="rx-logo">
+          <span style="font-size:22px;font-weight:800;color:#fff">R</span>
+        </div>
+        <div>
+          <div style="font-size:15px;font-weight:600">Explore Revolut X</div>
+          <div style="font-size:13px;color:var(--text-secondary);margin-top:2px;line-height:1.4">Trade crypto with 0% maker and<br>0.09% taker fees. T&Cs apply</div>
+        </div>
+        <div class="close-x">&times;</div>
+      </div>
+      <div class="promo-dots" style="margin-top:-4px">
+        <div class="dot active"></div>
+        <div class="dot"></div>
+      </div>
+
+      <!-- BTC / ETH Cards -->
+      <div class="crypto-pair-cards">
+        <div class="crypto-card">
+          <div class="token-name">BTC</div>
+          <div class="token-logo" style="background:#f7931a;border-radius:50%">
+            <span style="font-size:16px;font-weight:800;color:#fff">&#8383;</span>
+          </div>
+          <div class="price">&euro;58,877</div>
+          <div class="change up">0.03%</div>
+          <div class="sparkline-container">
+            <div class="baseline"></div>
+            <svg width="100%" height="40" viewBox="0 0 150 40" preserveAspectRatio="none">
+              <polyline points="0,38 8,36 16,30 24,32 32,28 40,25 48,20 56,22 64,18 72,15 80,20 88,18 96,14 104,16 112,12 120,10 128,8 136,6 142,5 150,4" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+        <div class="crypto-card">
+          <div class="token-name">ETH</div>
+          <div class="token-logo" style="background:rgba(98,126,234,0.2);border-radius:50%">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#627eea"><path d="M12 1.5l-8 13 8 4.5 8-4.5-8-13zM4 14.5L12 22l8-7.5-8 4.5-8-4.5z"/></svg>
+          </div>
+          <div class="price">&euro;1,706.44</div>
+          <div class="change down">1.56%</div>
+          <div class="sparkline-container">
+            <div class="baseline"></div>
+            <svg width="100%" height="40" viewBox="0 0 150 40" preserveAspectRatio="none">
+              <polyline points="0,8 10,10 20,6 30,12 40,14 50,10 60,16 70,20 80,18 90,24 100,22 110,28 120,26 130,32 140,30 150,34" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
         </div>
       </div>
 
-      <div class="hub-section">
-        <div class="hub-section-title">Cuenta</div>
-        <div class="hub-row">
-          <div class="hub-icon" style="background:var(--accent-bg)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-          <span class="hub-label">Datos personales</span>
-          <div class="hub-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+      <!-- Top Movers -->
+      <div class="section-title">Top movers <span class="chevron">&#8250;</span></div>
+      <div class="tabs-row">
+        <div class="tab-btn active">Top gainers</div>
+        <div class="tab-btn">Top losers</div>
+      </div>
+      <div class="movers-grid">
+        <div class="mover-item">
+          <div class="mover-logo" style="background:#daa520"><span style="font-size:14px;color:#fff;font-weight:800">&#9830;</span></div>
+          <span class="name">PNG</span>
+          <span class="pct up">48.52%</span>
         </div>
-        <div class="hub-row">
-          <div class="hub-icon" style="background:rgba(26,192,151,.15)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-          <span class="hub-label">Centro de seguridad</span>
-          <div class="hub-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+        <div class="mover-item">
+          <div class="mover-logo" style="background:#2ecc40">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M12 2l10 18H2z"/></svg>
+          </div>
+          <span class="name">AURORA</span>
+          <span class="pct up">25.93%</span>
+        </div>
+        <div class="mover-item">
+          <div class="mover-logo" style="background:#e85d04">
+            <span style="font-size:18px">&#9760;</span>
+          </div>
+          <span class="name">PIRATE</span>
+          <span class="pct up">14.90%</span>
+        </div>
+        <div class="mover-item">
+          <div class="mover-logo" style="background:#dc2626">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M13 3L4 14h7l-2 7 9-11h-7l2-7z"/></svg>
+          </div>
+          <span class="name">AKT</span>
+          <span class="pct up">12.45%</span>
+        </div>
+        <div class="mover-item">
+          <div class="mover-logo" style="background:#e63946">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><circle cx="8" cy="16" r="3"/><circle cx="16" cy="16" r="3"/></svg>
+          </div>
+          <span class="name">SPA</span>
+          <span class="pct up">10.96%</span>
+        </div>
+        <div class="mover-item">
+          <div class="mover-logo" style="background:#b8ffc6">
+            <span style="font-size:16px;color:#1a3a1a;font-weight:800">C</span>
+          </div>
+          <span class="name">COOKIE</span>
+          <span class="pct up">11.16%</span>
+        </div>
+        <div class="mover-item">
+          <div class="mover-logo" style="background:#6c5ce7">
+            <span style="font-size:14px;color:#fff;font-weight:800">T</span>
+          </div>
+          <span class="name">TAI</span>
+          <span class="pct up">8.80%</span>
+        </div>
+        <div class="mover-item">
+          <div class="mover-logo" style="background:#00cec9">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M12 2l3 7h7l-5.5 4.5 2 7.5L12 16l-6.5 5 2-7.5L2 9h7z"/></svg>
+          </div>
+          <span class="name">KAITO</span>
+          <span class="pct up">8.30%</span>
         </div>
       </div>
 
-      <div class="hub-section">
-        <div class="hub-section-title">Plan</div>
-        <div class="hub-row">
-          <div class="hub-icon" style="background:rgba(191,90,242,.15)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
-          <span class="hub-label">Revolut Platinum</span>
-          <div class="hub-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+      <!-- Earn -->
+      <div class="card earn-row">
+        <div class="earn-icon">%</div>
+        <div>
+          <div style="font-size:15px;font-weight:600">Earn</div>
+          <div style="font-size:13px;color:var(--text-secondary)">Up to 21.80% APY</div>
         </div>
+        <div class="chevron">&#8250;</div>
       </div>
+      <div class="spacer"></div>
+      <div class="spacer"></div>
+    </div>
 
-      <div class="hub-section">
-        <div class="hub-section-title">Soporte</div>
-        <div class="hub-row">
-          <div class="hub-icon" style="background:rgba(255,159,10,.15)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></div>
-          <span class="hub-label">Ayuda</span>
-          <div class="hub-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+    <!-- REVPOINTS -->
+    <div class="screen" id="screen-revpoints">
+      <div class="revpoints-hero">
+        <div class="points-circle">
+          <div class="points-number">142</div>
+          <div class="points-label">RevPoints</div>
         </div>
-        <div class="hub-row">
-          <div class="hub-icon" style="background:rgba(43,178,255,.15)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-          <span class="hub-label">Chat con soporte</span>
-          <div class="hub-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+        <h2>Earn &amp; spend points</h2>
+        <p>Get RevPoints every time you pay with Revolut. Redeem for rewards, upgrades, and more.</p>
+      </div>
+      <div class="rewards-list">
+        <div class="card" style="padding:0">
+          <div class="reward-item" style="padding:14px 16px">
+            <div class="reward-icon" style="background:rgba(0,102,255,0.15)">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0 0 4h4v-4z"/></svg>
+            </div>
+            <div>
+              <div style="font-size:15px;font-weight:500">Cashback</div>
+              <div style="font-size:13px;color:var(--text-secondary)">Convert points to cash</div>
+            </div>
+            <div class="chevron">&#8250;</div>
+          </div>
+          <div class="reward-item" style="padding:14px 16px;border-top:1px solid rgba(255,255,255,0.04)">
+            <div class="reward-icon" style="background:rgba(0,210,106,0.15)">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-5"/></svg>
+            </div>
+            <div>
+              <div style="font-size:15px;font-weight:500">Upgrade plan</div>
+              <div style="font-size:13px;color:var(--text-secondary)">Use points for premium</div>
+            </div>
+            <div class="chevron">&#8250;</div>
+          </div>
+          <div class="reward-item" style="padding:14px 16px;border-top:1px solid rgba(255,255,255,0.04)">
+            <div class="reward-icon" style="background:rgba(255,107,53,0.15)">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2"/><path d="M12 6v6l4 2"/></svg>
+            </div>
+            <div>
+              <div style="font-size:15px;font-weight:500">Experiences</div>
+              <div style="font-size:13px;color:var(--text-secondary)">Book activities &amp; events</div>
+            </div>
+            <div class="chevron">&#8250;</div>
+          </div>
         </div>
       </div>
-
-      <div class="hub-section">
-        <div class="hub-section-title">Otros</div>
-        <div class="hub-row">
-          <div class="hub-icon" style="background:rgba(255,87,119,.15)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg></div>
-          <span class="hub-label">Invitar amigos</span>
-          <div class="hub-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
-        </div>
-        <div class="hub-row">
-          <div class="hub-icon" style="background:rgba(255,255,255,.08)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
-          <span class="hub-label">Configuracion</span>
-          <div class="hub-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
-        </div>
-      </div>
-      <div style="height:24px"></div>
+      <div class="spacer"></div>
     </div>
   </div>
 
-  <!-- Tab Bar -->
-  <div class="tab-bar">
-    <div class="tab active" onclick="switchTab('home',this)">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1h-2z"/></svg>
-      <span class="tab-label">Inicio</span>
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav">
+    <div class="nav-item active" data-screen="home">
+      <div class="nav-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff" stroke="none">
+          <path d="M6 4h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm8 0h4a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm0 8h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2zM6 14h4a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2z"/>
+        </svg>
+      </div>
+      <span class="nav-label">Home</span>
     </div>
-    <div class="tab" onclick="switchTab('cards',this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-      <span class="tab-label">Tarjetas</span>
+    <div class="nav-item" data-screen="invest">
+      <div class="nav-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 20V10M12 20V4M6 20v-6"/>
+        </svg>
+      </div>
+      <span class="nav-label">Invest</span>
     </div>
-    <div class="tab" onclick="switchTab('invest',this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-      <span class="tab-label">Invertir</span>
+    <div class="nav-item" data-screen="payments">
+      <div class="nav-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M7 10l5-5 5 5"/><path d="M7 14l5 5 5-5"/>
+        </svg>
+      </div>
+      <span class="nav-label">Payments</span>
     </div>
-    <div class="tab" onclick="switchTab('lifestyle',this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
-      <span class="tab-label">Descubre</span>
+    <div class="nav-item" data-screen="crypto">
+      <div class="nav-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M11.767 19.089c4.924.868 6.14-6.025 1.216-6.894m-1.216 6.894L5.86 18.047m5.908 1.042-.347 1.97m1.563-8.864c4.924.869 6.14-6.025 1.215-6.893m-1.215 6.893-3.94-.694m5.155-6.2L8.29 4.26m5.908 1.042.348-1.97M7.48 20.364l3.126-17.727"/>
+        </svg>
+      </div>
+      <span class="nav-label">Crypto</span>
     </div>
-    <div class="tab" onclick="switchTab('hub',this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-      <span class="tab-label">Hub</span>
+    <div class="nav-item" data-screen="revpoints">
+      <div class="nav-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/><path d="M12 6v12"/><path d="M6 12h12"/>
+        </svg>
+      </div>
+      <span class="nav-label">RevPoints</span>
     </div>
   </div>
 </div>
-
-<!-- TRANSACTION DETAIL OVERLAY -->
-<div class="overlay" id="txOverlay">
-  <div class="overlay-backdrop" onclick="closeTxDetail()"></div>
-  <div class="overlay-content">
-    <div class="overlay-close" onclick="closeTxDetail()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </div>
-    <div class="tx-detail-header">
-      <div class="tx-detail-icon" id="txdIcon"></div>
-      <div class="tx-detail-amount" id="txdAmount"></div>
-      <div class="tx-detail-status" id="txdStatus">Completada</div>
-      <div class="tx-detail-date" id="txdDate">3 mar 2026, 14:23</div>
-    </div>
-    <div class="detail-rows">
-      <div class="detail-row">
-        <span class="dr-label">Estado</span>
-        <span class="dr-value green" id="txdStatusRow">Completada</span>
-      </div>
-      <div class="detail-row">
-        <span class="dr-label">Extracto</span>
-        <span class="dr-value link">Descargar</span>
-      </div>
-      <div class="detail-row" id="txdChargeRow">
-        <span class="dr-label">Cargo del comercio</span>
-        <span class="dr-value" id="txdCharge"></span>
-      </div>
-      <div class="detail-row" id="txdRateRow">
-        <span class="dr-label">Tipo de cambio</span>
-        <span class="dr-value" id="txdRate">1 EUR = 1,1700 USD</span>
-      </div>
-      <div class="detail-row">
-        <span class="dr-label">Comisiones</span>
-        <span class="dr-value green">Sin comision</span>
-      </div>
-    </div>
-    <div style="padding:24px 20px">
-      <div class="card" style="padding:14px 20px">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <span style="font-size:14px;color:var(--inactive)">Nota</span>
-          <span style="font-size:14px;color:var(--accent);font-weight:500;cursor:pointer">+ Anadir nota</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- SEND MONEY OVERLAY -->
-<div class="overlay send-overlay" id="sendOverlay">
-  <div class="overlay-backdrop" onclick="closeSend()"></div>
-  <div class="overlay-content">
-    <!-- Step 1: Contacts -->
-    <div id="sendStep1" style="display:flex;flex-direction:column;height:100%">
-      <div class="send-header">
-        <h2>Enviar</h2>
-        <div class="overlay-close" style="position:static" onclick="closeSend()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </div>
-      </div>
-      <div class="send-contacts">
-        <input class="send-search" type="text" placeholder="Buscar contacto...">
-        <div style="font-size:12px;font-weight:600;color:var(--inactive);text-transform:uppercase;letter-spacing:.8px;margin-bottom:16px">Recientes</div>
-        <div class="contact-grid">
-          <div class="contact-item" onclick="selectContact('Maria','MG','#1ac097')">
-            <div class="contact-avatar" style="background:#1ac097">MG</div>
-            <div class="contact-name">Maria Garcia</div>
-          </div>
-          <div class="contact-item" onclick="selectContact('Pablo','PR','#6393f3')">
-            <div class="contact-avatar" style="background:#6393f3">PR</div>
-            <div class="contact-name">Pablo Ruiz</div>
-          </div>
-          <div class="contact-item" onclick="selectContact('Ana','AL','#bf5af2')">
-            <div class="contact-avatar" style="background:#bf5af2">AL</div>
-            <div class="contact-name">Ana Lopez</div>
-          </div>
-          <div class="contact-item" onclick="selectContact('Carlos','CM','#ff9f0a')">
-            <div class="contact-avatar" style="background:#ff9f0a">CM</div>
-            <div class="contact-name">Carlos Mendez</div>
-          </div>
-          <div class="contact-item" onclick="selectContact('Laura','LS','#ff5777')">
-            <div class="contact-avatar" style="background:#ff5777">LS</div>
-            <div class="contact-name">Laura Sanchez</div>
-          </div>
-          <div class="contact-item" onclick="selectContact('Diego','DT','#2bb2ff')">
-            <div class="contact-avatar" style="background:#2bb2ff">DT</div>
-            <div class="contact-name">Diego Torres</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Step 2: Amount -->
-    <div class="amount-screen" id="sendStep2">
-      <div class="overlay-close" style="position:static;margin-bottom:16px" onclick="backToContacts()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
-      </div>
-      <div class="amount-to">
-        <div class="to-avatar" id="sendToAvatar"></div>
-        <div class="to-name" id="sendToName"></div>
-      </div>
-      <div class="amount-display">
-        <div class="amount-value" id="amountValue">0</div>
-        <div class="amount-currency">EUR</div>
-      </div>
-      <div class="numpad">
-        <div class="numpad-key" onclick="numpadInput('1')">1</div>
-        <div class="numpad-key" onclick="numpadInput('2')">2</div>
-        <div class="numpad-key" onclick="numpadInput('3')">3</div>
-        <div class="numpad-key" onclick="numpadInput('4')">4</div>
-        <div class="numpad-key" onclick="numpadInput('5')">5</div>
-        <div class="numpad-key" onclick="numpadInput('6')">6</div>
-        <div class="numpad-key" onclick="numpadInput('7')">7</div>
-        <div class="numpad-key" onclick="numpadInput('8')">8</div>
-        <div class="numpad-key" onclick="numpadInput('9')">9</div>
-        <div class="numpad-key" onclick="numpadInput(',')">.</div>
-        <div class="numpad-key" onclick="numpadInput('0')">0</div>
-        <div class="numpad-key" onclick="numpadDelete()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"/><line x1="18" y1="9" x2="12" y2="15"/><line x1="12" y1="9" x2="18" y2="15"/></svg>
-        </div>
-      </div>
-    </div>
-
-    <!-- Step 3: Success -->
-    <div class="success-screen" id="sendStep3">
-      <div class="check-circle">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-      </div>
-      <div class="success-amount" id="successAmount"></div>
-      <div class="success-to" id="successTo"></div>
-      <div class="success-done" onclick="closeSend()">Listo</div>
-    </div>
-
-    <div id="sendBtnContainer" style="display:none">
-      <div class="send-btn disabled" id="sendBtn" onclick="executeSend()">Enviar</div>
-    </div>
-  </div>
-</div>
-
-<!-- Confetti container -->
-<div class="confetti-container" id="confetti"></div>
 
 <script>
-// Tab navigation
-const titles = { home:'Inicio', cards:'Tarjetas', invest:'Invertir', lifestyle:'Descubre', hub:'Hub' };
-let currentTab = 'home';
+  // Navigation
+  const navItems = document.querySelectorAll('.nav-item');
+  const screens = document.querySelectorAll('.screen');
 
-function switchTab(tab, el) {
-  if (tab === currentTab) return;
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  const oldScreen = document.getElementById('screen-' + currentTab);
-  const newScreen = document.getElementById('screen-' + tab);
-  const tabOrder = ['home','cards','invest','lifestyle','hub'];
-  const goingRight = tabOrder.indexOf(tab) > tabOrder.indexOf(currentTab);
+  navItems.forEach(item => {
+    item.addEventListener('click', () => {
+      const target = item.dataset.screen;
 
-  oldScreen.classList.remove('active');
-  // Clear any leftover inline styles from previous transitions
-  oldScreen.style.cssText = '';
+      navItems.forEach(n => n.classList.remove('active'));
+      item.classList.add('active');
 
-  newScreen.style.cssText = '';
-  newScreen.classList.add('active');
-  newScreen.scrollTop = 0;
+      screens.forEach(s => {
+        s.classList.remove('active');
+        s.scrollTop = 0;
+      });
 
-  document.getElementById('screenTitle').textContent = titles[tab];
-  currentTab = tab;
-}
+      document.getElementById('screen-' + target).classList.add('active');
+    });
+  });
 
-// Transaction detail
-function openTxDetail(name, cat, amount, curr, sub, color) {
-  const o = document.getElementById('txOverlay');
-  document.getElementById('txdIcon').style.background = color;
-  document.getElementById('txdIcon').innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>';
-  document.getElementById('txdAmount').textContent = amount + ' ' + curr;
-  if (sub) {
-    document.getElementById('txdChargeRow').style.display = 'flex';
-    document.getElementById('txdCharge').textContent = sub;
-    document.getElementById('txdRateRow').style.display = 'flex';
-  } else {
-    document.getElementById('txdChargeRow').style.display = 'none';
-    document.getElementById('txdRateRow').style.display = 'none';
-  }
-  o.classList.add('open');
-}
-function closeTxDetail() {
-  document.getElementById('txOverlay').classList.remove('open');
-}
+  // Tab switching
+  document.querySelectorAll('.tabs-row').forEach(row => {
+    row.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        row.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+  });
 
-// Send flow
-let sendAmount = '';
-let sendName = '';
-let sendColor = '';
-let sendInitials = '';
+  // Close buttons
+  document.querySelectorAll('.close-btn, .close-x').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const card = btn.closest('.card, .promo-banner, .welcome-card');
+      if (card) {
+        card.style.transition = 'opacity 0.3s, transform 0.3s, height 0.3s, margin 0.3s, padding 0.3s';
+        card.style.opacity = '0';
+        card.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+          card.style.height = '0';
+          card.style.margin = '0';
+          card.style.padding = '0';
+          card.style.overflow = 'hidden';
+          card.style.border = 'none';
+        }, 200);
+      }
+    });
+  });
 
-function openSend() {
-  sendAmount = ''; sendName = ''; sendColor = ''; sendInitials = '';
-  document.getElementById('sendStep1').style.display = 'flex';
-  document.getElementById('sendStep2').classList.remove('active');
-  document.getElementById('sendStep3').classList.remove('active');
-  document.getElementById('sendBtnContainer').style.display = 'none';
-  document.getElementById('sendOverlay').classList.add('open');
-}
-function closeSend() {
-  document.getElementById('sendOverlay').classList.remove('open');
-  document.getElementById('confetti').innerHTML = '';
-}
-function selectContact(name, initials, color) {
-  sendName = name; sendInitials = initials; sendColor = color;
-  sendAmount = '';
-  document.getElementById('amountValue').textContent = '0';
-  document.getElementById('sendToAvatar').style.background = color;
-  document.getElementById('sendToAvatar').textContent = initials;
-  document.getElementById('sendToName').textContent = name;
-  document.getElementById('sendStep1').style.display = 'none';
-  document.getElementById('sendStep2').classList.add('active');
-  document.getElementById('sendBtnContainer').style.display = 'block';
-  updateSendBtn();
-}
-function backToContacts() {
-  document.getElementById('sendStep2').classList.remove('active');
-  document.getElementById('sendBtnContainer').style.display = 'none';
-  document.getElementById('sendStep1').style.display = 'flex';
-}
-function numpadInput(key) {
-  if (key === ',' && sendAmount.includes(',')) return;
-  if (sendAmount === '' && key === ',') { sendAmount = '0,'; }
-  else if (sendAmount === '0' && key !== ',') { sendAmount = key; }
-  else { sendAmount += key; }
-  // Limit decimals
-  if (sendAmount.includes(',') && sendAmount.split(',')[1].length > 2) {
-    sendAmount = sendAmount.slice(0, -1); return;
-  }
-  if (sendAmount.replace(',','').length > 8) { sendAmount = sendAmount.slice(0,-1); return; }
-  const el = document.getElementById('amountValue');
-  el.textContent = sendAmount || '0';
-  el.classList.add('bounce');
-  setTimeout(() => el.classList.remove('bounce'), 100);
-  updateSendBtn();
-}
-function numpadDelete() {
-  sendAmount = sendAmount.slice(0, -1);
-  document.getElementById('amountValue').textContent = sendAmount || '0';
-  updateSendBtn();
-}
-function updateSendBtn() {
-  const btn = document.getElementById('sendBtn');
-  const val = parseFloat((sendAmount || '0').replace(',','.'));
-  if (val > 0) { btn.classList.remove('disabled'); btn.textContent = 'Enviar ' + (sendAmount || '0') + ' EUR'; }
-  else { btn.classList.add('disabled'); btn.textContent = 'Enviar'; }
-}
-function executeSend() {
-  document.getElementById('sendStep2').classList.remove('active');
-  document.getElementById('sendBtnContainer').style.display = 'none';
-  document.getElementById('successAmount').textContent = sendAmount + ' EUR';
-  document.getElementById('successTo').textContent = 'Enviado a ' + sendName;
-  document.getElementById('sendStep3').classList.add('active');
-  launchConfetti();
-}
-function launchConfetti() {
-  const container = document.getElementById('confetti');
-  const colors = ['#6393f3','#1ac097','#ff5363','#ff9f0a','#bf5af2','#2bb2ff','#ff5777','#ffd60a'];
-  for (let i = 0; i < 60; i++) {
-    const piece = document.createElement('div');
-    piece.className = 'confetti-piece';
-    piece.style.left = Math.random() * 100 + '%';
-    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-    piece.style.animationDelay = Math.random() * .8 + 's';
-    piece.style.animationDuration = (2 + Math.random() * 2) + 's';
-    piece.style.width = (4 + Math.random() * 6) + 'px';
-    piece.style.height = (4 + Math.random() * 6) + 'px';
-    piece.style.borderRadius = Math.random() > .5 ? '50%' : '2px';
-    container.appendChild(piece);
-  }
-  setTimeout(() => container.innerHTML = '', 4000);
-}
+  // Haptic-like feedback on transaction tap
+  document.querySelectorAll('.transaction').forEach(tx => {
+    tx.addEventListener('click', () => {
+      tx.style.background = 'rgba(255,255,255,0.04)';
+      setTimeout(() => tx.style.background = 'transparent', 200);
+    });
+  });
 </script>
 </body>
 </html>
