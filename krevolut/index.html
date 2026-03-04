@@ -1,1390 +1,1525 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#000d19">
 <title>Krevolut</title>
+
+<!-- Inter font via Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Lucide icons via unpkg CDN -->
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+/* ============================================================
+   DESIGN TOKENS — All 138 RUI CSS Variables
+   Source: ~/krevolut/teardown/design-system/css-variables-raw.json
+   ============================================================ */
+:root {
+  /* Colors — Core */
+  --rui-color-grey-2: #f7f7f7;
+  --rui-color-grey-tone-20: rgba(255,255,255,.38);
+  --rui-color-action-label: rgba(99,147,243,.3);
+  --rui-color-channel-action-background-neutral: 255 255 255;
+  --rui-color-action-background: rgba(99,147,243,.2);
+  --rui-color-accent-control-neutral: #cdcdcd;
+  --rui-color-widget-background: rgba(255,255,255,.1);
+  --rui-color-channel-teal: 19 209 163;
+  --rui-color-channel-shimmer-photo-header: 0 0 0;
+  --rui-color-on-accent: #fff;
+  --rui-color-premium-dark: #5d7d67;
+  --rui-color-channel-brown: 172 129 110;
+  --rui-color-channel-metal-dark: 164 131 93;
+  --rui-color-channel-cold-blue: 10 132 255;
+  --rui-color-channel-popover-background: 40 51 61;
+  --rui-color-channel-premium-light: 227 219 211;
+  --rui-color-channel-grouped-background: 0 13 25;
+  --rui-color-yellow: #ffd60a;
+  --rui-color-channel-ultra-mid: 154 129 162;
+  --rui-color-grouped-background: #000d19;
+  --rui-color-channel-red: 255 69 58;
+  --rui-color-foreground: #fff;
+  --rui-color-segmented-background: rgba(255,255,255,.1);
+  --rui-color-action-background-neutral: rgba(255,255,255,.2);
+  --rui-color-premium-mid: #8eb199;
+  --rui-color-channel-action-background: 99 147 243;
+  --rui-color-channel-orange: 255 159 10;
+  --rui-color-danger: #ff5363;
+  --rui-color-blue: #6fa0ff;
+  --rui-color-metal-light: #b1aaa1;
+  --rui-color-metal-dark: #a4835d;
+  --rui-color-search-background: rgba(255,255,255,.14);
+  --rui-color-channel-blue: 111 160 255;
+  --rui-color-action-photo-header-background: #6fa0ff;
+  --rui-color-channel-success: 26 192 151;
+  --rui-color-deep-pink: #ff5777;
+  --rui-color-accent-neutral: #fff;
+  --rui-color-brown: #ac816e;
+  --rui-color-channel-purple: 191 90 242;
+  --rui-color-channel-light-green: 90 208 36;
+  --rui-color-channel-negative: 255 83 99;
+  --rui-color-input-error-focus: #421210;
+  --rui-color-teal: #13d1a3;
+  --rui-color-grey-8: #ebebf0;
+  --rui-color-ultra-mid: #9a81a2;
+  --rui-color-segmented-active: rgba(255,255,255,.2);
+  --rui-color-popover-background: #28333d;
+  --rui-color-disabled-background: #1f1f1f;
+  --rui-color-premium-light: #e3dbd3;
+  --rui-color-red-action-background: #330e0c;
+  --rui-color-channel-green: 48 209 88;
+  --rui-color-light-green: #5ad024;
+  --rui-color-warning: #ff9f0a;
+  --rui-color-nested-background: rgba(0,0,0,.15);
+  --rui-color-light-blue: #2bb2ff;
+  --rui-color-positive: #1ac097;
+  --rui-color-inactive: rgba(255,255,255,.6);
+  --rui-color-grey-50: #717173;
+  --rui-color-indigo: #5e5ce6;
+  --rui-color-channel-pink: 255 80 164;
+  --rui-color-channel-lime: 203 220 15;
 
-  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  /* Typography */
+  --rui-font-default: -apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Helvetica Neue",Helvetica,Arial,Arimo,sans-serif;
+  --rui-font-brand: "Inter",-apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Helvetica Neue",Helvetica,Arial,Arimo,sans-serif;
+  --rui-font-weight-heading1: 700;
+  --rui-font-weight-heading2: 700;
+  --rui-font-weight-heading3: 700;
+  --rui-font-weight-body1: 400;
+  --rui-font-weight-body3: 400;
+  --rui-font-weight-emphasis3: 600;
+  --rui-font-weight-emphasis4: 600;
+  --rui-font-weight-subheader: 500;
+  --rui-font-weight-marketing-display1: 500;
+  --rui-font-weight-marketing-display2: 500;
+  --rui-font-weight-sm-subtitle-2: 500;
+  --rui-font-size-heading1: 1.5rem;
+  --rui-font-size-body1: .9375rem;
+  --rui-font-size-body2: .875rem;
+  --rui-font-size-body3: .75rem;
+  --rui-font-size-emphasis1: .9375rem;
+  --rui-font-size-emphasis3: .75rem;
+  --rui-font-size-display1: 3.5rem;
+  --rui-font-size-marketing-display1: 3.5rem;
+  --rui-font-size-marketing-display3: 2rem;
+  --rui-font-size-sm-subtitle-2: 1rem;
+  --rui-font-size-sm-h6: 1.375rem;
+  --rui-line-height-heading1: 1.33333;
+  --rui-line-height-heading3: 1.33333;
+  --rui-line-height-body2: 1.42857;
+  --rui-line-height-body3: 1.5;
+  --rui-line-height-subheader: 1.375;
+  --rui-line-height-display1: 1.18182;
+  --rui-line-height-marketing-display3: 1.125;
+  --rui-line-height-sm-subtitle-2: 1.375;
+  --rui-line-height-sm-h6: 1.18182;
+  --rui-letter-spacing-heading1: 0;
+  --rui-letter-spacing-heading2: 0;
+  --rui-letter-spacing-heading3: 0;
+  --rui-letter-spacing-emphasis3: 0;
+  --rui-letter-spacing-display2: 0;
 
-  :root {
-    --bg: #0a0e14;
-    --bg-card: rgba(255,255,255,0.05);
-    --bg-card-hover: rgba(255,255,255,0.08);
-    --border: rgba(255,255,255,0.07);
-    --text-primary: #ffffff;
-    --text-secondary: #8b95a3;
-    --text-tertiary: #5a6270;
-    --green: #00d26a;
-    --red: #ff3b30;
-    --blue: #0066ff;
-    --teal: #00c9b1;
-    --orange: #ff6b35;
-    --nav-bg: rgba(12,16,22,0.95);
-    --radius: 16px;
-    --radius-sm: 12px;
-    --radius-xs: 8px;
+  /* Spacing */
+  --rui-space-none: 0;
+  --rui-space-sp50: .125rem;
+  --rui-space-sp100: .1875rem;
+  --rui-space-sp300: .5rem;
+  --rui-space-sp400: .75rem;
+  --rui-space-sp600: 1.25rem;
+  --rui-space-sp1000: 2rem;
+  --rui-space-s8: .375rem;
+  --rui-space-s12: .5rem;
+
+  /* Sizing */
+  --rui-size-s4: .25rem;
+  --rui-size-s16: 1rem;
+  --rui-size-s20: 1.25rem;
+  --rui-size-s24: 1.5rem;
+  --rui-size-s40: 2.5rem;
+  --rui-size-s48: 3rem;
+  --rui-size-s56: 3.5rem;
+  --rui-size-s72: 4.5rem;
+  --rui-size-button-sm: 2rem;
+  --rui-size-button-md: 2.75rem;
+  --rui-size-control-sm: 2rem;
+
+  /* Radii */
+  --rui-radius-r2: .125rem;
+  --rui-radius-r6: .375rem;
+  --rui-radius-r8: .5rem;
+  --rui-radius-r12: .75rem;
+  --rui-radius-rd200: .375rem;
+  --rui-radius-round: 9999px;
+  --rui-radius-widget: .75rem;
+  --rui-radius-nested-widget: .5rem;
+  --rui-radius-cell: .5rem;
+
+  /* Shadows */
+  --rui-shadow-level1: 0 .125rem .1875rem rgba(0,0,0,.05);
+  --rui-shadow-level2: 0 .1875rem .5rem rgba(0,0,0,.1);
+  --rui-shadow-level3: 0 .1875rem 1.875rem rgba(0,0,0,.08);
+  --rui-shadow-popover: 0 .25rem .25rem .25rem rgba(0,0,0,.12),0 1rem 3rem rgba(0,0,0,.16);
+
+  /* Animation / Timing */
+  --rui-timing-shadow: .2s cubic-bezier(.4,.3,.8,.6);
+  --rui-timing-lg: .45s cubic-bezier(.15,.5,.5,1);
+  --rui-easing-toast: cubic-bezier(.175,.885,.21,1.65);
+  --rui-duration-sm: .2s;
+  --rui-duration-xl: .9s;
+  --rui-duration-skeleton: 1.5s;
+
+  /* ============================================================
+     APP-LEVEL TOKENS
+     ============================================================ */
+  --app-accent: #6fa0ff;
+  --app-bg: #000d19;
+  --app-tab-inactive: #717173;
+  --app-tab-active: #6fa0ff;
+  --app-tab-bar-bg: rgba(0, 13, 25, 0.92);
+  --app-status-bar-height: 54px;
+  --app-tab-bar-height: 56px;
+  --app-device-width: 393px;
+  --app-device-height: 852px;
+  --app-device-radius: 44px;
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  background: #0a0a0a;
+  font-family: var(--rui-font-brand);
+  color: var(--rui-color-foreground);
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================================
+   DEVICE FRAME — Desktop (>=500px)
+   ============================================================ */
+.device-frame {
+  position: relative;
+  width: var(--app-device-width);
+  height: var(--app-device-height);
+  border-radius: var(--app-device-radius);
+  overflow: hidden;
+  background: var(--app-bg);
+  box-shadow:
+    0 0 0 2px #1a1a1a,
+    0 0 0 4px #2a2a2a,
+    0 0 0 6px rgba(0,0,0,.3),
+    0 20px 60px rgba(0,0,0,.6),
+    0 40px 100px rgba(0,0,0,.4);
+}
+
+/* Mobile: full viewport, no frame */
+@media (max-width: 499px) {
+  body {
+    background: var(--app-bg);
   }
-
-  html, body {
-    height: 100%;
-    background: #000;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    color: var(--text-primary);
-    overflow: hidden;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  /* Phone Frame */
-  .phone-frame {
-    position: relative;
-    width: 390px;
-    height: 100vh;
+  .device-frame {
+    width: 100%;
     height: 100dvh;
-    max-height: 844px;
-    margin: 0 auto;
-    background: var(--bg);
-    overflow: hidden;
+    border-radius: 0;
+    box-shadow: none;
   }
+}
 
-  @media (max-width: 420px) {
-    .phone-frame { width: 100%; max-height: 100vh; max-height: 100dvh; }
-  }
+/* ============================================================
+   STATUS BAR — Desktop only
+   ============================================================ */
+.status-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--app-status-bar-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px 0;
+  z-index: 100;
+  pointer-events: none;
+  background: transparent;
+}
 
-  /* Background Glow */
-  .bg-glow {
-    position: absolute;
-    top: -80px;
-    left: -60px;
-    width: 350px;
-    height: 350px;
-    background: radial-gradient(circle, rgba(0,102,255,0.12) 0%, rgba(0,201,177,0.06) 40%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
-  }
+.status-bar__time {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
 
-  /* Status Bar */
+.status-bar__icons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.status-bar__icons svg {
+  opacity: 0.9;
+}
+
+/* Hide status bar on mobile (real device shows its own) */
+@media (max-width: 499px) {
   .status-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 20px 8px;
-    font-size: 14px;
-    font-weight: 600;
-    position: relative;
-    z-index: 10;
+    display: none;
   }
-  .status-bar .time { letter-spacing: 0.5px; }
-  .status-bar .right { display: flex; align-items: center; gap: 6px; font-size: 12px; }
-  .status-bar .signal { display: flex; gap: 1px; align-items: flex-end; }
-  .status-bar .signal span { width: 3px; background: #fff; border-radius: 1px; }
-  .status-bar .battery {
-    width: 25px; height: 12px; border: 1.5px solid rgba(255,255,255,0.5);
-    border-radius: 3px; position: relative; padding: 1.5px;
-  }
-  .status-bar .battery::after {
-    content: ''; position: absolute; right: -4px; top: 3px;
-    width: 2px; height: 5px; background: rgba(255,255,255,0.5); border-radius: 0 1px 1px 0;
-  }
-  .status-bar .battery-fill {
-    width: 48%; height: 100%; background: #fff; border-radius: 1px;
-  }
+}
 
-  /* Top Bar */
-  .top-bar {
-    display: flex;
-    align-items: center;
-    padding: 4px 16px 12px;
-    gap: 10px;
-    position: relative;
-    z-index: 10;
-  }
-  .avatar {
-    width: 40px; height: 40px; border-radius: 50%;
-    background: #3a3f47; display: flex; align-items: center; justify-content: center;
-    font-size: 14px; font-weight: 600; color: #fff;
-    position: relative; flex-shrink: 0;
-  }
-  .avatar::before {
-    content: ''; position: absolute; inset: -3px;
-    border-radius: 50%; border: 2px solid rgba(200,160,180,0.4);
-  }
-  .avatar .notif-dot {
-    position: absolute; top: -1px; right: -1px;
-    width: 8px; height: 8px; background: var(--red);
-    border-radius: 50%; border: 1.5px solid var(--bg);
-  }
-  .search-bar {
-    flex: 1; height: 38px; background: rgba(255,255,255,0.08);
-    border-radius: 20px; display: flex; align-items: center;
-    padding: 0 14px; gap: 8px; cursor: pointer;
-  }
-  .search-bar svg { opacity: 0.5; flex-shrink: 0; }
-  .search-bar span { color: var(--text-secondary); font-size: 15px; }
-  .top-icon {
-    width: 40px; height: 40px; border-radius: 50%;
-    background: rgba(255,255,255,0.08); display: flex;
-    align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer;
-  }
+/* ============================================================
+   APP CONTAINER
+   ============================================================ */
+.app {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
 
-  /* Screen Container */
-  .screens-container {
-    position: relative;
-    height: calc(100% - 152px);
-    overflow: hidden;
+/* ============================================================
+   SCREENS CONTAINER
+   ============================================================ */
+.screens {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Mobile: respect safe areas */
+@media (max-width: 499px) {
+  .screens {
+    padding-top: var(--safe-area-top);
   }
-  .screen {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    opacity: 0;
-    transform: translateX(20px);
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    pointer-events: none;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior-y: contain;
-    padding-bottom: 20px;
+}
+
+/* Desktop: respect fake status bar */
+@media (min-width: 500px) {
+  .screens {
+    padding-top: var(--app-status-bar-height);
   }
-  .screen::-webkit-scrollbar { display: none; }
-  .screen.active {
+}
+
+/* ============================================================
+   INDIVIDUAL SCREENS
+   ============================================================ */
+.screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--app-bg);
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  opacity: 0;
+  visibility: hidden;
+  transition: none;
+  will-change: transform, opacity;
+}
+
+/* Scrollbar styling */
+.screen::-webkit-scrollbar { width: 0; }
+
+/* Active screen */
+.screen.active {
+  opacity: 1;
+  visibility: visible;
+  z-index: 1;
+}
+
+/* Push screen (detail views) - slide from right */
+.screen.push-enter {
+  animation: pushEnter 300ms ease-out forwards;
+  z-index: 10;
+}
+
+.screen.push-exit {
+  animation: pushExit 300ms ease-out forwards;
+  z-index: 10;
+}
+
+.screen.push-behind {
+  animation: pushBehind 300ms ease-out forwards;
+  z-index: 0;
+}
+
+.screen.push-behind-reverse {
+  animation: pushBehindReverse 300ms ease-out forwards;
+  z-index: 0;
+}
+
+@keyframes spin {
+  from { transform: translateX(-50%) translateY(20px) rotate(0deg); }
+  to { transform: translateX(-50%) translateY(20px) rotate(360deg); }
+}
+
+@keyframes pushEnter {
+  from {
+    transform: translateX(100%);
     opacity: 1;
+    visibility: visible;
+  }
+  to {
     transform: translateX(0);
-    pointer-events: auto;
+    opacity: 1;
+    visibility: visible;
   }
+}
 
-  /* Cards */
-  .card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    margin: 0 16px 12px;
-    padding: 16px;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+@keyframes pushExit {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+    visibility: visible;
   }
+  to {
+    transform: translateX(100%);
+    opacity: 1;
+    visibility: hidden;
+  }
+}
 
-  /* Home Screen */
-  .balance-area {
-    text-align: center;
-    padding: 8px 16px 20px;
-    position: relative;
+@keyframes pushBehind {
+  from {
+    transform: translateX(0) scale(1);
+    opacity: 1;
   }
-  .accounts-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 16px;
-    background: rgba(255,255,255,0.1);
-    border-radius: 20px;
-    font-size: 14px;
-    color: var(--text-secondary);
-    margin-bottom: 12px;
-    cursor: pointer;
+  to {
+    transform: translateX(-30%) scale(0.95);
+    opacity: 0.5;
   }
-  .balance-amount {
-    font-size: 32px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-  }
-  .balance-currency {
-    font-size: 14px;
-    color: var(--text-secondary);
-    margin-top: 4px;
-  }
-  .balance-dots {
-    display: flex;
-    justify-content: center;
-    gap: 6px;
-    margin-top: 16px;
-  }
-  .balance-dots .dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: rgba(255,255,255,0.2);
-  }
-  .balance-dots .dot.active { background: #fff; }
+}
 
-  /* Quick Actions */
-  .quick-actions {
-    display: flex;
-    justify-content: center;
-    gap: 24px;
-    padding: 0 16px 20px;
+@keyframes pushBehindReverse {
+  from {
+    transform: translateX(-30%) scale(0.95);
+    opacity: 0.5;
   }
-  .quick-action {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
+  to {
+    transform: translateX(0) scale(1);
+    opacity: 1;
   }
-  .quick-action .icon-circle {
-    width: 52px; height: 52px; border-radius: 50%;
-    background: rgba(255,255,255,0.1);
-    display: flex; align-items: center; justify-content: center;
-  }
-  .quick-action span {
-    font-size: 12px; color: var(--text-secondary);
-  }
+}
 
-  /* Promo Banner */
-  .promo-banner {
-    margin: 0 16px 12px;
-    border-radius: var(--radius);
-    overflow: hidden;
-    position: relative;
-    height: 120px;
-    background: linear-gradient(135deg, #0a2a1f 0%, #0d1f2d 50%, #1a0a2e 100%);
-    cursor: pointer;
-  }
-  .promo-banner .aurora {
-    position: absolute;
-    top: 0; right: 0;
-    width: 55%;
-    height: 100%;
-    background: linear-gradient(160deg, transparent 20%, rgba(0,200,120,0.3) 40%, rgba(0,100,200,0.2) 60%, rgba(100,0,200,0.15) 80%);
-    filter: blur(15px);
-  }
-  .promo-banner .close-btn {
-    position: absolute; top: 12px; right: 12px;
-    width: 24px; height: 24px; border-radius: 50%;
-    background: rgba(0,0,0,0.3); display: flex;
-    align-items: center; justify-content: center;
-    color: #fff; font-size: 14px; cursor: pointer; z-index: 2;
-  }
-  .promo-banner .content {
-    position: relative; z-index: 1;
-    padding: 20px;
-  }
-  .promo-banner h3 {
-    font-size: 17px; font-weight: 600; margin-bottom: 6px;
-  }
-  .promo-banner p {
-    font-size: 13px; color: var(--text-secondary); line-height: 1.4;
-  }
-  .promo-dots {
-    display: flex;
-    justify-content: center;
-    gap: 6px;
-    margin-bottom: 16px;
-  }
-  .promo-dots .dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: rgba(255,255,255,0.2);
-  }
-  .promo-dots .dot.active { background: #fff; }
+/* ============================================================
+   SCREEN PLACEHOLDER CONTENT
+   ============================================================ */
+.screen__placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 12px;
+  color: var(--rui-color-inactive);
+  padding: 20px;
+}
 
-  /* Transactions */
-  .transactions { margin: 0 16px; }
-  .transaction {
-    display: flex;
-    align-items: center;
-    padding: 14px 0;
-    gap: 12px;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-    cursor: pointer;
-  }
-  .transaction:last-child { border-bottom: none; }
-  .tx-icon {
-    width: 44px; height: 44px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 13px; font-weight: 600; flex-shrink: 0;
-    position: relative;
-  }
-  .tx-icon.viasat { background: #fff; }
-  .tx-icon.heart { background: var(--teal); }
-  .tx-icon.food { background: var(--orange); }
-  .tx-icon.person { background: #5a7aa0; }
-  .tx-icon .badge {
-    position: absolute; bottom: -2px; right: -2px;
-    width: 18px; height: 18px; border-radius: 50%;
-    background: var(--blue); border: 2px solid var(--bg);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 10px; color: #fff;
-  }
-  .tx-details { flex: 1; min-width: 0; }
-  .tx-name {
-    font-size: 15px; font-weight: 500;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
-  .tx-date { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
-  .tx-amount { text-align: right; flex-shrink: 0; }
-  .tx-amount .primary { font-size: 15px; font-weight: 500; }
-  .tx-amount .primary.positive { color: var(--green); }
-  .tx-amount .secondary { font-size: 12px; color: var(--text-tertiary); margin-top: 2px; }
+.screen__placeholder-icon {
+  width: 48px;
+  height: 48px;
+  opacity: 0.4;
+}
 
-  .see-all {
-    text-align: center;
-    padding: 16px;
-    font-size: 15px;
-    font-weight: 500;
-    color: var(--text-secondary);
-    cursor: pointer;
-  }
+.screen__placeholder-title {
+  font-size: var(--rui-font-size-heading1);
+  font-weight: var(--rui-font-weight-heading1);
+  color: var(--rui-color-foreground);
+}
 
-  /* Welcome Card */
-  .welcome-card {
-    margin: 0 16px 16px;
-    border-radius: var(--radius);
-    overflow: hidden;
-    position: relative;
-    height: 160px;
-    background: linear-gradient(135deg, #1a3a2a 0%, #0d2520 100%);
-    cursor: pointer;
-  }
-  .welcome-card .bg-img {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%),
-                linear-gradient(135deg, rgba(34,139,34,0.15) 0%, rgba(139,69,19,0.1) 100%);
-  }
-  .welcome-card .pyramid {
-    position: absolute;
-    bottom: 10px; right: 20px;
-    width: 0; height: 0;
-    border-left: 60px solid transparent;
-    border-right: 60px solid transparent;
-    border-bottom: 80px solid rgba(139,119,42,0.3);
-  }
-  .welcome-card .pyramid-steps {
-    position: absolute;
-    bottom: 10px; right: 10px;
-    width: 130px; height: 85px;
-  }
-  .welcome-card .close-btn {
-    position: absolute; top: 12px; right: 12px;
-    width: 24px; height: 24px; border-radius: 50%;
-    background: rgba(0,0,0,0.3); display: flex;
-    align-items: center; justify-content: center;
-    color: #fff; font-size: 14px; cursor: pointer; z-index: 2;
-  }
-  .welcome-card .content {
-    position: relative; z-index: 1;
-    padding: 20px;
-  }
-  .welcome-card .subtitle {
-    font-size: 13px; color: rgba(255,255,255,0.7);
-  }
-  .welcome-card h2 {
-    font-size: 28px; font-weight: 700; margin: 2px 0 8px;
-  }
-  .welcome-card .rate {
-    font-size: 14px; color: rgba(255,255,255,0.6);
-  }
+.screen__placeholder-sub {
+  font-size: var(--rui-font-size-body2);
+  color: var(--rui-color-grey-50);
+}
 
-  /* Invest Screen */
-  .invest-hero {
-    position: relative;
-    height: 320px;
-    margin: 0 0 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-  }
-  .invest-hero .hero-bg {
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(ellipse at 30% 20%, rgba(20,40,80,0.6) 0%, transparent 50%),
-      radial-gradient(ellipse at 70% 60%, rgba(10,20,50,0.4) 0%, transparent 50%),
-      linear-gradient(160deg, #060a12 0%, #0a0f1a 30%, #080c14 60%, #050810 100%);
-  }
-  .invest-hero .silk-overlay {
-    position: absolute;
-    inset: 0;
-    background:
-      linear-gradient(135deg, transparent 30%, rgba(30,50,90,0.15) 45%, transparent 55%),
-      linear-gradient(225deg, transparent 40%, rgba(20,40,70,0.1) 50%, transparent 60%);
-    animation: silkShimmer 8s ease-in-out infinite;
-  }
-  @keyframes silkShimmer {
-    0%, 100% { opacity: 0.5; }
-    50% { opacity: 1; }
-  }
-  .invest-hero h1 {
-    font-size: 30px;
-    font-weight: 700;
-    text-align: center;
-    position: relative;
-    z-index: 1;
-    letter-spacing: -0.5px;
-  }
-  .invest-hero p {
-    font-size: 15px;
-    color: var(--text-secondary);
-    margin-top: 8px;
-    position: relative;
-    z-index: 1;
-  }
+/* Back button for pushed screens */
+.screen__back {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--rui-radius-round);
+  background: var(--rui-color-action-background-neutral);
+  border: none;
+  color: var(--rui-color-foreground);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 20;
+  transition: transform 120ms ease;
+}
 
-  .cta-button {
-    display: block;
-    margin: 0 16px 16px;
-    padding: 16px;
-    background: rgba(255,255,255,0.12);
-    border-radius: 14px;
-    text-align: center;
-    font-size: 17px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  .cta-button:active { background: rgba(255,255,255,0.18); }
+.screen__back:active {
+  transform: scale(0.9);
+}
 
-  .free-trades-card {
-    display: flex;
-    align-items: center;
-    gap: 14px;
+/* Mobile: offset back button for safe area */
+@media (max-width: 499px) {
+  .screen__back {
+    top: calc(var(--safe-area-top) + 12px);
   }
-  .free-trades-icon {
-    width: 48px; height: 48px; border-radius: 50%;
-    border: 2px dashed var(--blue);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 14px; font-weight: 700; color: var(--blue);
-    flex-shrink: 0;
-  }
-  .free-trades-card .close-x {
-    margin-left: auto; color: var(--text-tertiary); cursor: pointer; flex-shrink: 0;
-  }
+}
 
-  .section-title {
-    font-size: 15px;
-    color: var(--text-secondary);
-    padding: 8px 16px 12px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    cursor: pointer;
+/* Desktop: offset back button for status bar */
+@media (min-width: 500px) {
+  .screen__back {
+    top: calc(var(--app-status-bar-height) + 12px);
   }
-  .section-title .chevron { font-size: 12px; }
+}
 
-  .tabs-row {
-    display: flex;
-    margin: 0 16px 16px;
-    background: rgba(255,255,255,0.06);
-    border-radius: 10px;
-    overflow: hidden;
-  }
-  .tab-btn {
-    flex: 1;
-    padding: 10px;
-    text-align: center;
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--text-secondary);
-    cursor: pointer;
-    border-radius: 10px;
-    transition: all 0.2s;
-  }
-  .tab-btn.active {
-    background: rgba(255,255,255,0.12);
-    color: #fff;
-  }
+/* ============================================================
+   BOTTOM TAB BAR
+   ============================================================ */
+.tab-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  height: var(--app-tab-bar-height);
+  background: var(--app-tab-bar-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 0.5px solid rgba(255,255,255,.08);
+  z-index: 50;
+  flex-shrink: 0;
+  transition: transform 300ms ease-out, opacity 200ms ease;
+}
 
-  .stocks-row {
-    display: flex;
-    gap: 16px;
-    padding: 0 16px 20px;
-    overflow-x: auto;
+/* Mobile: respect safe area bottom */
+@media (max-width: 499px) {
+  .tab-bar {
+    padding-bottom: var(--safe-area-bottom);
+    height: calc(var(--app-tab-bar-height) + var(--safe-area-bottom));
   }
-  .stocks-row::-webkit-scrollbar { display: none; }
-  .stock-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    min-width: 70px;
-    cursor: pointer;
-  }
-  .stock-logo {
-    width: 56px; height: 56px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 11px; font-weight: 700;
-  }
-  .stock-item .ticker {
-    font-size: 13px; color: var(--text-secondary); font-weight: 500;
-  }
+}
 
-  /* Crypto Screen */
-  .crypto-hero {
-    position: relative;
-    height: 280px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-  }
-  .crypto-hero .hero-bg {
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(ellipse at 40% 30%, rgba(20,30,60,0.5) 0%, transparent 50%),
-      linear-gradient(160deg, #060a12 0%, #0a0f1a 40%, #080c14 100%);
-  }
-  .crypto-hero .silk-overlay {
-    position: absolute;
-    inset: 0;
-    background:
-      linear-gradient(135deg, transparent 25%, rgba(40,60,100,0.12) 40%, transparent 55%),
-      linear-gradient(200deg, transparent 45%, rgba(20,35,65,0.08) 55%, transparent 65%);
-    animation: silkShimmer 8s ease-in-out infinite;
-  }
-  .crypto-hero h1 {
-    font-size: 28px;
-    font-weight: 700;
-    text-align: center;
-    position: relative;
-    z-index: 1;
-    letter-spacing: -0.3px;
-    color: var(--red);
-  }
-  .crypto-hero p {
-    font-size: 15px;
-    color: var(--text-secondary);
-    margin-top: 4px;
-    position: relative;
-    z-index: 1;
-  }
+/* Hide tab bar when pushed screen is active */
+.tab-bar.hidden {
+  transform: translateY(100%);
+  opacity: 0;
+  pointer-events: none;
+}
 
-  .revolut-x-card {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    position: relative;
-    overflow: hidden;
-  }
-  .revolut-x-card .rx-logo {
-    width: 60px; height: 60px; border-radius: 12px;
-    background: linear-gradient(135deg, #1a1a3a, #2a1a4a, #1a3a3a);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 20px; font-weight: 800; flex-shrink: 0;
-    position: relative; overflow: hidden;
-  }
-  .revolut-x-card .rx-logo::after {
-    content: ''; position: absolute; inset: 0;
-    background: linear-gradient(135deg, transparent 30%, rgba(255,255,255,0.15) 50%, transparent 70%);
-    animation: holographic 3s ease-in-out infinite;
-  }
-  @keyframes holographic {
-    0%, 100% { transform: translateX(-100%) rotate(20deg); }
-    50% { transform: translateX(100%) rotate(20deg); }
-  }
-  .revolut-x-card .close-x {
-    position: absolute; top: 0; right: 0;
-    color: var(--text-tertiary); cursor: pointer;
-  }
+/* ============================================================
+   TAB ITEMS
+   ============================================================ */
+.tab-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 120ms ease;
+}
 
-  .crypto-pair-cards {
-    display: flex;
-    gap: 12px;
-    padding: 0 16px 16px;
-  }
-  .crypto-card {
-    flex: 1;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 16px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-  .crypto-card .token-name {
-    font-size: 13px; color: var(--text-secondary); font-weight: 500;
-  }
-  .crypto-card .token-logo {
-    position: absolute; top: 14px; right: 14px;
-    width: 32px; height: 32px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .crypto-card .price {
-    font-size: 20px; font-weight: 700; margin: 4px 0 2px;
-    letter-spacing: -0.3px;
-  }
-  .crypto-card .change { font-size: 13px; font-weight: 500; }
-  .crypto-card .change.up { color: var(--green); }
-  .crypto-card .change.up::before { content: '\25B2 '; font-size: 10px; }
-  .crypto-card .change.down { color: var(--red); }
-  .crypto-card .change.down::before { content: '\25BC '; font-size: 10px; }
-  .crypto-card .sparkline-container {
-    margin-top: 12px;
-    height: 40px;
-    position: relative;
-  }
-  .crypto-card .sparkline-container .baseline {
-    position: absolute;
-    top: 50%;
-    left: 0; right: 0;
-    border-top: 1px dotted rgba(255,255,255,0.15);
-  }
+.tab-item svg {
+  width: 24px;
+  height: 24px;
+  stroke-width: 1.8;
+  color: var(--app-tab-inactive);
+  transition: color 150ms ease, transform 200ms cubic-bezier(.175,.885,.32,1.275);
+}
 
-  /* Top Movers Grid */
-  .movers-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    padding: 0 16px 16px;
-  }
-  .mover-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    cursor: pointer;
-  }
-  .mover-logo {
-    width: 48px; height: 48px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px; font-weight: 700;
-  }
-  .mover-item .name { font-size: 11px; color: var(--text-secondary); font-weight: 500; }
-  .mover-item .pct { font-size: 12px; font-weight: 600; }
-  .mover-item .pct.up { color: var(--green); }
-  .mover-item .pct.up::before { content: '\25B2 '; font-size: 9px; }
+.tab-item.active svg {
+  color: var(--app-tab-active);
+  transform: scale(1.08);
+}
 
-  .earn-row {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    cursor: pointer;
-  }
-  .earn-icon {
-    width: 44px; height: 44px; border-radius: 50%;
-    background: rgba(255,255,255,0.08);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px; font-weight: 700; color: var(--text-secondary);
-  }
-  .earn-row .chevron {
-    margin-left: auto;
-    color: var(--text-tertiary);
-  }
+/* Press feedback */
+.tab-item:active {
+  transform: scale(0.9);
+}
 
-  /* Payments Screen */
-  .payments-hero {
-    text-align: center;
-    padding: 40px 20px 30px;
-  }
-  .payments-hero h2 {
-    font-size: 22px; font-weight: 600; margin-bottom: 8px;
-  }
-  .payments-hero p {
-    font-size: 14px; color: var(--text-secondary);
-  }
-  .payment-option {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 16px;
-    cursor: pointer;
-  }
-  .payment-icon {
-    width: 44px; height: 44px; border-radius: 50%;
-    background: rgba(255,255,255,0.08);
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-  }
-  .payment-option .chevron {
-    margin-left: auto; color: var(--text-tertiary);
-  }
+/* ============================================================
+   BUTTON PRESS FEEDBACK (Global)
+   ============================================================ */
+.pressable {
+  transition: transform 120ms cubic-bezier(.175,.885,.32,1.275);
+  cursor: pointer;
+}
 
-  /* RevPoints Screen */
-  .revpoints-hero {
-    text-align: center;
-    padding: 60px 24px 30px;
-  }
-  .revpoints-hero .points-circle {
-    width: 120px; height: 120px; border-radius: 50%;
-    background: linear-gradient(135deg, rgba(0,102,255,0.2), rgba(0,201,177,0.15));
-    border: 2px solid rgba(0,102,255,0.3);
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    margin: 0 auto 24px;
-  }
-  .revpoints-hero .points-number {
-    font-size: 32px; font-weight: 700;
-  }
-  .revpoints-hero .points-label {
-    font-size: 12px; color: var(--text-secondary);
-  }
-  .revpoints-hero h2 { font-size: 20px; font-weight: 600; margin-bottom: 8px; }
-  .revpoints-hero p { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
+.pressable:active,
+.pressable.pressing {
+  transform: scale(0.95);
+}
 
-  .rewards-list { padding: 0 16px; }
-  .reward-item {
-    display: flex; align-items: center; gap: 14px;
-    padding: 14px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-    cursor: pointer;
-  }
-  .reward-icon {
-    width: 44px; height: 44px; border-radius: var(--radius-sm);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 20px; flex-shrink: 0;
-  }
-  .reward-item .chevron { margin-left: auto; color: var(--text-tertiary); }
+/* ============================================================
+   UTILITY ANIMATIONS
+   ============================================================ */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
 
-  /* Bottom Nav */
-  .bottom-nav {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: calc(70px + env(safe-area-inset-bottom, 10px));
-    background: var(--nav-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-top: 1px solid rgba(255,255,255,0.06);
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-around;
-    padding: 8px 8px 0;
-    padding-bottom: env(safe-area-inset-bottom, 10px);
-    z-index: 100;
-  }
-  .nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    padding: 8px 0;
-    cursor: pointer;
-    min-width: 60px;
-    transition: opacity 0.2s;
-  }
-  .nav-item .nav-icon {
-    width: 28px; height: 28px;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .nav-item .nav-label {
-    font-size: 10px;
-    color: var(--text-tertiary);
-    font-weight: 500;
-    transition: color 0.2s;
-  }
-  .nav-item.active .nav-label { color: #fff; }
-  .nav-item svg { transition: all 0.2s; }
-  .nav-item.active svg { opacity: 1; }
-  .nav-item:not(.active) svg { opacity: 0.4; }
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
 
-  /* Utility */
-  .spacer { height: 16px; }
-  .fade-enter { animation: fadeIn 0.3s ease forwards; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.4; }
+}
+
+.animate-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Shimmer for skeleton loading */
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,.06) 25%,
+    rgba(255,255,255,.12) 50%,
+    rgba(255,255,255,.06) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer var(--rui-duration-skeleton) linear infinite;
+  border-radius: var(--rui-radius-r6);
+}
+
+/* ============================================================
+   BOTTOM SHEET OVERLAY (reusable)
+   ============================================================ */
+.sheet-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.5);
+  z-index: 90;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 250ms ease;
+}
+
+.sheet-overlay.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.bottom-sheet {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--rui-color-popover-background);
+  border-radius: 24px 24px 0 0;
+  z-index: 91;
+  transform: translateY(100%);
+  transition: transform 250ms cubic-bezier(.175,.885,.32,1.275);
+  box-shadow: var(--rui-shadow-popover);
+  max-height: 80%;
+  overflow-y: auto;
+}
+
+.bottom-sheet.visible {
+  transform: translateY(0);
+}
+
+.bottom-sheet__handle {
+  width: 36px;
+  height: 4px;
+  background: rgba(255,255,255,.2);
+  border-radius: var(--rui-radius-round);
+  margin: 10px auto 16px;
+}
+
+/* ============================================================
+   TOAST
+   ============================================================ */
+.toast {
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-120px);
+  background: var(--rui-color-popover-background);
+  color: var(--rui-color-foreground);
+  padding: 12px 20px;
+  border-radius: var(--rui-radius-r12);
+  font-size: var(--rui-font-size-body2);
+  font-weight: var(--rui-font-weight-subheader);
+  z-index: 200;
+  box-shadow: var(--rui-shadow-popover);
+  transition: transform 400ms var(--rui-easing-toast);
+  white-space: nowrap;
+}
+
+.toast.visible {
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ============================================================
+   SWIPE GESTURES
+   ============================================================ */
+
+/* Edge-back: shadow on the swiped screen's left edge */
+.screen.swiping-back {
+  box-shadow: -8px 0 30px rgba(0,0,0,.35);
+  will-change: transform;
+}
+
+/* Pull-to-refresh indicator */
+.ptr-indicator {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(-40px);
+  width: 28px;
+  height: 28px;
+  border: 2.5px solid rgba(255,255,255,.15);
+  border-top-color: var(--app-accent);
+  border-radius: 50%;
+  z-index: 5;
+  opacity: 0;
+  transition: opacity 150ms ease;
+  pointer-events: none;
+}
+
+.ptr-indicator.visible {
+  opacity: 1;
+}
+
+.ptr-indicator.spinning {
+  animation: ptrSpin 600ms linear infinite;
+}
+
+@keyframes ptrSpin {
+  to { transform: translateX(-50%) translateY(-40px) rotate(360deg); }
+}
+
+/* Skeleton shimmer overlay for pull-to-refresh */
+.ptr-shimmer-overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--app-bg);
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  padding: 70px 16px 16px;
+  gap: 16px;
+}
+
+.ptr-shimmer-overlay .skel-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ptr-shimmer-overlay .skel-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.ptr-shimmer-overlay .skel-lines {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ptr-shimmer-overlay .skel-line {
+  height: 12px;
+  border-radius: 6px;
+}
+
+.ptr-shimmer-overlay .skel-line.w60 { width: 60%; }
+.ptr-shimmer-overlay .skel-line.w80 { width: 80%; }
+.ptr-shimmer-overlay .skel-line.w40 { width: 40%; }
+
+.ptr-shimmer-overlay .skel-block {
+  height: 100px;
+  border-radius: var(--rui-radius-r12);
+}
 </style>
+
 </head>
 <body>
-<div class="phone-frame">
-  <div class="bg-glow"></div>
 
-  <!-- Status Bar -->
+<!-- ================================================================
+     DEVICE FRAME
+     ================================================================ -->
+<div class="device-frame" id="deviceFrame">
+
+  <!-- Status Bar (desktop only, handled via CSS) -->
   <div class="status-bar">
-    <div class="time">4:09</div>
-    <div class="right">
-      <div class="signal">
-        <span style="height:4px"></span>
-        <span style="height:6px"></span>
-        <span style="height:8px"></span>
-        <span style="height:10px"></span>
-      </div>
-      <span style="font-size:11px;font-weight:500">4G</span>
-      <div class="battery"><div class="battery-fill"></div></div>
+    <span class="status-bar__time">9:41</span>
+    <div class="status-bar__icons">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12.55a11 11 0 0 1 14.08 0"/>
+        <path d="M1.42 9a16 16 0 0 1 21.16 0"/>
+        <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+        <circle cx="12" cy="20" r="1"/>
+      </svg>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 7h1v10H2z" opacity=".4"/>
+        <path d="M6 5h1v12H6z" opacity=".6"/>
+        <path d="M10 3h1v14h-1z" opacity=".8"/>
+        <path d="M14 1h1v16h-1z"/>
+      </svg>
+      <svg width="24" height="14" viewBox="0 0 27 14" fill="currentColor">
+        <rect x="0" y="1" width="22" height="12" rx="2.5" ry="2.5" stroke="currentColor" stroke-width="1" fill="none" opacity=".35"/>
+        <rect x="1.5" y="2.5" width="19" height="9" rx="1.5" ry="1.5" fill="currentColor"/>
+        <path d="M23.5 5v4a2.5 2.5 0 0 0 0-4z" fill="currentColor" opacity=".4"/>
+      </svg>
     </div>
   </div>
 
-  <!-- Top Bar -->
-  <div class="top-bar">
-    <div class="avatar">
-      CJ
-      <div class="notif-dot"></div>
-    </div>
-    <div class="search-bar">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-      <span>Search</span>
-    </div>
-    <div class="top-icon" id="analyticsBtn">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
-    </div>
-    <div class="top-icon">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-    </div>
-  </div>
+  <!-- App Container -->
+  <div class="app" id="app">
 
-  <!-- Screens -->
-  <div class="screens-container">
+    <!-- Screens Container -->
+    <div class="screens" id="screensContainer">
 
-    <!-- HOME -->
-    <div class="screen active" id="screen-home">
-      <div class="balance-area">
-        <div class="accounts-pill">
-          Accounts
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="m6 9 6 6 6-6"/></svg>
-        </div>
-        <div class="balance-amount">&euro;2,015.47</div>
-        <div class="balance-currency">M$41,417.91</div>
-        <div class="balance-dots">
-          <div class="dot active"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>
+      <!-- TAB SCREENS (main level) -->
+
+      <!-- Home Screen -->
+      <div class="screen active" id="screen-home" data-tab="home">
+        <div class="screen__placeholder">
+          <i data-lucide="home" class="screen__placeholder-icon"></i>
+          <div class="screen__placeholder-title">Inicio</div>
+          <div class="screen__placeholder-sub">Dashboard principal</div>
         </div>
       </div>
 
-      <div class="quick-actions">
-        <div class="quick-action">
-          <div class="icon-circle">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-          </div>
-          <span>Add money</span>
-        </div>
-        <div class="quick-action">
-          <div class="icon-circle">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 2a4 4 0 0 0-4 4c0 2 2 4 4 6 2-2 4-4 4-6a4 4 0 0 0-4-4z"/><path d="M12 22a4 4 0 0 0 4-4c0-2-2-4-4-6-2 2-4 4-4 6a4 4 0 0 0 4 4z"/></svg>
-          </div>
-          <span>Bizum</span>
-        </div>
-        <div class="quick-action">
-          <div class="icon-circle">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M7 16l-4-4 4-4"/><path d="M3 12h14"/><path d="M17 8l4 4-4 4"/><path d="M21 12H7"/></svg>
-          </div>
-          <span>Move</span>
-        </div>
-        <div class="quick-action">
-          <div class="icon-circle">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>
-          </div>
-          <span>More</span>
+      <!-- Cards Screen -->
+      <div class="screen" id="screen-cards" data-tab="cards">
+        <div class="screen__placeholder">
+          <i data-lucide="credit-card" class="screen__placeholder-icon"></i>
+          <div class="screen__placeholder-title">Tarjetas</div>
+          <div class="screen__placeholder-sub">Gestiona tus tarjetas</div>
         </div>
       </div>
 
-      <!-- Promo Banner -->
-      <div class="promo-banner">
-        <div class="aurora"></div>
-        <div class="close-btn">&times;</div>
-        <div class="content">
-          <h3>New Experiences await</h3>
-          <p>Choose from 300,000 activities<br>and book in-app. T&Cs apply</p>
-        </div>
-      </div>
-      <div class="promo-dots">
-        <div class="dot active"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-      </div>
-
-      <!-- Transactions -->
-      <div class="card" style="padding:4px 16px;">
-        <div class="transaction">
-          <div class="tx-icon viasat">
-            <svg width="28" height="14" viewBox="0 0 60 20"><text x="2" y="16" font-family="Inter" font-weight="700" font-size="14" fill="#1a1a2e">Viasat</text></svg>
-          </div>
-          <div class="tx-details">
-            <div class="tx-name">Viasat</div>
-            <div class="tx-date">1 Mar, 11:54 a.m.</div>
-          </div>
-          <div class="tx-amount">
-            <div class="primary">-&euro;10.26</div>
-            <div class="secondary">-$12</div>
-          </div>
-        </div>
-        <div class="transaction">
-          <div class="tx-icon heart">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          </div>
-          <div class="tx-details">
-            <div class="tx-name">Myt017 2201 Hud Mxn</div>
-            <div class="tx-date">1 Mar, 9:39 a.m.</div>
-          </div>
-          <div class="tx-amount">
-            <div class="primary">-&euro;27.05</div>
-            <div class="secondary">-M$545</div>
-          </div>
-        </div>
-        <div class="transaction">
-          <div class="tx-icon food">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M7 2v9a4 4 0 0 0 4 4h0a4 4 0 0 0 4-4V2"/><path d="M7 2h4"/><path d="M11 2v6"/><path d="M17 2v20"/><path d="M17 2a3 3 0 0 1 0 6"/></svg>
-          </div>
-          <div class="tx-details">
-            <div class="tx-name">Rest Take Oof</div>
-            <div class="tx-date">1 Mar, 9:10 a.m.</div>
-          </div>
-          <div class="tx-amount">
-            <div class="primary">-&euro;9.28</div>
-            <div class="secondary">-M$187</div>
-          </div>
-        </div>
-        <div class="transaction">
-          <div class="tx-icon person">
-            GC
-            <div class="badge">+</div>
-          </div>
-          <div class="tx-details">
-            <div class="tx-name">GARCIA CARLOS JULIO</div>
-            <div class="tx-date">26 Feb, 8:42 a.m.</div>
-          </div>
-          <div class="tx-amount">
-            <div class="primary positive">+&euro;2,000</div>
-          </div>
-        </div>
-        <div class="see-all">See all</div>
-      </div>
-
-      <!-- Welcome to Mexico -->
-      <div class="welcome-card">
-        <div class="bg-img"></div>
-        <svg class="pyramid-steps" viewBox="0 0 130 85" fill="none">
-          <polygon points="65,5 25,85 105,85" fill="rgba(160,140,60,0.25)" stroke="rgba(160,140,60,0.15)" stroke-width="0.5"/>
-          <line x1="30" y1="75" x2="100" y2="75" stroke="rgba(160,140,60,0.2)" stroke-width="0.5"/>
-          <line x1="38" y1="62" x2="92" y2="62" stroke="rgba(160,140,60,0.2)" stroke-width="0.5"/>
-          <line x1="45" y1="50" x2="85" y2="50" stroke="rgba(160,140,60,0.2)" stroke-width="0.5"/>
-          <line x1="50" y1="38" x2="80" y2="38" stroke="rgba(160,140,60,0.2)" stroke-width="0.5"/>
-          <line x1="56" y1="26" x2="74" y2="26" stroke="rgba(160,140,60,0.2)" stroke-width="0.5"/>
-        </svg>
-        <div class="close-btn">&times;</div>
-        <div class="content">
-          <div class="subtitle">Welcome to</div>
-          <h2>Mexico</h2>
-          <div class="rate">&euro;1 = M$20.55</div>
-        </div>
-      </div>
-      <div class="spacer"></div>
-    </div>
-
-    <!-- INVEST -->
-    <div class="screen" id="screen-invest">
-      <div class="invest-hero">
-        <div class="hero-bg"></div>
-        <div class="silk-overlay"></div>
-        <h1>Grow your wealth</h1>
-        <p>Invest today, from &euro;1</p>
-      </div>
-      <div class="cta-button">Start investing</div>
-      <div class="card free-trades-card">
-        <div class="free-trades-icon">10</div>
-        <div>
-          <div style="font-size:15px;font-weight:600">You've got free trades</div>
-          <div style="font-size:13px;color:var(--text-secondary);margin-top:2px">Enjoy 10 free stocks and ETF trades every month</div>
-        </div>
-        <div class="close-x">&times;</div>
-      </div>
-      <div class="section-title">Popular first time buys <span class="chevron">&#8250;</span></div>
-      <div class="tabs-row">
-        <div class="tab-btn active">Stocks</div>
-        <div class="tab-btn">ETFs</div>
-      </div>
-      <div class="stocks-row">
-        <div class="stock-item">
-          <div class="stock-logo" style="background:#76b900">
-            <svg width="30" height="30" viewBox="0 0 24 24"><path d="M3 12l3-3v6l-3-3zm6-6l3-3v18l-3-3V6zm6 2l3-3v14l-3-3V8z" fill="#fff"/></svg>
-          </div>
-          <span class="ticker">NVDA</span>
-        </div>
-        <div class="stock-item">
-          <div class="stock-logo" style="background:#1a1a1a;border:1px solid rgba(255,255,255,0.1)">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83"/><path d="M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-          </div>
-          <span class="ticker">AAPL</span>
-        </div>
-        <div class="stock-item">
-          <div class="stock-logo" style="background:#cc0000">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff"><path d="M12 4L4 20h4l1.5-3h5l1.5 3h4L12 4zm0 5.5L14.5 15h-5L12 9.5z"/></svg>
-          </div>
-          <span class="ticker">TSLA</span>
-        </div>
-        <div class="stock-item">
-          <div class="stock-logo" style="background:#e50914">
-            <span style="font-size:22px;font-weight:800;color:#fff">N</span>
-          </div>
-          <span class="ticker">NFLX</span>
-        </div>
-        <div class="stock-item">
-          <div class="stock-logo" style="background:#ff9900">
-            <span style="font-size:16px;font-weight:800;color:#fff">amzn</span>
-          </div>
-          <span class="ticker">AMZN</span>
-        </div>
-      </div>
-      <div class="spacer"></div>
-    </div>
-
-    <!-- PAYMENTS -->
-    <div class="screen" id="screen-payments">
-      <div class="payments-hero">
-        <h2>Payments</h2>
-        <p>Send and receive money instantly</p>
-      </div>
-      <div class="card" style="padding:0">
-        <div class="payment-option">
-          <div class="payment-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="m22 2-7 20-4-9-9-4z"/><path d="m22 2-11 11"/></svg>
-          </div>
-          <div>
-            <div style="font-size:15px;font-weight:500">Send</div>
-            <div style="font-size:13px;color:var(--text-secondary)">Send money to anyone</div>
-          </div>
-          <div class="chevron">&#8250;</div>
-        </div>
-        <div class="payment-option" style="border-top:1px solid rgba(255,255,255,0.04)">
-          <div class="payment-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 22V8"/><path d="m5 15 7-7 7 7"/></svg>
-          </div>
-          <div>
-            <div style="font-size:15px;font-weight:500">Request</div>
-            <div style="font-size:13px;color:var(--text-secondary)">Request money from contacts</div>
-          </div>
-          <div class="chevron">&#8250;</div>
-        </div>
-        <div class="payment-option" style="border-top:1px solid rgba(255,255,255,0.04)">
-          <div class="payment-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
-          </div>
-          <div>
-            <div style="font-size:15px;font-weight:500">Transfer</div>
-            <div style="font-size:13px;color:var(--text-secondary)">Bank transfers &amp; SEPA</div>
-          </div>
-          <div class="chevron">&#8250;</div>
-        </div>
-        <div class="payment-option" style="border-top:1px solid rgba(255,255,255,0.04)">
-          <div class="payment-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          </div>
-          <div>
-            <div style="font-size:15px;font-weight:500">Vaults</div>
-            <div style="font-size:13px;color:var(--text-secondary)">Save for your goals</div>
-          </div>
-          <div class="chevron">&#8250;</div>
-        </div>
-      </div>
-      <div class="card" style="padding:0">
-        <div class="payment-option">
-          <div class="payment-icon" style="background:rgba(0,210,106,0.15)">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M17 11h1a3 3 0 0 1 0 6h-1"/><path d="M9 12v6"/><path d="M13 12v6"/><circle cx="12" cy="5" r="3"/></svg>
-          </div>
-          <div>
-            <div style="font-size:15px;font-weight:500">Bizum</div>
-            <div style="font-size:13px;color:var(--text-secondary)">Pay with your phone</div>
-          </div>
-          <div class="chevron">&#8250;</div>
-        </div>
-      </div>
-      <div class="spacer"></div>
-    </div>
-
-    <!-- CRYPTO -->
-    <div class="screen" id="screen-crypto">
-      <div class="crypto-hero">
-        <div class="hero-bg"></div>
-        <div class="silk-overlay"></div>
-        <h1>Trade crypto from<br>0% fees</h1>
-      </div>
-      <div class="cta-button">Start trading</div>
-      <div class="card revolut-x-card">
-        <div class="rx-logo">
-          <span style="font-size:22px;font-weight:800;color:#fff">R</span>
-        </div>
-        <div>
-          <div style="font-size:15px;font-weight:600">Explore Revolut X</div>
-          <div style="font-size:13px;color:var(--text-secondary);margin-top:2px;line-height:1.4">Trade crypto with 0% maker and<br>0.09% taker fees. T&Cs apply</div>
-        </div>
-        <div class="close-x">&times;</div>
-      </div>
-      <div class="promo-dots" style="margin-top:-4px">
-        <div class="dot active"></div>
-        <div class="dot"></div>
-      </div>
-
-      <!-- BTC / ETH Cards -->
-      <div class="crypto-pair-cards">
-        <div class="crypto-card">
-          <div class="token-name">BTC</div>
-          <div class="token-logo" style="background:#f7931a;border-radius:50%">
-            <span style="font-size:16px;font-weight:800;color:#fff">&#8383;</span>
-          </div>
-          <div class="price">&euro;58,877</div>
-          <div class="change up">0.03%</div>
-          <div class="sparkline-container">
-            <div class="baseline"></div>
-            <svg width="100%" height="40" viewBox="0 0 150 40" preserveAspectRatio="none">
-              <polyline points="0,38 8,36 16,30 24,32 32,28 40,25 48,20 56,22 64,18 72,15 80,20 88,18 96,14 104,16 112,12 120,10 128,8 136,6 142,5 150,4" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-        </div>
-        <div class="crypto-card">
-          <div class="token-name">ETH</div>
-          <div class="token-logo" style="background:rgba(98,126,234,0.2);border-radius:50%">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="#627eea"><path d="M12 1.5l-8 13 8 4.5 8-4.5-8-13zM4 14.5L12 22l8-7.5-8 4.5-8-4.5z"/></svg>
-          </div>
-          <div class="price">&euro;1,706.44</div>
-          <div class="change down">1.56%</div>
-          <div class="sparkline-container">
-            <div class="baseline"></div>
-            <svg width="100%" height="40" viewBox="0 0 150 40" preserveAspectRatio="none">
-              <polyline points="0,8 10,10 20,6 30,12 40,14 50,10 60,16 70,20 80,18 90,24 100,22 110,28 120,26 130,32 140,30 150,34" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
+      <!-- Invest Screen -->
+      <div class="screen" id="screen-invest" data-tab="invest">
+        <div class="screen__placeholder">
+          <i data-lucide="trending-up" class="screen__placeholder-icon"></i>
+          <div class="screen__placeholder-title">Crypto</div>
+          <div class="screen__placeholder-sub">Inversiones y trading</div>
         </div>
       </div>
 
-      <!-- Top Movers -->
-      <div class="section-title">Top movers <span class="chevron">&#8250;</span></div>
-      <div class="tabs-row">
-        <div class="tab-btn active">Top gainers</div>
-        <div class="tab-btn">Top losers</div>
-      </div>
-      <div class="movers-grid">
-        <div class="mover-item">
-          <div class="mover-logo" style="background:#daa520"><span style="font-size:14px;color:#fff;font-weight:800">&#9830;</span></div>
-          <span class="name">PNG</span>
-          <span class="pct up">48.52%</span>
-        </div>
-        <div class="mover-item">
-          <div class="mover-logo" style="background:#2ecc40">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M12 2l10 18H2z"/></svg>
-          </div>
-          <span class="name">AURORA</span>
-          <span class="pct up">25.93%</span>
-        </div>
-        <div class="mover-item">
-          <div class="mover-logo" style="background:#e85d04">
-            <span style="font-size:18px">&#9760;</span>
-          </div>
-          <span class="name">PIRATE</span>
-          <span class="pct up">14.90%</span>
-        </div>
-        <div class="mover-item">
-          <div class="mover-logo" style="background:#dc2626">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M13 3L4 14h7l-2 7 9-11h-7l2-7z"/></svg>
-          </div>
-          <span class="name">AKT</span>
-          <span class="pct up">12.45%</span>
-        </div>
-        <div class="mover-item">
-          <div class="mover-logo" style="background:#e63946">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><circle cx="8" cy="16" r="3"/><circle cx="16" cy="16" r="3"/></svg>
-          </div>
-          <span class="name">SPA</span>
-          <span class="pct up">10.96%</span>
-        </div>
-        <div class="mover-item">
-          <div class="mover-logo" style="background:#b8ffc6">
-            <span style="font-size:16px;color:#1a3a1a;font-weight:800">C</span>
-          </div>
-          <span class="name">COOKIE</span>
-          <span class="pct up">11.16%</span>
-        </div>
-        <div class="mover-item">
-          <div class="mover-logo" style="background:#6c5ce7">
-            <span style="font-size:14px;color:#fff;font-weight:800">T</span>
-          </div>
-          <span class="name">TAI</span>
-          <span class="pct up">8.80%</span>
-        </div>
-        <div class="mover-item">
-          <div class="mover-logo" style="background:#00cec9">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M12 2l3 7h7l-5.5 4.5 2 7.5L12 16l-6.5 5 2-7.5L2 9h7z"/></svg>
-          </div>
-          <span class="name">KAITO</span>
-          <span class="pct up">8.30%</span>
+      <!-- Lifestyle Screen (Estilo de vida) -->
+      <div class="screen" id="screen-lifestyle" data-tab="lifestyle">
+        <div class="screen__placeholder">
+          <i data-lucide="compass" class="screen__placeholder-icon"></i>
+          <div class="screen__placeholder-title">Estilo de vida</div>
+          <div class="screen__placeholder-sub">Beneficios y estilo</div>
         </div>
       </div>
 
-      <!-- Earn -->
-      <div class="card earn-row">
-        <div class="earn-icon">%</div>
-        <div>
-          <div style="font-size:15px;font-weight:600">Earn</div>
-          <div style="font-size:13px;color:var(--text-secondary)">Up to 21.80% APY</div>
-        </div>
-        <div class="chevron">&#8250;</div>
-      </div>
-      <div class="spacer"></div>
-      <div class="spacer"></div>
-    </div>
-
-    <!-- REVPOINTS -->
-    <div class="screen" id="screen-revpoints">
-      <div class="revpoints-hero">
-        <div class="points-circle">
-          <div class="points-number">142</div>
-          <div class="points-label">RevPoints</div>
-        </div>
-        <h2>Earn &amp; spend points</h2>
-        <p>Get RevPoints every time you pay with Revolut. Redeem for rewards, upgrades, and more.</p>
-      </div>
-      <div class="rewards-list">
-        <div class="card" style="padding:0">
-          <div class="reward-item" style="padding:14px 16px">
-            <div class="reward-icon" style="background:rgba(0,102,255,0.15)">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0 0 4h4v-4z"/></svg>
-            </div>
-            <div>
-              <div style="font-size:15px;font-weight:500">Cashback</div>
-              <div style="font-size:13px;color:var(--text-secondary)">Convert points to cash</div>
-            </div>
-            <div class="chevron">&#8250;</div>
-          </div>
-          <div class="reward-item" style="padding:14px 16px;border-top:1px solid rgba(255,255,255,0.04)">
-            <div class="reward-icon" style="background:rgba(0,210,106,0.15)">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-5"/></svg>
-            </div>
-            <div>
-              <div style="font-size:15px;font-weight:500">Upgrade plan</div>
-              <div style="font-size:13px;color:var(--text-secondary)">Use points for premium</div>
-            </div>
-            <div class="chevron">&#8250;</div>
-          </div>
-          <div class="reward-item" style="padding:14px 16px;border-top:1px solid rgba(255,255,255,0.04)">
-            <div class="reward-icon" style="background:rgba(255,107,53,0.15)">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2"/><path d="M12 6v6l4 2"/></svg>
-            </div>
-            <div>
-              <div style="font-size:15px;font-weight:500">Experiences</div>
-              <div style="font-size:13px;color:var(--text-secondary)">Book activities &amp; events</div>
-            </div>
-            <div class="chevron">&#8250;</div>
-          </div>
+      <!-- Hub Screen -->
+      <div class="screen" id="screen-hub" data-tab="hub">
+        <div class="screen__placeholder">
+          <i data-lucide="layout-grid" class="screen__placeholder-icon"></i>
+          <div class="screen__placeholder-title">Hub</div>
+          <div class="screen__placeholder-sub">Servicios y ajustes</div>
         </div>
       </div>
-      <div class="spacer"></div>
-    </div>
-  </div>
 
-  <!-- Bottom Navigation -->
-  <div class="bottom-nav">
-    <div class="nav-item active" data-screen="home">
-      <div class="nav-icon">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff" stroke="none">
-          <path d="M6 4h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm8 0h4a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm0 8h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2zM6 14h4a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2z"/>
-        </svg>
-      </div>
-      <span class="nav-label">Home</span>
-    </div>
-    <div class="nav-item" data-screen="invest">
-      <div class="nav-icon">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M18 20V10M12 20V4M6 20v-6"/>
-        </svg>
-      </div>
-      <span class="nav-label">Invest</span>
-    </div>
-    <div class="nav-item" data-screen="payments">
-      <div class="nav-icon">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M7 10l5-5 5 5"/><path d="M7 14l5 5 5-5"/>
-        </svg>
-      </div>
-      <span class="nav-label">Payments</span>
-    </div>
-    <div class="nav-item" data-screen="crypto">
-      <div class="nav-icon">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M11.767 19.089c4.924.868 6.14-6.025 1.216-6.894m-1.216 6.894L5.86 18.047m5.908 1.042-.347 1.97m1.563-8.864c4.924.869 6.14-6.025 1.215-6.893m-1.215 6.893-3.94-.694m5.155-6.2L8.29 4.26m5.908 1.042.348-1.97M7.48 20.364l3.126-17.727"/>
-        </svg>
-      </div>
-      <span class="nav-label">Crypto</span>
-    </div>
-    <div class="nav-item" data-screen="revpoints">
-      <div class="nav-icon">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10"/><path d="M12 6v12"/><path d="M6 12h12"/>
-        </svg>
-      </div>
-      <span class="nav-label">RevPoints</span>
-    </div>
-  </div>
-</div>
+      <!-- PUSH SCREENS (slide from right) -->
 
+      <!-- Transaction Detail -->
+      <div class="screen" id="screen-detail" data-push="true">
+        <button class="screen__back" onclick="popScreen()" aria-label="Volver">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+        </button>
+        <div class="screen__placeholder">
+          <i data-lucide="receipt" class="screen__placeholder-icon"></i>
+          <div class="screen__placeholder-title">Detalle</div>
+          <div class="screen__placeholder-sub">Detalle de transacción</div>
+        </div>
+      </div>
+
+      <!-- Card Config -->
+      <div class="screen" id="screen-card-config" data-push="true">
+        <button class="screen__back" onclick="popScreen()" aria-label="Volver">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+        </button>
+        <div class="screen__placeholder">
+          <i data-lucide="settings" class="screen__placeholder-icon"></i>
+          <div class="screen__placeholder-title">Configuración</div>
+          <div class="screen__placeholder-sub">Configuración de tarjeta</div>
+        </div>
+      </div>
+
+      <!-- Crypto Screen -->
+      <div class="screen" id="screen-crypto" data-push="true">
+        <button class="screen__back" onclick="popScreen()" aria-label="Volver">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+        </button>
+        <div class="screen__placeholder">
+          <i data-lucide="bitcoin" class="screen__placeholder-icon"></i>
+          <div class="screen__placeholder-title">Crypto</div>
+          <div class="screen__placeholder-sub">Revolut X Trading</div>
+        </div>
+      </div>
+
+      <!-- Send Money -->
+      <div class="screen" id="screen-send" data-push="true">
+        <button class="screen__back" onclick="popScreen()" aria-label="Volver">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+        </button>
+        <div class="screen__placeholder">
+          <i data-lucide="send" class="screen__placeholder-icon"></i>
+          <div class="screen__placeholder-title">Enviar</div>
+          <div class="screen__placeholder-sub">Enviar dinero</div>
+        </div>
+      </div>
+
+      <!-- Account Selector -->
+      <div class="screen" id="screen-account-selector" data-push="true">
+        <button class="screen__back" onclick="popScreen()" aria-label="Volver">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+        </button>
+        <div class="screen__placeholder">
+          <i data-lucide="wallet" class="screen__placeholder-icon"></i>
+          <div class="screen__placeholder-title">Cuentas</div>
+          <div class="screen__placeholder-sub">Selector de cuentas</div>
+        </div>
+      </div>
+
+      <!-- Profile -->
+      <div class="screen" id="screen-profile" data-push="true">
+        <button class="screen__back" onclick="popScreen()" aria-label="Volver">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+        </button>
+        <div class="screen__placeholder">
+          <i data-lucide="user" class="screen__placeholder-icon"></i>
+          <div class="screen__placeholder-title">Perfil</div>
+          <div class="screen__placeholder-sub">Tu perfil y ajustes</div>
+        </div>
+      </div>
+
+      <!-- Security -->
+      <div class="screen" id="screen-security" data-push="true">
+        <button class="screen__back" onclick="popScreen()" aria-label="Volver">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+        </button>
+        <div class="screen__placeholder">
+          <i data-lucide="shield" class="screen__placeholder-icon"></i>
+          <div class="screen__placeholder-title">Seguridad</div>
+          <div class="screen__placeholder-sub">Centro de seguridad</div>
+        </div>
+      </div>
+
+    </div><!-- /screens -->
+
+    <!-- Bottom Tab Bar -->
+    <nav class="tab-bar" id="tabBar">
+      <button class="tab-item active" data-tab="home" onclick="switchTab('home')" aria-label="Inicio">
+        <i data-lucide="home"></i>
+      </button>
+      <button class="tab-item" data-tab="cards" onclick="switchTab('cards')" aria-label="Tarjetas">
+        <i data-lucide="credit-card"></i>
+      </button>
+      <button class="tab-item" data-tab="invest" onclick="switchTab('invest')" aria-label="Crypto">
+        <i data-lucide="trending-up"></i>
+      </button>
+      <button class="tab-item" data-tab="lifestyle" onclick="switchTab('lifestyle')" aria-label="Estilo de vida">
+        <i data-lucide="compass"></i>
+      </button>
+      <button class="tab-item" data-tab="hub" onclick="switchTab('hub')" aria-label="Hub">
+        <i data-lucide="layout-grid"></i>
+      </button>
+    </nav>
+
+  </div><!-- /app -->
+
+</div><!-- /device-frame -->
+
+<!-- ================================================================
+     JAVASCRIPT — Router, State, Interactions
+     ================================================================ -->
 <script>
-  // Navigation - use both click and touchend for reliability on mobile
-  var navItems = document.querySelectorAll('.nav-item');
-  var screens = document.querySelectorAll('.screen');
+(function() {
+  'use strict';
 
-  function switchScreen(target) {
-    navItems.forEach(function(n) { n.classList.remove('active'); });
-    document.querySelector('[data-screen="' + target + '"]').classList.add('active');
+  // ── State ───────────────────────────────────────────────────
+  const state = {
+    currentTab: 'home',
+    screenStack: [],       // stack of pushed screen IDs
+    tabScreenMap: {        // which tab-level screen each tab uses
+      home: 'screen-home',
+      cards: 'screen-cards',
+      invest: 'screen-invest',
+      lifestyle: 'screen-lifestyle',
+      hub: 'screen-hub'
+    }
+  };
 
-    screens.forEach(function(s) {
-      if (s.id === 'screen-' + target) {
-        s.classList.add('active');
-      } else {
+  // ── DOM refs ────────────────────────────────────────────────
+  const tabBar = document.getElementById('tabBar');
+  const screensContainer = document.getElementById('screensContainer');
+
+  // ── Helpers ─────────────────────────────────────────────────
+  function getAllScreens() {
+    return screensContainer.querySelectorAll('.screen');
+  }
+
+  function getScreen(id) {
+    return document.getElementById(id);
+  }
+
+  function hideAllTabScreens() {
+    getAllScreens().forEach(s => {
+      if (!s.dataset.push) {
         s.classList.remove('active');
+        s.style.transform = '';
+        s.style.opacity = '';
       }
     });
   }
 
-  navItems.forEach(function(item) {
-    // Prevent double-fire: track touch
-    var touched = false;
+  function clearPushAnimations(screen) {
+    screen.classList.remove('push-enter', 'push-exit', 'push-behind', 'push-behind-reverse');
+  }
 
-    item.addEventListener('touchstart', function(e) {
-      touched = true;
+  // ── switchTab ───────────────────────────────────────────────
+  // Instant switch between main tabs (no animation per Revolut spec)
+  window.switchTab = function(tabName) {
+    if (state.screenStack.length > 0) {
+      // If a pushed screen is active, pop everything first
+      popAllScreens();
+    }
+
+    if (tabName === state.currentTab) return;
+
+    state.currentTab = tabName;
+
+    // Update tab bar active state
+    tabBar.querySelectorAll('.tab-item').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.tab === tabName);
+    });
+
+    // Show correct screen instantly
+    hideAllTabScreens();
+    const targetScreen = getScreen(state.tabScreenMap[tabName]);
+    if (targetScreen) {
+      targetScreen.classList.add('active');
+    }
+
+    // Ensure tab bar is visible
+    tabBar.classList.remove('hidden');
+  };
+
+  // ── pushScreen ──────────────────────────────────────────────
+  // Slide-from-right transition, hides tab bar
+  window.pushScreen = function(screenId) {
+    const screen = getScreen(screenId);
+    if (!screen) return;
+
+    // Determine what's currently visible
+    let currentVisible;
+    if (state.screenStack.length > 0) {
+      currentVisible = getScreen(state.screenStack[state.screenStack.length - 1]);
+    } else {
+      currentVisible = getScreen(state.tabScreenMap[state.currentTab]);
+    }
+
+    // Push to stack
+    state.screenStack.push(screenId);
+
+    // Animate current screen behind
+    if (currentVisible) {
+      clearPushAnimations(currentVisible);
+      currentVisible.classList.add('active', 'push-behind');
+    }
+
+    // Animate new screen in from right
+    clearPushAnimations(screen);
+    screen.classList.add('active', 'push-enter');
+
+    // Hide tab bar
+    tabBar.classList.add('hidden');
+
+    // Clean up animations after they complete
+    screen.addEventListener('animationend', function handler() {
+      screen.removeEventListener('animationend', handler);
+      clearPushAnimations(screen);
+      screen.classList.add('active');
+      if (currentVisible && currentVisible !== screen) {
+        clearPushAnimations(currentVisible);
+        currentVisible.classList.remove('active');
+      }
+    });
+  };
+
+  // ── popScreen ───────────────────────────────────────────────
+  // Reverse slide transition, shows tab bar if stack empty
+  window.popScreen = function() {
+    if (state.screenStack.length === 0) return;
+
+    const screenId = state.screenStack.pop();
+    const screen = getScreen(screenId);
+
+    // Determine what to reveal
+    let revealScreen;
+    if (state.screenStack.length > 0) {
+      revealScreen = getScreen(state.screenStack[state.screenStack.length - 1]);
+    } else {
+      revealScreen = getScreen(state.tabScreenMap[state.currentTab]);
+    }
+
+    // Animate the reveal screen back
+    if (revealScreen) {
+      clearPushAnimations(revealScreen);
+      revealScreen.classList.add('active', 'push-behind-reverse');
+    }
+
+    // Animate current screen out to right
+    if (screen) {
+      clearPushAnimations(screen);
+      screen.classList.add('push-exit');
+
+      screen.addEventListener('animationend', function handler() {
+        screen.removeEventListener('animationend', handler);
+        clearPushAnimations(screen);
+        screen.classList.remove('active');
+        if (revealScreen) {
+          clearPushAnimations(revealScreen);
+          revealScreen.classList.add('active');
+        }
+      });
+    }
+
+    // Show tab bar if stack is empty
+    if (state.screenStack.length === 0) {
+      tabBar.classList.remove('hidden');
+    }
+  };
+
+  // ── popAllScreens ───────────────────────────────────────────
+  function popAllScreens() {
+    // Instantly clear all pushed screens
+    while (state.screenStack.length > 0) {
+      const id = state.screenStack.pop();
+      const s = getScreen(id);
+      if (s) {
+        clearPushAnimations(s);
+        s.classList.remove('active');
+      }
+    }
+    tabBar.classList.remove('hidden');
+  }
+
+  // ── SWIPE GESTURES ──────────────────────────────────────────
+
+  // 1. Swipe-from-left-edge to go back (iOS-style)
+  (function initEdgeSwipeBack() {
+    const EDGE_ZONE = 25;        // px from left edge to start gesture
+    const COMPLETE_THRESHOLD = 0.35; // 35% of screen width
+    const VELOCITY_THRESHOLD = 0.5;  // px/ms — fast swipe completes even if < threshold
+    const screensContainer = document.getElementById('screens');
+
+    let tracking = false;
+    let startX = 0, startY = 0, startTime = 0;
+    let currentX = 0;
+    let topScreen = null, behindScreen = null;
+    let screenWidth = 0;
+    let directionLocked = false;
+    let isHorizontal = false;
+
+    screensContainer.addEventListener('touchstart', function(e) {
+      if (state.screenStack.length === 0) return;
+      const touch = e.touches[0];
+      if (touch.clientX > EDGE_ZONE) return;
+
+      tracking = true;
+      directionLocked = false;
+      isHorizontal = false;
+      startX = touch.clientX;
+      startY = touch.clientY;
+      startTime = Date.now();
+      currentX = 0;
+      screenWidth = window.innerWidth;
+
+      // Identify screens
+      const topId = state.screenStack[state.screenStack.length - 1];
+      topScreen = getScreen(topId);
+
+      let behindId;
+      if (state.screenStack.length > 1) {
+        behindId = state.screenStack[state.screenStack.length - 2];
+      } else {
+        behindId = state.tabScreenMap[state.currentTab];
+      }
+      behindScreen = getScreen(behindId);
+
+      // Prepare screens for gesture (GPU acceleration)
+      if (topScreen) {
+        topScreen.style.willChange = 'transform';
+        topScreen.style.transition = 'none';
+        clearPushAnimations(topScreen);
+        topScreen.classList.add('active');
+      }
+      if (behindScreen) {
+        behindScreen.style.willChange = 'transform, opacity';
+        behindScreen.style.transition = 'none';
+        clearPushAnimations(behindScreen);
+        behindScreen.classList.add('active');
+        behindScreen.style.transform = 'translateX(-30%) scale(0.95)';
+        behindScreen.style.opacity = '0.5';
+      }
+    }, { passive: true });
+
+    screensContainer.addEventListener('touchmove', function(e) {
+      if (!tracking) return;
+      const touch = e.touches[0];
+      const dx = touch.clientX - startX;
+      const dy = touch.clientY - startY;
+
+      // Lock direction after 10px of movement
+      if (!directionLocked && (Math.abs(dx) > 10 || Math.abs(dy) > 10)) {
+        directionLocked = true;
+        isHorizontal = Math.abs(dx) > Math.abs(dy);
+        if (!isHorizontal) {
+          tracking = false;
+          cleanupGestureStyles();
+          return;
+        }
+      }
+
+      if (!directionLocked) return;
+      if (!isHorizontal) return;
+
+      // Prevent vertical scroll while swiping
       e.preventDefault();
-      switchScreen(item.dataset.screen);
+
+      currentX = Math.max(0, dx); // Only allow right swipe
+      const progress = currentX / screenWidth;
+
+      // Move top screen with finger
+      if (topScreen) {
+        topScreen.style.transform = 'translateX(' + currentX + 'px)';
+      }
+
+      // Parallax behind screen: from -30%/0.95/0.5 toward 0/1/1
+      if (behindScreen) {
+        const behindTranslate = -30 + (30 * progress);
+        const behindScale = 0.95 + (0.05 * progress);
+        const behindOpacity = 0.5 + (0.5 * progress);
+        behindScreen.style.transform = 'translateX(' + behindTranslate + '%) scale(' + behindScale + ')';
+        behindScreen.style.opacity = String(behindOpacity);
+      }
     }, { passive: false });
 
-    item.addEventListener('click', function(e) {
-      if (!touched) {
-        switchScreen(item.dataset.screen);
-      }
-      touched = false;
-    });
-  });
+    function finishGesture(complete) {
+      if (!tracking) return;
+      tracking = false;
 
-  // Tab switching
-  document.querySelectorAll('.tabs-row').forEach(function(row) {
-    row.querySelectorAll('.tab-btn').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        row.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-        btn.classList.add('active');
-      });
-    });
-  });
+      const duration = complete ? '250ms' : '300ms';
+      const easing = complete ? 'cubic-bezier(0.2, 0.9, 0.3, 1)' : 'cubic-bezier(0.2, 0.9, 0.3, 1)';
 
-  // Close buttons
-  document.querySelectorAll('.close-btn, .close-x').forEach(function(btn) {
-    btn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      var card = btn.closest('.card, .promo-banner, .welcome-card');
-      if (card) {
-        card.style.transition = 'opacity 0.3s, transform 0.3s, height 0.3s, margin 0.3s, padding 0.3s';
-        card.style.opacity = '0';
-        card.style.transform = 'scale(0.95)';
+      if (complete) {
+        // Complete the pop
+        if (topScreen) {
+          topScreen.style.transition = 'transform ' + duration + ' ' + easing;
+          topScreen.style.transform = 'translateX(100%)';
+        }
+        if (behindScreen) {
+          behindScreen.style.transition = 'transform ' + duration + ' ' + easing + ', opacity ' + duration + ' ' + easing;
+          behindScreen.style.transform = 'translateX(0) scale(1)';
+          behindScreen.style.opacity = '1';
+        }
+
+        // After animation, do the actual popScreen logic
         setTimeout(function() {
-          card.style.height = '0';
-          card.style.margin = '0';
-          card.style.padding = '0';
-          card.style.overflow = 'hidden';
-          card.style.border = 'none';
-        }, 200);
+          // Clean up inline styles
+          if (topScreen) {
+            topScreen.style.cssText = '';
+            topScreen.classList.remove('active');
+          }
+          if (behindScreen) {
+            behindScreen.style.cssText = '';
+            behindScreen.classList.add('active');
+          }
+
+          // Update state (manual pop without animation)
+          state.screenStack.pop();
+          if (state.screenStack.length === 0) {
+            tabBar.classList.remove('hidden');
+          }
+
+          topScreen = null;
+          behindScreen = null;
+        }, 260);
+      } else {
+        // Spring back
+        if (topScreen) {
+          topScreen.style.transition = 'transform ' + duration + ' ' + easing;
+          topScreen.style.transform = 'translateX(0)';
+        }
+        if (behindScreen) {
+          behindScreen.style.transition = 'transform ' + duration + ' ' + easing + ', opacity ' + duration + ' ' + easing;
+          behindScreen.style.transform = 'translateX(-30%) scale(0.95)';
+          behindScreen.style.opacity = '0.5';
+        }
+
+        setTimeout(function() {
+          cleanupGestureStyles();
+        }, 310);
       }
-    });
-  });
+    }
 
-  // Transaction tap feedback
-  document.querySelectorAll('.transaction').forEach(function(tx) {
-    tx.addEventListener('click', function() {
-      tx.style.background = 'rgba(255,255,255,0.04)';
-      setTimeout(function() { tx.style.background = 'transparent'; }, 200);
-    });
-  });
+    function cleanupGestureStyles() {
+      if (topScreen) {
+        topScreen.style.cssText = '';
+        topScreen.classList.add('active');
+      }
+      if (behindScreen) {
+        behindScreen.style.cssText = '';
+        behindScreen.classList.remove('active');
+      }
+      topScreen = null;
+      behindScreen = null;
+    }
 
-  // Quick action tap feedback
-  document.querySelectorAll('.quick-action, .payment-option, .reward-item, .stock-item, .mover-item, .cta-button, .earn-row').forEach(function(el) {
-    el.addEventListener('touchstart', function() {
-      el.style.transform = 'scale(0.96)';
-      el.style.transition = 'transform 0.1s';
+    screensContainer.addEventListener('touchend', function(e) {
+      if (!tracking) return;
+      const elapsed = Date.now() - startTime;
+      const velocity = currentX / elapsed; // px/ms
+      const progress = currentX / screenWidth;
+
+      const complete = progress > COMPLETE_THRESHOLD || velocity > VELOCITY_THRESHOLD;
+      finishGesture(complete);
     }, { passive: true });
-    el.addEventListener('touchend', function() {
-      el.style.transform = 'scale(1)';
+
+    screensContainer.addEventListener('touchcancel', function() {
+      finishGesture(false);
     }, { passive: true });
-  });
+  })();
+
+  // 2. Pull-to-refresh on home screen
+  (function initPullToRefresh() {
+    const homeScreen = getScreen('home');
+    if (!homeScreen) return;
+
+    const PULL_THRESHOLD = 60;
+    let pulling = false;
+    let startY = 0;
+    let pullDistance = 0;
+    let refreshIndicator = null;
+
+    // Create refresh indicator
+    refreshIndicator = document.createElement('div');
+    refreshIndicator.style.cssText = 'position:absolute;top:0;left:50%;transform:translateX(-50%) translateY(-40px);width:30px;height:30px;border-radius:50%;border:2px solid rgba(255,255,255,0.3);border-top-color:#6fa0ff;z-index:100;opacity:0;transition:opacity 0.2s;pointer-events:none;';
+    homeScreen.style.position = 'relative';
+    homeScreen.appendChild(refreshIndicator);
+
+    homeScreen.addEventListener('touchstart', function(e) {
+      // Only if screen is scrolled to top and no pushed screens
+      if (state.screenStack.length > 0) return;
+      if (state.currentTab !== 'home') return;
+      if (homeScreen.scrollTop > 5) return;
+      startY = e.touches[0].clientY;
+      pulling = true;
+      pullDistance = 0;
+    }, { passive: true });
+
+    homeScreen.addEventListener('touchmove', function(e) {
+      if (!pulling) return;
+      const dy = e.touches[0].clientY - startY;
+      if (dy < 0) { pulling = false; return; }
+
+      pullDistance = Math.min(dy * 0.5, 100); // Dampen the pull
+
+      // Rotate the indicator as you pull
+      const rotation = (pullDistance / PULL_THRESHOLD) * 360;
+      const opacity = Math.min(pullDistance / PULL_THRESHOLD, 1);
+      refreshIndicator.style.opacity = String(opacity);
+      refreshIndicator.style.transform = 'translateX(-50%) translateY(' + (pullDistance - 40) + 'px) rotate(' + rotation + 'deg)';
+
+      if (pullDistance > 10) {
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    homeScreen.addEventListener('touchend', function() {
+      if (!pulling) return;
+      pulling = false;
+
+      if (pullDistance >= PULL_THRESHOLD) {
+        // Trigger refresh animation
+        refreshIndicator.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+        refreshIndicator.style.transform = 'translateX(-50%) translateY(20px)';
+        refreshIndicator.style.opacity = '1';
+
+        // Spin animation
+        refreshIndicator.style.animation = 'spin 0.6s linear infinite';
+
+        // After 1s, hide and reset
+        setTimeout(function() {
+          refreshIndicator.style.animation = '';
+          refreshIndicator.style.transition = 'opacity 0.2s ease';
+          refreshIndicator.style.opacity = '0';
+          setTimeout(function() {
+            refreshIndicator.style.transform = 'translateX(-50%) translateY(-40px)';
+          }, 200);
+        }, 1000);
+      } else {
+        // Snap back
+        refreshIndicator.style.transition = 'transform 0.2s ease, opacity 0.2s ease';
+        refreshIndicator.style.opacity = '0';
+        refreshIndicator.style.transform = 'translateX(-50%) translateY(-40px)';
+      }
+      pullDistance = 0;
+    }, { passive: true });
+
+    homeScreen.addEventListener('touchcancel', function() {
+      pulling = false;
+      refreshIndicator.style.opacity = '0';
+      refreshIndicator.style.transform = 'translateX(-50%) translateY(-40px)';
+      pullDistance = 0;
+    }, { passive: true });
+  })();
+
+  // 3. Swipe between tabs (horizontal swipe on tab content)
+  (function initTabSwipe() {
+    const screensContainer = document.getElementById('screens');
+    const tabOrder = ['home', 'cards', 'invest', 'lifestyle', 'hub'];
+
+    let swiping = false;
+    let startX = 0, startY = 0;
+    let dirLocked = false, isHoriz = false;
+
+    screensContainer.addEventListener('touchstart', function(e) {
+      if (state.screenStack.length > 0) return; // Only on tab screens
+      const touch = e.touches[0];
+      if (touch.clientX <= 25) return; // Don't conflict with edge-back
+      swiping = true;
+      dirLocked = false;
+      isHoriz = false;
+      startX = touch.clientX;
+      startY = touch.clientY;
+    }, { passive: true });
+
+    screensContainer.addEventListener('touchend', function(e) {
+      if (!swiping) return;
+      swiping = false;
+      if (!dirLocked || !isHoriz) return;
+
+      const dx = e.changedTouches[0].clientX - startX;
+      if (Math.abs(dx) < 60) return; // Min swipe distance
+
+      const currentIdx = tabOrder.indexOf(state.currentTab);
+      if (dx < -60 && currentIdx < tabOrder.length - 1) {
+        // Swipe left → next tab
+        switchTab(tabOrder[currentIdx + 1]);
+      } else if (dx > 60 && currentIdx > 0) {
+        // Swipe right → previous tab
+        switchTab(tabOrder[currentIdx - 1]);
+      }
+    }, { passive: true });
+
+    screensContainer.addEventListener('touchmove', function(e) {
+      if (!swiping) return;
+      if (dirLocked) return;
+      const dx = e.touches[0].clientX - startX;
+      const dy = e.touches[0].clientY - startY;
+      if (Math.abs(dx) > 10 || Math.abs(dy) > 10) {
+        dirLocked = true;
+        isHoriz = Math.abs(dx) > Math.abs(dy);
+      }
+    }, { passive: true });
+  })();
+
+  // ── Button press feedback ───────────────────────────────────
+  // Scale(0.95) on touchstart/mousedown, spring back on release
+  function initPressFeedback() {
+    const pressables = document.querySelectorAll('.pressable');
+    pressables.forEach(el => {
+      el.addEventListener('touchstart', () => el.classList.add('pressing'), { passive: true });
+      el.addEventListener('touchend', () => el.classList.remove('pressing'), { passive: true });
+      el.addEventListener('touchcancel', () => el.classList.remove('pressing'), { passive: true });
+      el.addEventListener('mousedown', () => el.classList.add('pressing'));
+      el.addEventListener('mouseup', () => el.classList.remove('pressing'));
+      el.addEventListener('mouseleave', () => el.classList.remove('pressing'));
+    });
+  }
+
+  // ── Initialize ──────────────────────────────────────────────
+  function init() {
+    // Initialize Lucide icons
+    if (window.lucide) {
+      lucide.createIcons();
+    }
+
+    // Set up press feedback
+    initPressFeedback();
+
+    // Set initial tab
+    switchTab('home');
+    // Reset state since switchTab checks for same tab
+    state.currentTab = '';
+    switchTab('home');
+
+    // Expose state for debugging
+    window.__krevolut = { state, pushScreen, popScreen, switchTab };
+  }
+
+  // Wait for DOM and Lucide
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+})();
 </script>
+
 </body>
 </html>
