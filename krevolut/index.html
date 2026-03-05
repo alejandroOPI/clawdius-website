@@ -778,6 +778,168 @@
   .spacer { height: 16px; }
   .fade-enter { animation: fadeIn 0.3s ease forwards; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* === V3 Widget System === */
+  .widget { position: relative; transition: opacity 0.3s ease, transform 0.3s ease; }
+  .widget.fade-out { opacity: 0; transform: translateY(-10px); pointer-events: none; }
+  .widget.fade-in { animation: widgetFadeIn 0.3s ease forwards; }
+  @keyframes widgetFadeIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+
+  /* Edit Mode */
+  .widget.editing { animation: jiggle 0.15s ease-in-out infinite alternate; }
+  @keyframes jiggle { from { transform: rotate(-0.5deg); } to { transform: rotate(0.5deg); } }
+  .widget .remove-badge {
+    display: none; position: absolute; top: -6px; right: 10px; z-index: 20;
+    width: 22px; height: 22px; border-radius: 50%; background: var(--red);
+    color: #fff; font-size: 14px; font-weight: 700; cursor: pointer;
+    align-items: center; justify-content: center; border: 2px solid var(--bg);
+  }
+  .widget.editing .remove-badge { display: flex; animation: badgePop 0.2s ease; }
+  @keyframes badgePop { from { transform: scale(0); } to { transform: scale(1); } }
+  .widget .drag-handle {
+    display: none; position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
+    width: 30px; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.3);
+    cursor: grab; z-index: 20;
+  }
+  .widget.editing .drag-handle { display: block; }
+  .edit-done-btn {
+    display: none; position: fixed; top: 60px; left: 50%; transform: translateX(-50%);
+    padding: 8px 24px; background: var(--blue); color: #fff; border: none;
+    border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; z-index: 200;
+  }
+
+  /* Widget Gallery Bottom Sheet */
+  .widget-gallery-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+    z-index: 300; opacity: 0; transition: opacity 0.25s;
+  }
+  .widget-gallery-overlay.open { display: block; opacity: 1; }
+  .widget-gallery {
+    position: absolute; bottom: 0; left: 0; right: 0; max-height: 70vh;
+    background: #1a1e24; border-radius: 20px 20px 0 0; padding: 20px 16px;
+    transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    overflow-y: auto;
+  }
+  .widget-gallery-overlay.open .widget-gallery { transform: translateY(0); }
+  .widget-gallery h3 { font-size: 18px; font-weight: 600; margin-bottom: 16px; }
+  .widget-gallery .gallery-item {
+    display: flex; align-items: center; gap: 12px; padding: 12px;
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
+    margin-bottom: 8px; cursor: pointer;
+  }
+  .widget-gallery .gallery-item.added { opacity: 0.4; pointer-events: none; }
+  .gallery-item .gi-icon {
+    width: 40px; height: 40px; border-radius: 10px; background: rgba(255,255,255,0.08);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    font-size: 18px;
+  }
+  .gallery-item .gi-add {
+    margin-left: auto; padding: 6px 14px; background: var(--teal); color: #000;
+    border-radius: 16px; font-size: 12px; font-weight: 600; flex-shrink: 0;
+  }
+  .gallery-item.added .gi-add { background: transparent; color: var(--text-secondary); }
+
+  /* Stock Watchlist Widget */
+  .stocks-scroll { display: flex; gap: 10px; overflow-x: auto; padding: 0 16px 12px; }
+  .stocks-scroll::-webkit-scrollbar { display: none; }
+  .stock-mini-card {
+    min-width: 130px; background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 12px; position: relative; overflow: hidden; cursor: pointer;
+  }
+  .stock-mini-card .smc-ticker { font-size: 12px; color: var(--text-secondary); font-weight: 500; }
+  .stock-mini-card .smc-logo {
+    position: absolute; top: 10px; right: 10px; width: 28px; height: 28px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 800; color: #fff;
+  }
+  .stock-mini-card .smc-price { font-size: 17px; font-weight: 700; margin: 6px 0 2px; }
+  .stock-mini-card .smc-change { font-size: 12px; font-weight: 500; }
+  .stock-mini-card .smc-change.up { color: var(--green); }
+  .stock-mini-card .smc-change.up::before { content: '\25B2 '; font-size: 9px; }
+  .stock-mini-card .smc-change.down { color: var(--red); }
+  .stock-mini-card .smc-change.down::before { content: '\25BC '; font-size: 9px; }
+  .stock-mini-card .smc-spark { margin-top: 8px; height: 30px; }
+
+  /* Crypto Widget */
+  .crypto-w-cards { display: flex; gap: 10px; padding: 0 16px 12px; }
+  .crypto-w-card {
+    flex: 1; background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 14px; position: relative; overflow: hidden; cursor: pointer;
+  }
+  .crypto-w-card .cw-name { font-size: 12px; color: var(--text-secondary); font-weight: 500; }
+  .crypto-w-card .cw-logo {
+    position: absolute; top: 12px; right: 12px; width: 28px; height: 28px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  }
+  .crypto-w-card .cw-price { font-size: 18px; font-weight: 700; margin: 4px 0 2px; }
+  .crypto-w-card .cw-change { font-size: 12px; font-weight: 500; }
+  .crypto-w-card .cw-change.up { color: var(--green); }
+  .crypto-w-card .cw-change.up::before { content: '\25B2 '; font-size: 9px; }
+  .crypto-w-card .cw-change.down { color: var(--red); }
+  .crypto-w-card .cw-change.down::before { content: '\25BC '; font-size: 9px; }
+  .crypto-w-card .cw-spark { margin-top: 10px; height: 35px; position: relative; }
+  .crypto-w-card .cw-spark .baseline {
+    position: absolute; top: 50%; left: 0; right: 0;
+    border-top: 1px dotted rgba(255,255,255,0.12);
+  }
+
+  /* Savings Widget */
+  .savings-list { padding: 0 16px; }
+  .savings-goal {
+    display: flex; align-items: center; gap: 12px; padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .savings-goal:last-child { border-bottom: none; }
+  .savings-goal .sg-icon {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0;
+  }
+  .savings-goal .sg-info { flex: 1; }
+  .savings-goal .sg-name { font-size: 14px; font-weight: 500; }
+  .savings-goal .sg-amounts { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+  .savings-goal .sg-bar { height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; margin-top: 6px; overflow: hidden; }
+  .savings-goal .sg-bar-fill { height: 100%; border-radius: 3px; width: 0; transition: width 0.6s ease-out; }
+
+  /* Budget Widget */
+  .budget-widget { text-align: center; padding: 0 16px 12px; }
+  .budget-donut { margin: 0 auto 12px; }
+  .budget-center { font-size: 20px; font-weight: 700; }
+  .budget-sub { font-size: 12px; color: var(--text-secondary); }
+  .budget-legend { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 8px; }
+  .budget-legend-item { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--text-secondary); }
+  .budget-legend-item .bl-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  /* Upcoming Payments Widget */
+  .upcoming-list { padding: 0 16px; }
+  .upcoming-item {
+    display: flex; align-items: center; gap: 12px; padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .upcoming-item:last-child { border-bottom: none; }
+  .upcoming-item .ui-icon {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; flex-shrink: 0;
+  }
+  .upcoming-item .ui-info { flex: 1; }
+  .upcoming-item .ui-name { font-size: 14px; font-weight: 500; }
+  .upcoming-item .ui-date { font-size: 12px; color: var(--text-secondary); margin-top: 1px; }
+  .upcoming-item .ui-amount { font-size: 14px; font-weight: 500; flex-shrink: 0; }
+
+  /* Widget Header */
+  .widget-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 16px 8px; font-size: 14px;
+  }
+  .widget-header .wh-title { font-weight: 600; color: var(--text-secondary); }
+  .widget-header .wh-link { color: var(--blue); font-size: 13px; cursor: pointer; }
+
+  /* Add Widget Button */
+  .add-widget-btn {
+    display: none; margin: 12px 16px; padding: 14px; text-align: center;
+    border: 2px dashed rgba(255,255,255,0.15); border-radius: var(--radius);
+    color: var(--text-secondary); font-size: 14px; font-weight: 500; cursor: pointer;
+  }
 </style>
 </head>
 <body>
@@ -820,140 +982,10 @@
   <!-- Screens -->
   <div class="screens-container">
 
-    <!-- HOME -->
+    <!-- HOME (V3 Widget System) -->
     <div class="screen active" id="screen-home">
-      <div class="balance-area">
-        <div class="accounts-pill">
-          Accounts
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="m6 9 6 6 6-6"/></svg>
-        </div>
-        <div class="balance-amount">&euro;2,015.47</div>
-        <div class="balance-currency">M$41,417.91</div>
-        <div class="balance-dots">
-          <div class="dot active"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>
-        </div>
-      </div>
-
-      <div class="quick-actions">
-        <div class="quick-action">
-          <div class="icon-circle">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-          </div>
-          <span>Add money</span>
-        </div>
-        <div class="quick-action">
-          <div class="icon-circle">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 2a4 4 0 0 0-4 4c0 2 2 4 4 6 2-2 4-4 4-6a4 4 0 0 0-4-4z"/><path d="M12 22a4 4 0 0 0 4-4c0-2-2-4-4-6-2 2-4 4-4 6a4 4 0 0 0 4 4z"/></svg>
-          </div>
-          <span>Bizum</span>
-        </div>
-        <div class="quick-action">
-          <div class="icon-circle">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M7 16l-4-4 4-4"/><path d="M3 12h14"/><path d="M17 8l4 4-4 4"/><path d="M21 12H7"/></svg>
-          </div>
-          <span>Move</span>
-        </div>
-        <div class="quick-action">
-          <div class="icon-circle">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>
-          </div>
-          <span>More</span>
-        </div>
-      </div>
-
-      <!-- Promo Banner -->
-      <div class="promo-banner">
-        <div class="aurora"></div>
-        <div class="close-btn">&times;</div>
-        <div class="content">
-          <h3>New Experiences await</h3>
-          <p>Choose from 300,000 activities<br>and book in-app. T&Cs apply</p>
-        </div>
-      </div>
-      <div class="promo-dots">
-        <div class="dot active"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-      </div>
-
-      <!-- Transactions -->
-      <div class="card" style="padding:4px 16px;">
-        <div class="transaction">
-          <div class="tx-icon viasat">
-            <svg width="28" height="14" viewBox="0 0 60 20"><text x="2" y="16" font-family="Inter" font-weight="700" font-size="14" fill="#1a1a2e">Viasat</text></svg>
-          </div>
-          <div class="tx-details">
-            <div class="tx-name">Viasat</div>
-            <div class="tx-date">1 Mar, 11:54 a.m.</div>
-          </div>
-          <div class="tx-amount">
-            <div class="primary">-&euro;10.26</div>
-            <div class="secondary">-$12</div>
-          </div>
-        </div>
-        <div class="transaction">
-          <div class="tx-icon heart">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          </div>
-          <div class="tx-details">
-            <div class="tx-name">Myt017 2201 Hud Mxn</div>
-            <div class="tx-date">1 Mar, 9:39 a.m.</div>
-          </div>
-          <div class="tx-amount">
-            <div class="primary">-&euro;27.05</div>
-            <div class="secondary">-M$545</div>
-          </div>
-        </div>
-        <div class="transaction">
-          <div class="tx-icon food">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M7 2v9a4 4 0 0 0 4 4h0a4 4 0 0 0 4-4V2"/><path d="M7 2h4"/><path d="M11 2v6"/><path d="M17 2v20"/><path d="M17 2a3 3 0 0 1 0 6"/></svg>
-          </div>
-          <div class="tx-details">
-            <div class="tx-name">Rest Take Oof</div>
-            <div class="tx-date">1 Mar, 9:10 a.m.</div>
-          </div>
-          <div class="tx-amount">
-            <div class="primary">-&euro;9.28</div>
-            <div class="secondary">-M$187</div>
-          </div>
-        </div>
-        <div class="transaction">
-          <div class="tx-icon person">
-            GC
-            <div class="badge">+</div>
-          </div>
-          <div class="tx-details">
-            <div class="tx-name">GARCIA CARLOS JULIO</div>
-            <div class="tx-date">26 Feb, 8:42 a.m.</div>
-          </div>
-          <div class="tx-amount">
-            <div class="primary positive">+&euro;2,000</div>
-          </div>
-        </div>
-        <div class="see-all">See all</div>
-      </div>
-
-      <!-- Welcome to Mexico -->
-      <div class="welcome-card">
-        <div class="bg-img"></div>
-        <svg class="pyramid-steps" viewBox="0 0 130 85" fill="none">
-          <polygon points="65,5 25,85 105,85" fill="rgba(160,140,60,0.25)" stroke="rgba(160,140,60,0.15)" stroke-width="0.5"/>
-          <line x1="30" y1="75" x2="100" y2="75" stroke="rgba(160,140,60,0.2)" stroke-width="0.5"/>
-          <line x1="38" y1="62" x2="92" y2="62" stroke="rgba(160,140,60,0.2)" stroke-width="0.5"/>
-          <line x1="45" y1="50" x2="85" y2="50" stroke="rgba(160,140,60,0.2)" stroke-width="0.5"/>
-          <line x1="50" y1="38" x2="80" y2="38" stroke="rgba(160,140,60,0.2)" stroke-width="0.5"/>
-          <line x1="56" y1="26" x2="74" y2="26" stroke="rgba(160,140,60,0.2)" stroke-width="0.5"/>
-        </svg>
-        <div class="close-btn">&times;</div>
-        <div class="content">
-          <div class="subtitle">Welcome to</div>
-          <h2>Mexico</h2>
-          <div class="rate">&euro;1 = M$20.55</div>
-        </div>
-      </div>
+      <div id="widget-container"></div>
+      <div class="add-widget-btn" id="addWidgetBtn">+ Add Widget</div>
       <div class="spacer"></div>
     </div>
 
@@ -1301,7 +1333,474 @@
   </div>
 </div>
 
+<!-- Edit Mode Done Button -->
+<button class="edit-done-btn" id="editDoneBtn">Done</button>
+
+<!-- Widget Gallery Overlay -->
+<div class="widget-gallery-overlay" id="galleryOverlay">
+  <div class="widget-gallery" id="gallerySheet">
+    <h3>Add Widgets</h3>
+    <div id="galleryItems"></div>
+  </div>
+</div>
+
 <script>
+  // === V3 WIDGET ENGINE ===
+
+  // --- User Data ---
+  var USERS = {
+    cj: {
+      initials: 'CJ', ringColor: '#C4A0B0',
+      balance: { primary: '\u20AC2,015.47', secondary: 'M$41,417.91', primaryNum: 2015.47 },
+      quickActions: [
+        { label: 'Add money', icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>' },
+        { label: 'Bizum', icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 2a4 4 0 0 0-4 4c0 2 2 4 4 6 2-2 4-4 4-6a4 4 0 0 0-4-4z"/><path d="M12 22a4 4 0 0 0 4-4c0-2-2-4-4-6-2 2-4 4-4 6a4 4 0 0 0 4 4z"/></svg>' },
+        { label: 'Move', icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M7 16l-4-4 4-4"/><path d="M3 12h14"/><path d="M17 8l4 4-4 4"/><path d="M21 12H7"/></svg>' },
+        { label: 'More', icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>' }
+      ],
+      widgets: ['balance','quick-actions','promo-carousel','transactions','welcome-card'],
+      transactions: [
+        { name:'Viasat', date:'1 Mar, 11:54 a.m.', amount:'-\u20AC10.26', sub:'-$12', cls:'viasat', icon:'<svg width="28" height="14" viewBox="0 0 60 20"><text x="2" y="16" font-family="Inter" font-weight="700" font-size="14" fill="#1a1a2e">Viasat</text></svg>' },
+        { name:'Myt017 2201 Hud Mxn', date:'1 Mar, 9:39 a.m.', amount:'-\u20AC27.05', sub:'-M$545', cls:'heart', icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>' },
+        { name:'Rest Take Oof', date:'1 Mar, 9:10 a.m.', amount:'-\u20AC9.28', sub:'-M$187', cls:'food', icon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M7 2v9a4 4 0 0 0 4 4h0a4 4 0 0 0 4-4V2"/><path d="M7 2h4"/><path d="M11 2v6"/><path d="M17 2v20"/><path d="M17 2a3 3 0 0 1 0 6"/></svg>' },
+        { name:'GARCIA CARLOS JULIO', date:'26 Feb, 8:42 a.m.', amount:'+\u20AC2,000', sub:'', cls:'person', initials:'GC', positive:true }
+      ]
+    },
+    am: {
+      initials: 'AM', ringColor: '#4ECDC4',
+      balance: { primary: '\u20AC14,892.31', secondary: '$16,247.09', primaryNum: 14892.31 },
+      quickActions: [
+        { label: 'Add money', icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>' },
+        { label: 'Send', icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="m22 2-7 20-4-9-9-4z"/></svg>' },
+        { label: 'Exchange', icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M7 16l-4-4 4-4"/><path d="M3 12h18"/><path d="M17 8l4 4-4 4"/></svg>' },
+        { label: 'Invest', icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>' }
+      ],
+      widgets: ['balance','quick-actions','stock-watchlist','crypto-prices','savings-progress','budget-tracker','transactions','upcoming-payments'],
+      transactions: [
+        { name:'Amazon', date:'3 Mar, 2:15 p.m.', amount:'-\u20AC47.99', sub:'-$52.30', cls:'food', icon:'<span style="font-size:14px;font-weight:800;color:#fff">a</span>', bgColor:'#ff9900' },
+        { name:'Uber', date:'3 Mar, 8:20 a.m.', amount:'-\u20AC12.50', sub:'', cls:'heart', icon:'<span style="font-size:14px;font-weight:700;color:#fff">U</span>', bgColor:'#000' },
+        { name:'Airbnb', date:'2 Mar, 6:00 p.m.', amount:'-\u20AC189.00', sub:'-$206', cls:'food', icon:'<span style="font-size:16px;color:#fff">A</span>', bgColor:'#ff5a5f' },
+        { name:'Apple', date:'1 Mar, 10:00 a.m.', amount:'-\u20AC0.99', sub:'', cls:'person', icon:'<svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83z"/></svg>', bgColor:'#1a1a1a' }
+      ],
+      stocks: [
+        { ticker:'NVDA', price:'\u20AC892.40', change:'+2.34%', up:true, color:'#76b900', points:'0,28 15,25 30,20 45,22 60,15 75,12 90,8 105,10 120,5 135,3 150,2' },
+        { ticker:'AAPL', price:'\u20AC178.22', change:'+0.87%', up:true, color:'#999', points:'0,20 20,18 40,22 60,16 80,14 100,12 120,15 140,10 150,8' },
+        { ticker:'TSLA', price:'\u20AC241.55', change:'-1.23%', up:false, color:'#cc0000', points:'0,8 20,12 40,10 60,18 80,20 100,22 120,25 140,28 150,30' },
+        { ticker:'NFLX', price:'\u20AC612.80', change:'+1.56%', up:true, color:'#e50914', points:'0,30 20,28 40,22 60,20 80,15 100,18 120,12 140,8 150,5' },
+        { ticker:'AMZN', price:'\u20AC178.90', change:'+0.45%', up:true, color:'#ff9900', points:'0,22 20,20 40,18 60,22 80,16 100,14 120,12 140,10 150,8' }
+      ],
+      crypto: [
+        { name:'BTC', price:'\u20AC58,877', change:'0.03%', up:true, logo:'<span style="font-size:14px;font-weight:800;color:#fff">\u20BF</span>', logoColor:'#f7931a', points:'0,38 15,36 30,30 45,32 60,28 75,25 90,20 105,22 120,18 135,15 150,12' },
+        { name:'ETH', price:'\u20AC1,706.44', change:'1.56%', up:false, logo:'<svg width="14" height="14" viewBox="0 0 24 24" fill="#627eea"><path d="M12 1.5l-8 13 8 4.5 8-4.5-8-13zM4 14.5L12 22l8-7.5-8 4.5-8-4.5z"/></svg>', logoColor:'rgba(98,126,234,0.25)', points:'0,8 15,10 30,6 45,12 60,14 75,10 90,16 105,20 120,18 135,24 150,28' }
+      ],
+      savings: [
+        { name:'Vacation', current:1950, target:3000, pct:65, color:'#ff9900', icon:'\u2600' },
+        { name:'Emergency Fund', current:4000, target:10000, pct:40, color:'#0066ff', icon:'\uD83D\uDEE1' },
+        { name:'New MacBook', current:2225, target:2500, pct:89, color:'#8b95a3', icon:'\uD83D\uDCBB' }
+      ],
+      budget: {
+        used: 1847, total: 3000,
+        categories: [
+          { name:'Food', amount:620, color:'#00c9b1', pct:33.5 },
+          { name:'Transport', amount:380, color:'#0066ff', pct:20.6 },
+          { name:'Shopping', amount:510, color:'#ff6b9d', pct:27.6 },
+          { name:'Bills', amount:337, color:'#ff9900', pct:18.3 }
+        ]
+      },
+      upcoming: [
+        { name:'Netflix', date:'Due Mar 8', amount:'\u20AC12.99', color:'#e50914', icon:'N' },
+        { name:'Spotify', date:'Due Mar 10', amount:'\u20AC9.99', color:'#1db954', icon:'\u266B' },
+        { name:'Allianz', date:'Due Mar 15', amount:'\u20AC45.00', color:'#003781', icon:'A' }
+      ]
+    }
+  };
+
+  // --- Widget Registry ---
+  var WIDGET_REGISTRY = {
+    'balance': { name:'Account Balance', category:'core', removable:false, emoji:'\uD83D\uDCB0' },
+    'quick-actions': { name:'Quick Actions', category:'core', removable:false, emoji:'\u26A1' },
+    'promo-carousel': { name:'Promotions', category:'lifestyle', removable:true, emoji:'\uD83C\uDF89' },
+    'transactions': { name:'Recent Transactions', category:'core', removable:false, emoji:'\uD83D\uDCCB' },
+    'welcome-card': { name:'Welcome Card', category:'contextual', removable:true, emoji:'\uD83C\uDF0D' },
+    'stock-watchlist': { name:'Stock Watchlist', category:'markets', removable:true, emoji:'\uD83D\uDCC8' },
+    'crypto-prices': { name:'Crypto Prices', category:'markets', removable:true, emoji:'\u20BF' },
+    'savings-progress': { name:'Savings Goals', category:'finance', removable:true, emoji:'\uD83C\uDFAF' },
+    'budget-tracker': { name:'Budget Tracker', category:'finance', removable:true, emoji:'\uD83D\uDCC9' },
+    'upcoming-payments': { name:'Upcoming Payments', category:'finance', removable:true, emoji:'\uD83D\uDCC5' }
+  };
+
+  var currentUser = localStorage.getItem('krevolut-user') || 'cj';
+  var editMode = false;
+
+  function getUserWidgets(uid) {
+    var key = 'krevolut-layout-' + uid;
+    var saved = localStorage.getItem(key);
+    if (saved) try { return JSON.parse(saved); } catch(e) {}
+    return USERS[uid].widgets.slice();
+  }
+  function saveUserWidgets(uid, list) {
+    localStorage.setItem('krevolut-layout-' + uid, JSON.stringify(list));
+  }
+
+  // --- Render Functions ---
+  function renderBalance(user) {
+    return '<div class="balance-area">' +
+      '<div class="accounts-pill">Accounts <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="m6 9 6 6 6-6"/></svg></div>' +
+      '<div class="balance-amount" id="balanceAmount">' + user.balance.primary + '</div>' +
+      '<div class="balance-currency">' + user.balance.secondary + '</div>' +
+      '<div class="balance-dots"><div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>';
+  }
+
+  function renderQuickActions(user) {
+    var h = '<div class="quick-actions">';
+    user.quickActions.forEach(function(a) {
+      h += '<div class="quick-action"><div class="icon-circle">' + a.icon + '</div><span>' + a.label + '</span></div>';
+    });
+    return h + '</div>';
+  }
+
+  function renderPromo() {
+    return '<div class="promo-banner"><div class="aurora"></div><div class="close-btn" onclick="dismissWidget(this)">&times;</div>' +
+      '<div class="content"><h3>New Experiences await</h3><p>Choose from 300,000 activities<br>and book in-app. T&Cs apply</p></div></div>' +
+      '<div class="promo-dots"><div class="dot active"></div><div class="dot"></div><div class="dot"></div></div>';
+  }
+
+  function renderTransactions(user) {
+    var h = '<div class="card" style="padding:4px 16px;">';
+    user.transactions.forEach(function(tx) {
+      var iconStyle = tx.bgColor ? 'background:' + tx.bgColor : '';
+      var iconContent = tx.initials || tx.icon;
+      h += '<div class="transaction"><div class="tx-icon ' + tx.cls + '" style="' + iconStyle + '">' + iconContent;
+      if (tx.initials) h += '<div class="badge">+</div>';
+      h += '</div><div class="tx-details"><div class="tx-name">' + tx.name + '</div><div class="tx-date">' + tx.date + '</div></div>';
+      h += '<div class="tx-amount"><div class="primary' + (tx.positive ? ' positive' : '') + '">' + tx.amount + '</div>';
+      if (tx.sub) h += '<div class="secondary">' + tx.sub + '</div>';
+      h += '</div></div>';
+    });
+    return h + '<div class="see-all">See all</div></div>';
+  }
+
+  function renderWelcome() {
+    return '<div class="welcome-card"><div class="bg-img"></div>' +
+      '<svg class="pyramid-steps" viewBox="0 0 130 85" fill="none"><polygon points="65,5 25,85 105,85" fill="rgba(160,140,60,0.25)" stroke="rgba(160,140,60,0.15)" stroke-width="0.5"/>' +
+      '<line x1="30" y1="75" x2="100" y2="75" stroke="rgba(160,140,60,0.2)" stroke-width="0.5"/>' +
+      '<line x1="38" y1="62" x2="92" y2="62" stroke="rgba(160,140,60,0.2)" stroke-width="0.5"/>' +
+      '<line x1="45" y1="50" x2="85" y2="50" stroke="rgba(160,140,60,0.2)" stroke-width="0.5"/></svg>' +
+      '<div class="close-btn" onclick="dismissWidget(this)">&times;</div>' +
+      '<div class="content"><div class="subtitle">Welcome to</div><h2>Mexico</h2><div class="rate">\u20AC1 = M$20.55</div></div></div>';
+  }
+
+  function renderStockWatchlist(user) {
+    var h = '<div class="widget-header"><span class="wh-title">Stocks</span><span class="wh-link">See all</span></div><div class="stocks-scroll">';
+    user.stocks.forEach(function(s) {
+      h += '<div class="stock-mini-card"><div class="smc-ticker">' + s.ticker + '</div>' +
+        '<div class="smc-logo" style="background:' + s.color + '">' + s.ticker.charAt(0) + '</div>' +
+        '<div class="smc-price">' + s.price + '</div>' +
+        '<div class="smc-change ' + (s.up ? 'up' : 'down') + '">' + s.change + '</div>' +
+        '<div class="smc-spark"><svg width="100%" height="30" viewBox="0 0 150 35" preserveAspectRatio="none">' +
+        '<defs><linearGradient id="sg' + s.ticker + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="' + (s.up ? 'var(--green)' : 'var(--red)') + '" stop-opacity="0.3"/><stop offset="100%" stop-color="' + (s.up ? 'var(--green)' : 'var(--red)') + '" stop-opacity="0"/></linearGradient></defs>' +
+        '<polygon points="' + s.points + ' 150,35 0,35" fill="url(#sg' + s.ticker + ')"/>' +
+        '<polyline points="' + s.points + '" fill="none" stroke="' + (s.up ? 'var(--green)' : 'var(--red)') + '" stroke-width="2" stroke-linecap="round" class="sparkline-anim"/>' +
+        '</svg></div></div>';
+    });
+    return h + '</div>';
+  }
+
+  function renderCryptoPrices(user) {
+    var h = '<div class="widget-header"><span class="wh-title">Crypto</span><span class="wh-link">See all</span></div><div class="crypto-w-cards">';
+    user.crypto.forEach(function(c) {
+      h += '<div class="crypto-w-card"><div class="cw-name">' + c.name + '</div>' +
+        '<div class="cw-logo" style="background:' + c.logoColor + '">' + c.logo + '</div>' +
+        '<div class="cw-price">' + c.price + '</div>' +
+        '<div class="cw-change ' + (c.up ? 'up' : 'down') + '">' + c.change + '</div>' +
+        '<div class="cw-spark"><div class="baseline"></div>' +
+        '<svg width="100%" height="35" viewBox="0 0 150 35" preserveAspectRatio="none">' +
+        '<defs><linearGradient id="cg' + c.name + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="' + (c.up ? 'var(--green)' : 'var(--red)') + '" stop-opacity="0.25"/><stop offset="100%" stop-color="' + (c.up ? 'var(--green)' : 'var(--red)') + '" stop-opacity="0"/></linearGradient></defs>' +
+        '<polygon points="' + c.points + ' 150,35 0,35" fill="url(#cg' + c.name + ')"/>' +
+        '<polyline points="' + c.points + '" fill="none" stroke="' + (c.up ? 'var(--green)' : 'var(--red)') + '" stroke-width="2" stroke-linecap="round" class="sparkline-anim"/>' +
+        '</svg></div></div>';
+    });
+    return h + '</div>';
+  }
+
+  function renderSavings(user) {
+    var h = '<div class="widget-header"><span class="wh-title">Savings</span><span class="wh-link">See all</span></div><div class="savings-list">';
+    user.savings.forEach(function(s) {
+      h += '<div class="savings-goal"><div class="sg-icon" style="background:' + s.color + '22">' + s.icon + '</div>' +
+        '<div class="sg-info"><div class="sg-name">' + s.name + '</div>' +
+        '<div class="sg-amounts">\u20AC' + s.current.toLocaleString() + ' / \u20AC' + s.target.toLocaleString() + '</div>' +
+        '<div class="sg-bar"><div class="sg-bar-fill" data-width="' + s.pct + '" style="background:' + s.color + '"></div></div></div></div>';
+    });
+    return h + '</div>';
+  }
+
+  function renderBudget(user) {
+    var b = user.budget;
+    var r = 50, cx = 60, cy = 60, circ = 2 * Math.PI * r;
+    var h = '<div class="widget-header"><span class="wh-title">Budget</span><span class="wh-link">See all</span></div><div class="budget-widget">';
+    h += '<svg class="budget-donut" width="120" height="120" viewBox="0 0 120 120">';
+    h += '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="12"/>';
+    var offset = 0;
+    b.categories.forEach(function(cat) {
+      var len = (cat.pct / 100) * circ;
+      h += '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="none" stroke="' + cat.color + '" stroke-width="12" ' +
+        'stroke-dasharray="' + len + ' ' + (circ - len) + '" stroke-dashoffset="' + (-offset) + '" ' +
+        'transform="rotate(-90 ' + cx + ' ' + cy + ')" class="donut-seg" style="opacity:0"/>';
+      offset += len;
+    });
+    h += '<text x="' + cx + '" y="' + (cy - 4) + '" text-anchor="middle" fill="#fff" font-size="16" font-weight="700">\u20AC' + b.used.toLocaleString() + '</text>';
+    h += '<text x="' + cx + '" y="' + (cy + 14) + '" text-anchor="middle" fill="#8b95a3" font-size="10">of \u20AC' + b.total.toLocaleString() + '</text>';
+    h += '</svg>';
+    h += '<div class="budget-legend">';
+    b.categories.forEach(function(cat) {
+      h += '<div class="budget-legend-item"><div class="bl-dot" style="background:' + cat.color + '"></div>' + cat.name + ' \u20AC' + cat.amount + '</div>';
+    });
+    h += '</div></div>';
+    return h;
+  }
+
+  function renderUpcoming(user) {
+    var h = '<div class="widget-header"><span class="wh-title">Upcoming</span><span class="wh-link">See all</span></div><div class="upcoming-list">';
+    user.upcoming.forEach(function(u) {
+      h += '<div class="upcoming-item"><div class="ui-icon" style="background:' + u.color + '">' + u.icon + '</div>' +
+        '<div class="ui-info"><div class="ui-name">' + u.name + '</div><div class="ui-date">' + u.date + '</div></div>' +
+        '<div class="ui-amount">' + u.amount + '</div></div>';
+    });
+    return h + '</div>';
+  }
+
+  var RENDERERS = {
+    'balance': renderBalance,
+    'quick-actions': renderQuickActions,
+    'promo-carousel': function() { return renderPromo(); },
+    'transactions': renderTransactions,
+    'welcome-card': function() { return renderWelcome(); },
+    'stock-watchlist': renderStockWatchlist,
+    'crypto-prices': renderCryptoPrices,
+    'savings-progress': renderSavings,
+    'budget-tracker': renderBudget,
+    'upcoming-payments': renderUpcoming
+  };
+
+  // --- Core Render ---
+  function renderHome(animate) {
+    var container = document.getElementById('widget-container');
+    var user = USERS[currentUser];
+    var widgets = getUserWidgets(currentUser);
+    container.innerHTML = '';
+
+    widgets.forEach(function(wid, i) {
+      var reg = WIDGET_REGISTRY[wid];
+      var renderer = RENDERERS[wid];
+      if (!reg || !renderer) return;
+
+      var div = document.createElement('div');
+      div.className = 'widget';
+      div.setAttribute('data-widget-id', wid);
+
+      // Remove badge + drag handle for edit mode
+      if (reg.removable) {
+        div.innerHTML = '<div class="remove-badge" onclick="removeWidget(\'' + wid + '\')">&times;</div>';
+      }
+      div.innerHTML += '<div class="drag-handle"></div>';
+      div.innerHTML += renderer(user);
+
+      if (animate) {
+        div.style.opacity = '0';
+        div.style.transform = 'translateY(12px)';
+        setTimeout(function(el) {
+          el.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+          el.style.opacity = '1';
+          el.style.transform = 'translateY(0)';
+        }.bind(null, div), 50 * i);
+      }
+
+      container.appendChild(div);
+    });
+
+    // Update avatar
+    var avatar = document.querySelector('.avatar');
+    avatar.textContent = user.initials;
+    var dot = document.createElement('div');
+    dot.className = 'notif-dot';
+    avatar.appendChild(dot);
+    avatar.style.setProperty('--ring', user.ringColor);
+    document.querySelector('.avatar').style.cssText = '';
+    document.querySelector('.avatar::before') // can't style pseudo via JS, use class
+    avatar.className = 'avatar user-' + currentUser;
+
+    // Animate savings bars + donut after render
+    setTimeout(function() {
+      document.querySelectorAll('.sg-bar-fill').forEach(function(bar) {
+        bar.style.width = bar.getAttribute('data-width') + '%';
+      });
+      document.querySelectorAll('.donut-seg').forEach(function(seg, i) {
+        setTimeout(function() { seg.style.transition = 'opacity 0.4s'; seg.style.opacity = '1'; }, i * 150);
+      });
+      // Animate sparklines
+      document.querySelectorAll('.sparkline-anim').forEach(function(line) {
+        var len = line.getTotalLength ? line.getTotalLength() : 300;
+        line.style.strokeDasharray = len;
+        line.style.strokeDashoffset = len;
+        line.style.transition = 'stroke-dashoffset 0.8s ease-out';
+        setTimeout(function() { line.style.strokeDashoffset = '0'; }, 100);
+      });
+    }, 100);
+  }
+
+  // --- User Switching ---
+  function switchUser() {
+    var oldUser = currentUser;
+    currentUser = currentUser === 'cj' ? 'am' : 'cj';
+    localStorage.setItem('krevolut-user', currentUser);
+
+    // Animate out old widgets
+    var widgets = document.querySelectorAll('#widget-container .widget');
+    var total = widgets.length;
+    widgets.forEach(function(w, i) {
+      setTimeout(function() {
+        w.style.transition = 'opacity 0.15s, transform 0.15s';
+        w.style.opacity = '0';
+        w.style.transform = 'translateY(-8px)';
+      }, (total - 1 - i) * 40);
+    });
+
+    // Update avatar ring color
+    var avatar = document.querySelector('.avatar');
+    avatar.style.transition = 'none';
+
+    setTimeout(function() {
+      // Animate balance count
+      renderHome(true);
+      // Update ring via inline style on pseudo (use border trick)
+      updateAvatarRing();
+    }, total * 40 + 150);
+  }
+
+  function updateAvatarRing() {
+    var user = USERS[currentUser];
+    // We inject a dynamic style for the avatar ring
+    var ringStyle = document.getElementById('avatar-ring-style');
+    if (!ringStyle) {
+      ringStyle = document.createElement('style');
+      ringStyle.id = 'avatar-ring-style';
+      document.head.appendChild(ringStyle);
+    }
+    ringStyle.textContent = '.avatar::before { border-color: ' + user.ringColor + '66 !important; }';
+  }
+
+  // --- Edit Mode ---
+  function enterEditMode() {
+    editMode = true;
+    document.querySelectorAll('#widget-container .widget').forEach(function(w) {
+      w.classList.add('editing');
+    });
+    document.getElementById('editDoneBtn').style.display = 'block';
+    document.getElementById('addWidgetBtn').style.display = 'block';
+  }
+
+  function exitEditMode() {
+    editMode = false;
+    document.querySelectorAll('#widget-container .widget').forEach(function(w) {
+      w.classList.remove('editing');
+    });
+    document.getElementById('editDoneBtn').style.display = 'none';
+    document.getElementById('addWidgetBtn').style.display = 'none';
+  }
+
+  function removeWidget(wid) {
+    var widgets = getUserWidgets(currentUser);
+    var idx = widgets.indexOf(wid);
+    if (idx === -1) return;
+    widgets.splice(idx, 1);
+    saveUserWidgets(currentUser, widgets);
+
+    var el = document.querySelector('[data-widget-id="' + wid + '"]');
+    if (el) {
+      el.style.transition = 'opacity 0.2s, transform 0.2s, height 0.3s, margin 0.3s';
+      el.style.opacity = '0';
+      el.style.transform = 'scale(0.95)';
+      setTimeout(function() {
+        el.style.height = '0';
+        el.style.margin = '0';
+        el.style.overflow = 'hidden';
+        setTimeout(function() { el.remove(); }, 300);
+      }, 200);
+    }
+  }
+
+  function dismissWidget(btn) {
+    var card = btn.closest('.widget');
+    if (!card) { card = btn.closest('.promo-banner, .welcome-card'); }
+    if (card && card.classList.contains('widget')) {
+      var wid = card.getAttribute('data-widget-id');
+      removeWidget(wid);
+    } else if (card) {
+      card.style.transition = 'opacity 0.3s, transform 0.3s, height 0.3s, margin 0.3s';
+      card.style.opacity = '0'; card.style.transform = 'scale(0.95)';
+      setTimeout(function() { card.style.height = '0'; card.style.margin = '0'; card.style.padding = '0'; card.style.overflow = 'hidden'; }, 200);
+    }
+  }
+
+  // --- Widget Gallery ---
+  function openGallery() {
+    var overlay = document.getElementById('galleryOverlay');
+    var items = document.getElementById('galleryItems');
+    var current = getUserWidgets(currentUser);
+    items.innerHTML = '';
+
+    Object.keys(WIDGET_REGISTRY).forEach(function(wid) {
+      var reg = WIDGET_REGISTRY[wid];
+      if (!reg.removable) return; // core widgets always present
+      var added = current.indexOf(wid) !== -1;
+      var div = document.createElement('div');
+      div.className = 'gallery-item' + (added ? ' added' : '');
+      div.innerHTML = '<div class="gi-icon">' + reg.emoji + '</div><div><div style="font-size:14px;font-weight:500">' + reg.name + '</div><div style="font-size:12px;color:var(--text-secondary)">' + reg.category + '</div></div>' +
+        '<div class="gi-add">' + (added ? 'Added' : 'Add') + '</div>';
+      if (!added) {
+        div.addEventListener('click', function() {
+          current.push(wid);
+          saveUserWidgets(currentUser, current);
+          closeGallery();
+          renderHome(true);
+          if (editMode) enterEditMode();
+        });
+      }
+      items.appendChild(div);
+    });
+
+    overlay.classList.add('open');
+  }
+
+  function closeGallery() {
+    document.getElementById('galleryOverlay').classList.remove('open');
+  }
+
+  // --- Long Press Detection ---
+  var longPressTimer = null;
+  document.getElementById('widget-container').addEventListener('touchstart', function(e) {
+    if (editMode) return;
+    longPressTimer = setTimeout(function() { enterEditMode(); }, 500);
+  }, { passive: true });
+  document.getElementById('widget-container').addEventListener('touchend', function() {
+    clearTimeout(longPressTimer);
+  }, { passive: true });
+  document.getElementById('widget-container').addEventListener('touchmove', function() {
+    clearTimeout(longPressTimer);
+  }, { passive: true });
+
+  // --- Event Listeners ---
+  document.querySelector('.avatar').addEventListener('click', switchUser);
+  document.getElementById('editDoneBtn').addEventListener('click', exitEditMode);
+  document.getElementById('addWidgetBtn').addEventListener('click', openGallery);
+  document.getElementById('galleryOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closeGallery();
+  });
+
+  // --- Init ---
+  updateAvatarRing();
+  renderHome(true);
+
   // Navigation - use both click and touchend for reliability on mobile
   var navItems = document.querySelectorAll('.nav-item');
   var screens = document.querySelectorAll('.screen');
