@@ -4,7 +4,7 @@
   "description": "Clawdius - Personal AI Assistant",
   "scripts": {
     "start": "eleventy --serve",
-    "build": "eleventy"
+    "build": "eleventy && cp -r krevolut _site/krevolut"
   },
   "devDependencies": {
     "@11ty/eleventy": "^2.0.1"
